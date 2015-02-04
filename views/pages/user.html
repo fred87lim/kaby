@@ -1,0 +1,293 @@
+<!doctype html>
+<html lang="en" ng-app="phonecatApp" ng-controller="MainCtrl" ng-init="init('{{data.target_user.local.username}}')">
+<head>
+    {% include "../partials/head.html" %}
+    <script type="text/javascript" src="/vendors/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/bootstrap/js/docs.min.js"></script>
+    <script type="text/javascript" src="/vendors/angular-file-upload/angular-file-upload-shim.min.js"></script>
+    <script type="text/javascript" src="/vendors/angular.js"></script>
+    <script type="text/javascript" src="/vendors/angular-file-upload/angular-file-upload.min.js"></script> 
+
+    <script type="text/javascript" src="/vendors/angular-route.js"></script>
+    <script type="text/javascript" src="/vendors/angular-resource.js"></script>
+    <script type="text/javascript" src="/vendors/angular-animate.js"></script>
+    <script type="text/javascript" src="/vendors/angular-sanitize.js"></script>
+  
+    <script type="text/javascript" src="/vendors/ui-bootstrap-tpls-0.12.0.js"></script>
+    <!-- ACE code highlight -->
+    <script type="text/javascript" src="/vendors/ace-noconflict/ace.js"></script>
+    <script type="text/javascript" src="/vendors/ace-noconflict/ext-modelist.js"></script>
+    <script type="text/javascript" src="/vendors/ui-ace.js"></script>
+
+    <script type="text/javascript" src="/vendors/tinymce/tinymce.min.js"></script>
+    <script type="text/javascript" src="/controllers/user-controller.js"></script>
+
+</head>
+<body data-twttr-rendered="true" style="background-color: #C0DEED;">
+    <a class="sr-only sr-only-focusable" href="#content">Skip to main content</a>
+    {% include "../partials/header.html" %}
+    <div class="container bs-docs-container" >
+        <div class="row" style="margin-top:10px"></div>
+        {% if data.target_user %}
+            <div class="row">
+                <!-- LEFT SIDEBAR -->
+                <div class="col-md-5" style="padding-right:5px">
+                    <div>
+                        <div class="panel panel-default" style="margin-bottom:6px">
+                            <div class="panel-body">
+                                <div class="col-md-6" style="padding-left:0px; padding-right:0px">
+                                    {% if data.target_user.profilePicture %}
+                                        <img src="{{ data.target_user.profilePicture }}" class="img-thumbnail" width="200px" height="200px">
+                                    {% else %}
+                                        <img src="/img/P5XUPlTJ.jpeg" class="img-thumbnail" width="200px" height="200px">
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-6" style="padding-left:0px; padding-right:0px">
+                                    <h3 style="margin-top:0px">{{ data.target_user.local.firstName }} {{ data.target_user.local.lastName }}</h3>
+                                </div>
+                            </div>
+                            <div class="panel-footer" >
+                                <ul class="list-inline" style="margin-bottom:0px">
+                                    {% if data.user._id == data.target_user._id %}
+                                        <li class="col-md-3">
+                                            <a href="/edit_profile" class="btn btn-primary btn-sm btn-block">Edit Profile</a> 
+                                        </li>
+                                        <li class="col-md-3">
+                                            <a href="/new_article" class="btn btn-primary btn-sm btn-block">Write Article</a> 
+                                        </li>
+                                    {% else %}
+                                        <li class="col-md-3">
+                                            <button type="button" class="btn btn-primary btn-sm btn-block">Message</button> 
+                                        </li>
+                                        <li class="col-md-3">
+                                            <button type="button" class="btn btn-primary btn-sm btn-block" ng-click="follow()">Follow</button> 
+                                        </li>
+                                        <li class="col-md-3">
+                                            <button type="button" class="btn btn-primary btn-sm btn-block">Add Friend</button> 
+                                        </li>
+                                    {% endif%}
+                                    
+                                </ul>
+                                <div class="clearfix visible-xs-block"></div>                  
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SUMMARY PANEL -->
+                    <div >
+                        <div class="panel panel-success">
+                            <div class="panel-heading">
+                                <ul class="list-inline" style="margin-bottom:0px">
+                                    <li><h3 class="panel-title">Summary</h3></li>
+                                </ul>
+                            </div>
+                            <div class="panel-body">
+                                <div>
+                                    {{ data.target_user.description | safe}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- END OF SUMMARY PANEL -->
+
+                    <!-- EXPERIENCE PANEL -->
+                    <div >
+                        <div class="panel panel-success">
+                            <div class="panel-heading">
+                                <ul class="list-inline" style="margin-bottom:0px">
+                                    <li><h3 class="panel-title">Experience</h3></li>
+                                
+                                </ul>
+                            </div>
+                            <div class="panel-body">
+                                <div>
+                                    <ul class="list-unstyled">
+                                        {% for exp in data.target_user.experiences %}
+                                            <li>
+                                                <div>
+                                                    <div class="col-md-2" style="padding-left:0px; padding-right:0px">
+                                                        <img src="/img/google.png" width="60px" height="60px">
+                                                    </div>
+                                                    <div class="col-md-10" style="padding-left:0px; padding-right:0px;">
+                                                        <h4 style="margin-top:5px;margin-bottom:0px">{{ exp.companyName }}</h4>
+                                                        <h7>{{ exp.title }}</h7>
+                                                        <p style="color: #999;font-size: 12px;">{{ exp.dateStarted | date('M Y')}} &#8212; {% if exp.isWorking %} Present {% else %} {{ exp.dateEnded | date('M Y')}} {% endif %}</p>
+                                                    </div>
+                                                </div>
+                                                <div class="clearfix visible-xs-block"></div> 
+                                                <p>{{ exp.description | safe }}</p>
+
+                                                {% if !loop.last %}<hr />{% endif %}
+                                                
+                                            </li>
+                                             
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>                    
+                        </div>
+                    </div>
+                    <!-- END OF EXPERIENCE PANEL -->
+
+                    <!-- EDUCATION PANEL -->
+                    <div >
+                        <div class="panel panel-success">
+                            <div class="panel-heading">
+                                <ul class="list-inline" style="margin-bottom:0px">
+                                    <li><h3 class="panel-title">Education</h3></li>
+                                    
+                                </ul>   
+                            </div>
+                            <div class="panel-body">
+                                <div>
+                                    <ul class="list-unstyled">
+                                        {% for exp in data.target_user.educations %}
+                                            <li>
+                                                <div>
+                                                    <div class="col-md-2" style="padding-left:0px; padding-right:0px">
+                                                        <img src="/img/harvard.png" width="60px" height="60px">
+                                                    </div>
+                                                    <div class="col-md-10" style="padding-left:0px; padding-right:0px;">
+                                                        <h4 style="margin-top:5px;margin-bottom:0px">{{ exp.schoolName }}</h4>
+                                                        <h7>{{ exp.studyField }}</h7>
+                                                        <p style="color: #999;font-size: 12px;">{{ exp.schoolStarted.year}} &#8212; {{ exp.schoolEnded.year}}</p>
+                                                    </div>
+                                                </div>
+                                                <div class="clearfix visible-xs-block"></div> 
+                                                <p>{{ exp.description | safe }}</p>
+
+                                                {% if !loop.last %}<hr />{% endif %}
+                                                
+                                            </li>
+                                             
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>                  
+                        </div>
+                    </div>
+                    <!-- END OF EDUCATION PANEL -->
+                    
+                </div>
+                <!-- END OF LEFT SIDEBAR -->
+
+                <!-- MAIN -->
+                <div class="col-md-7" style="padding-left:5px">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <!-- NAVIGATION BAR -->
+                            <div>
+                                <ul class="nav nav-pills nav-justified" id="myTab">
+      <li role="presentation" class="active"><a href="#newsfeed"><span style="display: block;">News Feed</span><span style="display: block;"></span></a></a></li>
+      <li role="presentation"><a href="#articles"><span style="display: block;">Articles</span><span style="display: block;">[[ user.articles.length]]</span></a></a></li>
+      <li role="presentation"><a href="#following"><span style="display: block;">Following</span><span style="display: block;">[[ user.following.length]]</span></a></li>
+      <li role="presentation"><a href="#followers"><span style="display: block;">Followers</span><span style="display: block;">[[ user.followers.length]]</span></a></a></li>
+      <li role="presentation"><a href="#friends"><span style="display: block;">Friends</span><span style="display: block;">230</span></a></a></li>
+    </ul>
+                            </div>
+
+                            <hr/>
+
+                            <div id="myTabContent" class="tab-content">
+      <div role="tabpanel" class="tab-pane fade" id="newsfeed" aria-labelledby="home-tab">
+        <p>Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro keffiyeh dreamcatcher synth. Cosby sweater eu banh mi, qui irure terry richardson ex squid. Aliquip placeat salvia cillum iphone. Seitan aliquip quis cardigan american apparel, butcher voluptate nisi qui.</p>
+      </div>
+      <div role="tabpanel" class="tab-pane fade" id="articles" aria-labelledby="profile-tab">
+        <div >
+            <ul class="list-unstyled">
+                <li ng-repeat="article in user.articles">
+                    <a href="/[[user.username]]/articles/[[article.slug]]"><h3>[[article.title]]</h3></a>
+                    <p style="color: #999;font-size: 12px;">
+                        <span>[[article.dateCreated | date:'hh:mm dd MMM yyyy']]</span>&nbsp
+                        <span>[[article.privacy.name]]</span>
+                    </p>
+                    <p>[[article.category.name]]</p>
+                    <p ng-bind-html="trustedHtml(article.content)"></p>
+                    <ul class="list-inline">
+                        <li ng-repeat="tag in article.tags"><a href="/[[user.username]]/tags/[[tag.slug]]"><span class="glyphicon glyphicon-tag" aria-hidden="true"></span> <span>[[tag.name]]</span></a></li>
+                    </ul>
+                    <br>
+                    <ul class="list-inline">
+                        <li><a href="">Like</a></li>
+                        <li> · </li>
+                        <li><a href="">Comment</a></li>
+                        <li> · </li>
+                        <li><a href="">Share</a></li>
+                    </ul>
+                    <hr />
+                </li>
+            </ul>
+        </div>
+      </div>
+
+<!-- FOLLOWING TAB -->
+<div role="tabpanel" class="tab-pane fade" id="following" aria-labelledby="dropdown1-tab">
+    <div>
+        <div ng-repeat="following in user.following">
+            <div class="col-sm-6 col-md-4">
+                <div class="thumbnail">
+                    <img src="[[ following.profilePicture.url]]" alt="...">
+                    <div class="caption">
+                        <a href="/[[following.username]]">[[ following.firstName ]] [[ following.lastName ]]</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END OF FOLLOWING TAB -->
+
+<!-- FOLLOWER TAB -->
+<div role="tabpanel" class="tab-pane fade" id="followers" aria-labelledby="dropdown2-tab">
+    <div>
+        <div ng-repeat="follower in user.followers">
+            <div class="col-sm-6 col-md-4">
+                <div class="thumbnail">
+                    <img src="[[ follower.profilePicture.url]]" alt="...">
+                    <div class="caption">
+                        <a href="/[[follower.username]]">[[ follower.firstName ]] [[ follower.lastName ]]</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+      <div role="tabpanel" class="tab-pane fade" id="friends" aria-labelledby="dropdown2-tab">
+        <p>Internet executive with over 19 years of experience, including general management of mid to large size organizations, corporate development, product development, business operations, and strategy..</p>
+      </div>
+    </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- END OF MAIN -->
+            </div>
+        {% else %}            
+            <div class="col-sm-9 col-sm-offset-2">
+                <h3><span class="fa fa-sign-in"></span>Sorrry, that page does not exist.</h3>
+                <div class="panel panel-default">
+                    <div class="panel-body" style="padding-top: 40px; padding-bottom: 40px; padding-left:80px; padding-right:80px">
+                        <!-- LOGIN FORM -->
+                        <form action="/request_password_reset" method="post">
+                            <div class="form-group">
+                                <p>You can search Project X using the search box below or return to the homepage.</p>                 
+                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="search" >                    
+                            </div>
+                            <button type="submit" class="btn btn-warning btn-lg">Search</button>
+                        </form>
+                    </div>
+                    <div class="panel-footer" style="padding-left:80px; padding-right:80px">
+                        <a href="/">Return to home page &nbsp; >></a>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+{% include "../partials/footer.html" %}
+{% include "../partials/tail.html" %}
+
+<script src="user_page.js"></script>
+</body></html>

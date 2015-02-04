@@ -1,0 +1,41 @@
+<!-- Container Main -->
+<div class="col-sm-12">
+<!-- User Info -->
+	<div class="col-sm-8 col-centered">
+		<h1>{{article.post.title}}</h1>
+		<div compile="article.post.content"></div>
+		<hr />
+		<div >
+			<ul class='list-inline'>
+				<li ng-if='!showUnlike'><a href='' ng-click='createNewLike()'>Like</a></li>
+				<li ng-if='showUnlike'><a href='' ng-click='unlike(loginLikeId)'>Unlike</a></li>
+				<li><a href="">Comment</a></li>
+				<li><a href="">Share</a></li>
+				<li><a href="">Add To List</a></li>
+			</ul>
+		</div>
+		<div id='like-section'>
+			<div ng-repeat='like in article.likes'>
+				<p><span ><a href='#/{{like.likerUsername}}'>{{like.likerName}}</a></span>&nbsp; liked it</p>
+				<p ng-if='$parent.loginUser._id == like.liker'>You liked it</p>
+				<p ng-if='showUnlike'>Unlike</p>
+			</div>
+			
+		</div>
+		<div id='comment-section'>
+			<div ng-repeat='comment in article.comments'>
+				<p><a href='#/{{comment.commenterUsername}}'>{{comment.commenterName}}</a>&nbsp;{{comment.content}}</p>
+				<p ng-if='$parent.loginUser._id == comment.commenter'><a href='' ng-click='deleteComment(comment.id)'>Delete</a></p>
+			</div>
+		</div>
+		<div>
+			<textarea row='3' class='form-control' ng-model='newComment.commentContent'></textarea>
+		</div>
+		<div class="col-sm-3">
+			<button type="button" class="btn btn-primary btn-block" ng-click='createNewComment()'>Comment</button>
+		</div>
+	</div>
+<!-- End of User Info -->
+	
+</div>
+<!-- End of Container Main -->

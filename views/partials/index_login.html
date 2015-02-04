@@ -1,0 +1,84 @@
+<div class="row">
+
+<!-- LEFT SIDEBAR -->
+<div class="col-md-3" style="padding-right:5px">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <h3>{{ data.user.local.firstName }}</h3>
+        </div>
+    </div>
+</div>
+<!-- END OF LEFT SIDEBAR -->
+
+<!-- MAIN -->
+<div class="col-md-6" style="padding-right:5px; padding-left:5px">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <h3>Main</h3>
+            
+            <div class="media">
+                <a class="pull-left" href="#">
+                    <img class="media-object" src="/bootstrap/images/64.jpg" alt="Media Object">
+                </a>
+                <div class="media-body">
+                    <h4 class="media-heading">Media heading</h4>
+                    This is some sample text. This is some sample text. 
+                    This is some sample text. This is some sample text.
+                    This is some sample text. This is some sample text. 
+                    This is some sample text. This is some sample text.
+                </div>
+            </div>
+
+<div class="media">
+   <a class="pull-left" href="#">
+      <img class="media-object" src="/bootstrap/images/64.jpg" 
+      alt="Media Object">
+   </a>
+   <div class="media-body">
+      <h4 class="media-heading">Media heading</h4>
+      This is some sample text. This is some sample text. 
+      This is some sample text. This is some sample text.
+      This is some sample text. This is some sample text. 
+      This is some sample text. This is some sample text.
+      <div class="media">
+         <a class="pull-left" href="#">
+            <img class="media-object" src="/bootstrap/images/64.jpg" 
+            alt="Media Object">
+         </a>
+         <div class="media-body">
+            <h4 class="media-heading">Media heading</h4>
+            This is some sample text. This is some sample text. 
+            This is some sample text. This is some sample text.
+            This is some sample text. This is some sample text. 
+            This is some sample text. This is some sample text.
+         </div>
+      </div>
+   </div>
+</div>
+
+        </div>
+    </div>
+</div>
+<!-- END OF MAIN -->
+
+<!-- RIGHT SIDEBAR -->
+<div class="col-md-3" style="padding-left:5px">
+    <div class="panel panel-default">
+        <div class="panel-body">
+
+            <div class="media" ng-repeat="following in user.following">
+   <a class="pull-left" href="#">
+      <img class="media-object" src="[[ following.profilePicture.url]]" width="60" height="60"
+      alt="Media Object">
+   </a>
+   <div class="media-body">
+      <h6 class="media-heading"><a href="/[[following.username]]">[[ following.firstName ]] [[ following.lastName ]]</a></h6>
+      This is some sample text.
+   </div>
+</div>
+            
+        </div>
+    </div>
+</div>
+<!-- END OF RIGHT SIDEBAR -->
+</div>

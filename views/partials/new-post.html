@@ -1,0 +1,82 @@
+<!-- This page is meant for only registered and activated user -->
+<div class="new-biz" data-ng-init="init()">
+	<h1>Create New Post</h1>
+	<p>Add information about your business below. Popintown reviews each submission, which may take a few days.</p>
+	<div class="row">
+		<div class="col-sm-9">
+			<form class="form-horizontal" role="form" ng-submit='createNewPost()'>
+        <div class="form-group">
+          <div class="col-sm-9">
+              <input pattern=".{3,}" ng-model="post.title" required title="3 characters minimum" class="form-control" name="title" id="title" placeholder="Enter title here" ng-blur="processUrl()">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputFirstName" class="col-sm-3 control-label">Permanent URL:</label>
+          <div class="col-sm-9">
+              <p>{{post.url}}</p>
+          </div>
+        </div>
+			  <div class="form-group">
+			    <label for="inputFirstName" class="col-sm-3 control-label">Business &#09;Name:</label>
+			    <div class="col-sm-9">
+			      	<textarea id='post-editor' class='mceEditor' ng-model='post.content' style='height: 300px'></textarea>
+			    </div>
+			  </div>
+			  <div class="form-group">
+			    <div class="col-sm-offset-3 col-sm-9">
+			      <button type="submit" class="btn btn-primary btn-block">Create New Post</button>
+			    </div>
+			  </div>
+			</form>
+		</div>
+	</div>
+	
+	<!-- Code Highlight Modal -->
+<div class="modal fade" id="codeModal" tabindex="-1" role="dialog" aria-labelledby="codeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="codeModalLabel">Code Highlight</h4>
+      </div>
+      <div class="modal-body">
+          <div class="row">
+            <div class="col-sm-8">
+              <div id="editor" style='width: 600px; height:400px'>function foo(items) {
+                  var x = "All this is syntax highlighted";
+                  return x;
+              }</div>
+            </div>
+            <div class="col-sm-4">
+              <form class="form-horizontal" role="form" ng-submit="addCodeToTinyMCE()">
+                <div class="form-group">
+                  <label for="inputLanguague" class="col-sm-3 control-label">Language:</label>
+                  <div class="col-sm-7">
+                    <select id="mode" size="1" class="form-control" ng-options='code.name for code in languageList' ng-model='codeHighlight.language' ng-change='changeLanguage()'></select>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="inputTheme" class="col-sm-3 control-label">Theme:</label>
+                  <div class="col-sm-7">
+                    <select id="mode" size="1" class="form-control" ng-options='theme.name group by theme.label for theme in themeList' ng-model='codeHighlight.theme' ng-change='changeTheme()'></select>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="inputFontSize" class="col-sm-3 control-label">Font Size:</label>
+                  <div class="col-sm-7">
+                    <select id="fontsize" size="1" class="form-control" ng-model='codeHighlight.size' ng-change='changeFontSize()' ng-options='size.name for size in sizeList'></select>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="col-sm-9">
+                    <button type="submit" class="btn btn-primary btn-block">Insert</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+

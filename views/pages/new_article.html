@@ -1,0 +1,336 @@
+<!doctype html>
+<html lang="en" ng-app="phonecatApp" ng-controller="MainCtrl" ng-init="init()">
+<head>
+  {% include "../partials/head.html" %}
+  <script type="text/javascript" src="/vendors/jquery-1.11.0.min.js"></script>
+  <script type="text/javascript" src="/bootstrap/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="/bootstrap/js/docs.min.js"></script>
+  <script type="text/javascript" src="/vendors/angular-file-upload/angular-file-upload-shim.min.js"></script>
+  <script type="text/javascript" src="/vendors/angular.js"></script>
+  <script type="text/javascript" src="/vendors/angular-file-upload/angular-file-upload.min.js"></script> 
+
+  <script type="text/javascript" src="/vendors/angular-route.js"></script>
+  <script type="text/javascript" src="/vendors/angular-resource.js"></script>
+  <script type="text/javascript" src="/vendors/angular-animate.js"></script>
+  <script type="text/javascript" src="/vendors/angular-sanitize.js"></script>
+  
+  <script type="text/javascript" src="/vendors/ui-bootstrap-tpls-0.12.0.js"></script>
+  <!-- ACE code highlight -->
+  <script type="text/javascript" src="/vendors/ace-noconflict/ace.js"></script>
+  <script type="text/javascript" src="/vendors/ace-noconflict/ext-modelist.js"></script>
+  <script type="text/javascript" src="/vendors/ui-ace.js"></script>
+
+  <script type="text/javascript" src="/vendors/tinymce/tinymce.min.js"></script>
+  <script type="text/javascript" src="/controllers/article-ctrl.js"></script>
+
+  <script type="text/ng-template" id="customTemplate.html">
+  <a ng-if="match._id != -1">
+  <span bind-html-unsafe="match.label | typeaheadHighlight:query"></span>
+  </a>
+  </script>
+  <style type="text/css">
+  .tag-label {
+    background-color: #5bc0de;
+    padding: .2em .6em .3em;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: .25em;
+}
+</style>
+</head>
+
+<body data-twttr-rendered="true" style="background-color: #C0DEED;">
+    <a class="sr-only sr-only-focusable" href="#content">Skip to main content</a>
+    {% include "../partials/header.html" %}
+    <div class="container bs-docs-container" >
+    <div class="row" style="margin-top:10px"></div>
+    <div class="row">
+
+<!-- LEFT SIDEBAR -->
+<div class="col-md-4" style="padding-right:5px">
+    <div class="panel panel-success" style="margin-bottom:6px">
+        <div class="panel-heading"><h3 class="panel-title">Article Setting</h3></div>
+        <div class="panel-body">
+            <div class="col-md-12">
+                <form class="form-horizontal" role="form">
+                    <div class="form-group" style="margin-left:-25px">
+                        <label for="edit-exp-company-name" class="col-sm-3 control-label" style="text-align: left;">Tags:</label>
+                        <div class="col-sm-9">
+                            <input type="text" ng-model="customSelected" placeholder="Custom template" typeahead="tag as tag.name for tag in getTags($viewValue) | filter:{name:$viewValue}" typeahead-on-select='onTypeaheadSelect($item, $model, $label)' typeahead-template-url="customTemplate.html" class="form-control">
+                            <ul class="list-inline">
+                                <li ng-repeat="tag in article.tags">
+                                    <p class="tag-label">[[tag.name]]<button type="button" class="close btn-sm" ng-click="removeTag(tag)" style="margin-left:10px"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button></p>    
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-left:-25px">
+                        <label for="edit-exp-category" class="col-sm-3 control-label" style="text-align: left;">Categories:</label>
+                            <div class="col-sm-9">
+                                <!-- Split button -->
+                                <div class="btn-group" dropdown is-open="status.isopen">
+                                    <button type="button" class="btn btn-default  dropdown-toggle" dropdown-toggle ng-disabled="disabled">
+                                        [[selectedCategory.name]] <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <li ng-repeat="category in settings.categories" ng-if="category.slug != selectedCategory.slug"><a href="#" ng-click="selectCategory(category)">[[category.name]]</a></li>
+                                        <li class="divider"></li>
+                                        <li><a href="#" ng-click="showAddNewCategory()">Add new category</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group" style="margin-left:-25px">
+                            <label for="edit-exp-title" class="col-sm-3 control-label" style="text-align: left;">Privacy:</label>
+                            <div class="col-sm-9">
+                                <!-- Split button -->
+                                <div class="btn-group" dropdown >
+                                    <button type="button" class="btn btn-default  dropdown-toggle" dropdown-toggle ng-disabled="disabled">
+                                        [[selectedPrivacy.name]] <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <li ng-repeat="privacy in settings.privacies" ng-if="privacy._id != selectedPrivacy._id"><a href="#" ng-click="selectPrivacy(privacy)">[[privacy.name]]</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <!-- Split button -->
+                            <div class="btn-group col-md-12" style="padding-left:0px; padding-right:0px" dropdown>
+                                <button type="button" class="btn btn-primary col-md-10" ng-click="publishArticle()" >Publish</button>
+                                <button type="button" class="btn btn-info col-md-2 dropdown-toggle" dropdown-toggle>
+                                    <span class="caret"></span>
+                                    <span class="sr-only">Split button!</span>
+                                </button>
+                                <ul class="dropdown-menu col-md-12" role="menu">
+                                    <li><a href="#">Save Draft</a></li>
+                                    <li><a href="#" ng-click="showSchedulePost()">Schedule Post</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </form>
+            </div>
+        </div>
+        <div class="panel-footer" style="padding-top:5px; padding-bottom:2px; font-size: 12px;">
+            <span class=" alert-danger" ng-if="article.error"> [[ article.error ]]</span>
+            <span ng-if="article.lastSaved">Auto saved at [[article.lastSaved | date:'HH:mm' ]]</span>
+        </div>
+    </div>
+</div>
+<!-- END OF LEFT SIDEBAR -->
+
+<!-- MAIN -->
+<div class="col-md-8" style="padding-left:5px">
+    <div class="panel panel-success">
+      <div class="panel-heading">
+       <h3 class="panel-title">Add New Article</h3>
+   </div>
+   <div class="panel-body">
+      <div class="col-md-12">
+        
+        <div class="form-group">
+          <div >
+            <input pattern=".{3,}" ng-model="article.title" required title="3 characters minimum" class="form-control" name="title" id="title" placeholder="Enter title here" ng-blur="processUrl()">
+        </div>
+    </div>
+    <div class="form-group">
+      <p><span>Permanent URL:</span><a href="">http://projectx.com/kabuky/articles/[[ article.slug]]</a></p>
+  </div>
+  <div class="form-group">
+      
+      <div >
+        <textarea id='article-editor' class='mceArticleEditor' style='height: 300px'></textarea>
+    </div>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+<!-- END OF MAIN -->
+</div>
+</div>
+
+<!-- ADD NEW TAG DIALOG MODAL -->
+<div class="modal fade" id="newTagModal" tabindex="-1" role="dialog" aria-labelledby="newTagModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="pull-right">
+          <div>
+            <button type="button" class="btn btn-default margin-right:10px" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary " ng-click="addNewTag()">Save</button>
+        </div>
+    </div>
+    
+    <h4 class="modal-title" id="newTagModalLabel">Add new tag</h4>
+</div>
+<div class="modal-body">
+  <div class="alert alert-danger" ng-if="newTag.errors.length">
+            <ul>
+                <li ng-repeat="error in newTag.errors">
+                    [[ error ]]
+                </li>
+            </ul>
+        </div>
+    <form class="form-horizontal" role="form">
+      <div class="form-group" >
+        <label for="edit-exp-title" class="col-sm-3 control-label" style="text-align: left;">Tag Name:</label>
+        <div class="col-sm-9">
+          <input type="text" ng-model="newTag.name" class="form-control">
+      </div>
+  </div>
+  <div class="form-group">
+    <label for="edit-exp-title" class="col-sm-3 control-label" style="text-align: left;">Slug:</label>
+    <div class="col-sm-9">
+      <input type="text" ng-model="newTag.slug" disabled class="form-control">
+  </div>
+</div>
+</form>
+<div class="clearfix visible-xs-block"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- ADD NEW TAG DIALOG MODAL -->
+
+<!-- ADD NEW CATEGORY DIALOG MODAL -->
+<div class="modal fade" id="newCategoryModal" tabindex="-1" role="dialog" aria-labelledby="newCategoryModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="pull-right">
+                    <div>
+                        <button type="button" class="btn btn-default margin-right:10px" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary " ng-click="addNewCategory()">Save</button>
+                    </div>
+                </div>
+                <h4 class="modal-title" id="newCategoryModalLabel">Add new category</h4>
+            </div>
+        <div class="modal-body">
+            <div class="alert alert-danger" ng-if="newCategory.errors.length">
+            <ul>
+                <li ng-repeat="error in newCategory.errors">
+                    [[ error ]]
+                </li>
+            </ul>
+        </div>
+    <form class="form-horizontal" role="form">
+      <div class="form-group" >
+        <label for="edit-exp-category" class="col-sm-3 control-label" style="text-align: left;">Category Name:</label>
+        <div class="col-sm-9">
+          <input type="text" ng-model="newCategory.name" class="form-control">
+      </div>
+  </div>
+  <div class="form-group">
+    <label for="edit-exp-slug" class="col-sm-3 control-label" style="text-align: left;">Slug:</label>
+    <div class="col-sm-9">
+      <input type="text" ng-model="newCategory.slug" disabled class="form-control">
+  </div>
+</div>
+</form>
+<div class="clearfix visible-xs-block"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- ADD NEW CATEGORY DIALOG MODAL -->
+
+<!-- SCHEDULE POST DIALOG MODAL -->
+<div class="modal fade" id="scheduleModal" tabindex="-1" role="dialog" aria-labelledby="scheduleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="pull-right">
+                    <div>
+                        <button type="button" class="btn btn-default margin-right:10px" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary " ng-click="schedulePost()">Save</button>
+                    </div>
+                </div>
+                <h4 class="modal-title" id="scheduleModalLabel">Schedule Post</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" role="form">
+                    <div class="form-group" >
+                        <label for="edit-exp-category" class="col-sm-3 control-label" style="text-align: left;">Date:</label>
+                        <div class="col-sm-9">
+                          <p class="input-group">
+                              <input type="text" class="form-control" datepicker-popup="[[format]]" ng-model="dt" is-open="opened" min-date="minDate" max-date="'2015-06-22'" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
+                              <span class="input-group-btn">
+                                <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                              </span>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="form-group" >
+                        <label for="edit-exp-category" class="col-sm-3 control-label" style="text-align: left;">Time:</label>
+                        <div class="col-sm-9">
+                            <timepicker ng-model="mytime" ng-change="changed()" hour-step="hstep" minute-step="mstep" show-meridian="ismeridian"></timepicker>
+                        </div>
+                    </div>
+                </form>
+                
+                <div class="clearfix visible-xs-block"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- SCHEDULE POST DIALOG MODAL -->
+
+<!-- Code Highlight Modal -->
+<div class="modal fade" id="codeModal" tabindex="-1" role="dialog" aria-labelledby="codeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="codeModalLabel">Code Highlight</h4>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+          <div class="col-sm-8">
+            <div id="editor" style='width: 600px; height:400px'>function foo(items) {
+              var x = "All this is syntax highlighted";
+              return x;
+          }</div>
+      </div>
+      <div class="col-sm-4">
+        <form class="form-horizontal" role="form" ng-submit="addCodeToTinyMCE()">
+          <div class="form-group">
+            <label for="inputLanguague" class="col-sm-3 control-label">Language:</label>
+            <div class="col-sm-7">
+              <select id="mode" size="1" class="form-control" ng-options='code.name for code in languageList' ng-model='codeHighlight.language' ng-change='changeLanguage()'></select>
+          </div>
+      </div>
+      <div class="form-group">
+        <label for="inputTheme" class="col-sm-3 control-label">Theme:</label>
+        <div class="col-sm-7">
+          <select id="mode" size="1" class="form-control" ng-options='theme.name group by theme.label for theme in themeList' ng-model='codeHighlight.theme' ng-change='changeTheme()'></select>
+      </div>
+  </div>
+  <div class="form-group">
+    <label for="inputFontSize" class="col-sm-3 control-label">Font Size:</label>
+    <div class="col-sm-7">
+      <select id="fontsize" size="1" class="form-control" ng-model='codeHighlight.size' ng-change='changeFontSize()' ng-options='size.name for size in sizeList'></select>
+  </div>
+</div>
+<div class="form-group">
+    <div class="col-sm-9">
+      <button type="submit" class="btn btn-primary btn-block">Insert</button>
+  </div>
+</div>
+</form>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+{% include "../partials/footer.html" %}
+
+<script src="user_page.js"></script>
+</body></html>

@@ -1,0 +1,155 @@
+<!doctype html>
+<!-- Docs master nav -->
+<header class="navbar navbar-static-top bs-docs-nav" id="top" role="banner" style="-webkit-box-shadow: 0px 4px 5px 0px rgba(56,53,56,1); -moz-box-shadow: 0px 4px 5px 0px rgba(56,53,56,1); box-shadow: 0px 4px 5px 0px rgba(56,53,56,1);">
+<div class="container">
+    <div class="navbar-header">
+        <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+      <a href="../" class="navbar-brand">Project X</a>
+    </div>
+    <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
+      <ul class="nav navbar-nav">
+        <li>
+          <a href="../getting-started/">Getting started</a>
+        </li>
+        <li>
+          <a href="../css/">Discover</a>
+        </li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        {% if data.user %}
+            <li><a href="/{{data.user.local.username}}">{{ data.user.local.firstName }}</a></li>
+            <li><a tabindex="-1" href="/logout">Log out</a></li>
+            <li  class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Account &nbsp; <span class="caret"></span></a>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="drop3">
+                    <li role="presentation"><a role="menuitem" tabindex="-1" href="https://twitter.com/fat">Settings</a></li>
+                    <li role="presentation"><a role="menuitem" tabindex="-1" href="/page/new">Create page</a></li>
+                    <li role="presentation"><a role="menuitem" tabindex="-1" href="https://twitter.com/fat">Privacy settings</a></li>
+                    <li role="presentation" class="divider"></li>
+                    <li role="presentation"><a role="menuitem" tabindex="-1" href="/logout">Log out</a></li>
+                </ul>
+            </li>
+
+
+        {% else %}
+            <li><a href="#" data-toggle="modal" data-target="#loginModal">Log In</a></li>
+            <li><a href="#" data-toggle="modal" data-target="#signupModal">Sign Up</a></li>
+        {% endif %}
+
+        
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<!-- Sign Up Modal -->
+<div class="modal fade" id="signupModal" tabindex="-1" role="dialog" aria-labelledby="signupModalLabel" aria-hidden="true">
+  <div class="modal-dialog ">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="signupModalLabel">Sign Up</h4>
+      </div>
+      <div class="modal-body">
+        <form class="form-horizontal" role="form">
+        <div class="form-group">
+          <label for="inputEmail3" class="col-sm-3 control-label">Email:</label>
+          <div class="col-sm-9">
+            <input type="email" class="form-control" id="inputEmail3" placeholder="Email">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputFirstName" class="col-sm-3 control-label">First Name:</label>
+          <div class="col-sm-9">
+            <input type="firstName" class="form-control" id="inputFirstName">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputLastName" class="col-sm-3 control-label">Last Name:</label>
+          <div class="col-sm-9">
+            <input type="lastName" class="form-control" id="inputLastName">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputPassword3" class="col-sm-3 control-label">Password</label>
+          <div class="col-sm-9">
+            <input type="password" class="form-control" id="inputPassword3" placeholder="Password">
+          </div>
+        </div>
+        <!-- <div class="form-group">
+          <div class="col-sm-offset-2 col-sm-10">
+            <div class="checkbox">
+              <label>
+                <input type="checkbox"> Remember me
+              </label>
+            </div>
+          </div>
+        </div> -->
+  <!-- <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+      <button type="submit" class="btn btn-default">Sign in</button>
+    </div>
+  </div> -->
+</form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Sign Up</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Log In Modal -->
+<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <form class="form-horizontal" role="form" method="POST" action="/login">
+      <input type="hidden" name="redirect_url" value="{{ data.redirect_url }}">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="loginModalLabel">Log In</h4>
+      </div>
+      <div class="modal-body">
+        
+        <div class="form-group">
+          <label for="inputEmail3" class="col-sm-2 control-label">Email</label>
+          <div class="col-sm-10">
+            <input type="email" class="form-control" name="email" id="inputEmail3" placeholder="Email">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputPassword3" class="col-sm-2 control-label">Password</label>
+          <div class="col-sm-10">
+            <input type="password" class="form-control" name="password" id="inputPassword3" placeholder="Password">
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-offset-2 col-sm-10">
+            <div class="checkbox">
+              <label>
+                <input type="checkbox"> Remember me
+              </label>
+            </div>
+          </div>
+        </div>
+        <!-- <div class="form-group">
+          <div class="col-sm-offset-2 col-sm-10">
+            <button type="submit" class="btn btn-default">Sign in</button>
+          </div>
+        </div> -->
+      
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">Log In</button>
+      </div>
+    </div>
+    </form>
+  </div>
+</div>

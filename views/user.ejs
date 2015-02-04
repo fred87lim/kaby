@@ -1,0 +1,295 @@
+<!doctype html>
+<html ng-app="phonecatApp" ng-controller="MainCtrl">
+<head>
+	<title>Node Authentication</title>
+	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+	<link rel="stylesheet" type="text/css" href="bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="bootstrap-responsive.css">
+	<link rel="stylesheet" type="text/css" href="app.css">
+	<link rel="stylesheet" type="text/css" href="animations.css">
+
+	<!-- Twitter Bootstrap vertical tabs -->
+	<link rel="stylesheet" type="text/css" href="bootstrap.vertical-tabs.css">
+	
+
+	<!-- Font Awesome -->
+	<link rel="stylesheet" type="text/css" href="font-awesome.css">
+	<link rel="stylesheet" type="text/css" href="docs.css">
+	<!-- Bootstrap social button -->
+	<link rel="stylesheet" type="text/css" href="bootstrap-social.css">
+
+	<link rel="stylesheet" href="/jquery-file-upload/style.css">
+	<!-- CSS to style the file input field as button and adjust the Bootstrap progress bars -->
+	<link rel="stylesheet" href="/jquery-file-upload/jquery.fileupload.css">
+
+	<script type="text/javascript" src="/vendors/jquery-1.11.0.min.js"></script>
+	<script type="text/javascript" src="/vendors/bootstrap.js"></script>
+
+	<!-- Jcrop -->
+	<script type="text/javascript" src="/vendors/jcrop/jquery.Jcrop.js"></script>
+	<link rel="stylesheet" href="/vendors/jcrop/jquery.Jcrop.css">
+
+	<script type="text/javascript" src="/vendors/angular-file-upload/angular-file-upload-shim.min.js"></script>
+	<script type="text/javascript" src="/vendors/angular.js"></script>
+	<script type="text/javascript" src="/vendors/angular-file-upload/angular-file-upload.min.js"></script> 
+	
+	<script type="text/javascript" src="/vendors/angular-route.js"></script>
+	<script type="text/javascript" src="/vendors/angular-resource.js"></script>
+	<script type="text/javascript" src="/vendors/angular-animate.js"></script>
+	<script type="text/javascript" src="/vendors/angular-sanitize.js"></script>
+
+	<!-- AngularJS Google Maps -->
+	<script type="text/javascript" src='//maps.googleapis.com/maps/api/js?sensor=false'></script>
+	<script type="text/javascript" src="/vendors/underscore.js"></script>
+	<script type="text/javascript" src="/vendors/angular-google-maps.js"></script>
+
+	<!-- AngularJS UI -->
+	<script type="text/javascript" src="/vendors/ui-bootstrap-tpls-0.10.0.js"></script>
+
+	<!-- Toastr [Notification] -->
+	<link rel="stylesheet" type="text/css" href="toastr.css">
+	<script type="text/javascript" src="/vendors/toastr.js"></script>
+
+	<!-- ACE code highlight -->
+	<script type="text/javascript" src="/vendors/ace-noconflict/ace.js"></script>
+	<script type="text/javascript" src="/vendors/ace-noconflict/ext-modelist.js"></script>
+
+	<!--
+	<script src="http://localhost:5000/socket.io/socket.io.js"></script> -->
+
+	<!-- TinyMCE editor -->
+	<script type="text/javascript" src="/vendors/tinymce/tinymce.min.js"></script>
+
+	<script type="text/javascript" src="app.js"></script>
+	<script type="text/javascript" src="/services/services.js"></script>
+
+
+	<!-- AngularJS Controller -->
+	<script type="text/javascript" src="/controllers/controllers.js"></script>
+	<script type="text/javascript" src="/controllers/new-biz-ctrl.js"></script>
+	<script type="text/javascript" src="/controllers/settings-ctrl.js"></script>
+	<script type="text/javascript" src="/controllers/index-ctrl.js"></script>
+	<script type="text/javascript" src="/controllers/rate-ctrl.js"></script>
+	<script type="text/javascript" src="/controllers/transactions-ctrl.js"></script>
+	<script type="text/javascript" src="/controllers/new-post-ctrl.js"></script>
+	<script type="text/javascript" src="/controllers/user-ctrl.js"></script>
+	<script type="text/javascript" src="/controllers/userprofile-ctrl.js"></script>
+	
+	<script type="text/javascript" src="/filters/filters.js"></script>
+	<script type="text/javascript" src="/animations/animation.js"></script>
+
+
+<style type="text/css">
+
+/* Apply these styles only when #preview-pane has
+   been placed within the Jcrop widget */
+.jcrop-holder #preview-pane {
+  display: block;
+  position: absolute;
+  z-index: 2000;
+  top: 10px;
+  right: -280px;
+  padding: 6px;
+  border: 1px rgba(0,0,0,.4) solid;
+  background-color: white;
+
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+
+  -webkit-box-shadow: 1px 1px 5px 2px rgba(0, 0, 0, 0.2);
+  -moz-box-shadow: 1px 1px 5px 2px rgba(0, 0, 0, 0.2);
+  box-shadow: 1px 1px 5px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* The Javascript code will set the aspect ratio of the crop
+   area based on the size of the thumbnail preview,
+   specified here */
+#preview-pane .preview-container {
+  width: 200px;
+  height: 200px;
+  overflow: hidden;
+}
+
+</style>
+
+
+	<!-- <base href="/"> -->
+</head>
+<body>
+
+<!-- When user logged in -->
+<div ng-if="loggedinUser == null">
+	<div ng-include="'/partials/login-navbar.ejs'" ng-init="username=loggedinUser.local.username"></div>
+</div>
+
+<!-- When user not logged in, show navbar -->
+<div ng-if="loggedinUser != null">
+	<div ng-include="'/partials/logout-navbar.html'"></div>
+</div>
+
+<!-- Since navbar is staticly fixed on top. Need to define offset margin for container -->
+<div style="margin-top: 50px"></div>
+
+<div class="container" ng-controller="UserCtrl" ng-init="init('<%= targetUsername %>', '<%= loginToken %>')" >
+
+	<!-- Container Main -->
+	<div class="col-sm-8">
+
+		<!-- User Info -->
+		<div class="row">
+			<div class="col-sm-4" ng-switch="isMyself">
+
+				<!-- If logged in user is viewing his own profile -->
+				<div ng-if="isMyself">
+					<div ng-if="targetUser.profilePicture == null">
+						<a href="#" data-toggle="modal" data-target="#profilePicModal"><img src="/img/default_user.png"></a>
+					</div>
+					<div ng-if="targetUser.profilePicture != null">
+						<a href="#" data-toggle="modal" data-target="#profilePicModal"><img src="{{targetUser.profilePicture.url}}"></a>
+					</div>
+				</div>
+
+				<div ng-if="!isMyself">
+					<div ng-if="targetUser.profilePicture == null">
+						<img src="/img/default_user.png">
+					</div>
+					<div ng-if="targetUser.profilePicture != null">
+						<img src="{{targetUser.profilePicture.url}}">
+					</div>
+				</div>
+				
+			</div>
+			<div class="col-sm-8">
+				<h1>Business card goes here</h1>
+				
+				
+			</div>
+		</div>
+		<!-- End of User Info -->
+
+		<hr />
+		
+		<div class="row">
+			<ul id="myTab" class="nav nav-tabs" role="tablist">
+			    <li ng-class="{ active: tab == 'home' }">
+			    	<a ng-click='tab = "home"'>Home</a>
+			    </li>
+			    <li ng-class="{ active: tab == 'profile' }">
+			    	<a ng-click='tab = "profile"'>Profile</a>
+			    </li>
+			    <li ng-class="{ active: tab == 'blog' }">
+			    	<a ng-click='tab = "blog"'>Blog</a>
+			    </li>			    
+			</ul>
+
+			<div class="tab-content">
+				<div ng-switch='tab'>
+					<div ng-switch-when='home'>
+						<div  ng-include="'/tabs/profile-home.html'"></div>
+					</div>
+					<div ng-switch-when='profile' >
+						<div ng-include="'/tabs/profile-profile.html'"></div>
+					</div>
+					<div ng-switch-when='blog' >
+						<div ng-include="'/tabs/profile-blog.html'"></div>
+					</div>
+				</div>			    
+			</div>
+		</div>
+	</div>
+	<!-- End of Container Main -->
+
+	<!-- Right side bar -->
+	<div class="col-sm-4">
+		<h1>Right sidebard</h1>
+	</div>
+	<!-- End of Right side bar -->
+	
+<!-- <div ng-view></div> -->
+
+<!-- Log In Modal -->
+<div class="modal fade" id="profilePicModal" tabindex="-1" role="dialog" aria-labelledby="profilePicModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="profilePicModalLabel">Profile Picture</h4>
+      </div>
+      <div class="modal-body">
+          <div class="row">
+            <div class="alert alert-danger">Email and password does not match.</div>
+            <div class="col-sm-7">
+            	<div class="row">
+					  <input type="file" ng-file-select="onFileSelect($files)" >
+					  <!-- <input type="file" ng-file-select="onFileSelect($files)" multiple>
+					  <div ng-file-drop="onFileSelect($files)" ng-file-drag-over-class="optional-css-class"
+					        ng-show="dropSupported">drop files here</div>
+					  <div ng-file-drop-available="dropSupported=true" 
+					        ng-show="!dropSupported">HTML5 Drop File is not supported!</div>
+					  <button ng-click="upload.abort()">Cancel Upload</button> -->
+					  <img-cropped src="{{imgUrl}}" changed='changed(cords)' selected='selected(cords)'></img-cropped>
+				</div>
+            	
+            </div>
+
+            <!-- Profile Picture Review -->
+            <div class="col-sm-5">
+            	<div id="preview-pane">
+				    <div class="preview-container">
+				      <img src="{{imgUrl}}" class="jcrop-preview" alt="Preview" />
+				    </div>
+				  </div>
+            </div>
+          </div>              
+      </div>
+      <div class='modal-footer'>
+      		<button type="button" class="btn btn-primary" ng-click="cropImage()">Crop Image</button>	
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- The jQuery UI widget factory, can be omitted if jQuery UI is already included -->
+<script src="/vendors/jquery-file-upload/jquery.ui.widget.js"></script>
+<!-- The Iframe Transport is required for browsers without support for XHR file uploads -->
+<script src="/vendors/jquery-file-upload/jquery.iframe-transport.js"></script>
+<!-- The basic File Upload plugin -->
+<script src="/vendors/jquery-file-upload/jquery.fileupload.js"></script>
+<script src="/vendors/jquery-file-upload/jquery.fileupload-process.js"></script>
+<script src="/vendors/jquery-file-upload/jquery.fileupload-image.js"></script>
+<script src="/vendors/jquery-file-upload/jquery.fileupload-angular.js"></script>
+<script>
+/*jslint unparam: true */
+/*global window, $ */
+$(function () {
+    'use strict';
+    // on nodejs side parse this req.files.myFile.path
+    // Change this to the location of your server-side upload handler:
+    var url = window.location.hostname === 'blueimp.github.io' ?
+                '//jquery-file-upload.appspot.com/' : '/api/v1/user/photo/jquery-upload';
+    $('#fileupload').fileupload({
+        url: url,
+        dataType: 'json',
+        
+        done: function (e, data) {
+        	console.log(data);
+            $.each(data.result.results.files, function (index, file) {
+            	console.log(JSON.stringify(file));
+                $('<p/>').text(file.name).appendTo('#files');
+            });
+        },
+        progressall: function (e, data) {
+            var progress = parseInt(data.loaded / data.total * 100, 10);
+            $('#progress .progress-bar').css(
+                'width',
+                progress + '%'
+            );
+        }
+    }).prop('disabled', !$.support.fileInput)
+        .parent().addClass($.support.fileInput ? undefined : 'disabled');
+});
+</script>
+</body>
+</html>

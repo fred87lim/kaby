@@ -1,0 +1,15 @@
+<h1>This is blog</h1>
+<div ng-repeat='post in posts'>
+	<h4><a href="#/{{username}}/{{post.urlTitle}}" >{{post.title}}</a></h4>
+	<div compile="post.content"></div>
+	<div>
+		<ul class='list-inline'>
+			<li><a href="">Like</a></li>
+			<li><a href="">Comment</a></li>
+			<li><a href="">Share</a></li>
+			<li><a href="">Add To List</a></li>
+		</ul>
+	</div>
+	<br />
+	<hr>
+</div>

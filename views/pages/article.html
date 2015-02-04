@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en" ng-app="phonecatApp" ng-controller="MainCtrl" ng-init="init('{{data.username}}', '{{data.articleSlug}}')">
+<head>
+    {% include "../partials/head.html" %}
+    <script type="text/javascript" src="/vendors/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/bootstrap/js/docs.min.js"></script>
+    <script type="text/javascript" src="/vendors/angular-file-upload/angular-file-upload-shim.min.js"></script>
+    <script type="text/javascript" src="/vendors/angular.js"></script>
+    <script type="text/javascript" src="/vendors/angular-file-upload/angular-file-upload.min.js"></script> 
+
+    <script type="text/javascript" src="/vendors/angular-route.js"></script>
+    <script type="text/javascript" src="/vendors/angular-resource.js"></script>
+    <script type="text/javascript" src="/vendors/angular-animate.js"></script>
+    <script type="text/javascript" src="/vendors/angular-sanitize.js"></script>
+  
+    <script type="text/javascript" src="/vendors/ui-bootstrap-tpls-0.12.0.js"></script>
+    <!-- ACE code highlight -->
+    <script type="text/javascript" src="/vendors/ace-noconflict/ace.js"></script>
+    <script type="text/javascript" src="/vendors/ace-noconflict/ext-modelist.js"></script>
+    <script type="text/javascript" src="/vendors/ui-ace.js"></script>
+
+    <script type="text/javascript" src="/vendors/tinymce/tinymce.min.js"></script>
+    <script type="text/javascript" src="/controllers/article-controller.js"></script>
+    <link href="/app.css" rel="stylesheet">
+</head>
+<body data-twttr-rendered="true" style="background-color: #C0DEED;">
+    <a class="sr-only sr-only-focusable" href="#content">Skip to main content</a>
+    {% include "../partials/header.html" %}
+    <div class="container bs-docs-container" >
+        <div class="row" style="margin-top:10px"></div>
+        
+            <div class="row">
+                <!-- LEFT SIDEBAR -->
+                <div class="col-md-4" style="padding-right:5px">
+                    <div>
+                        <div class="panel panel-default" style="margin-bottom:6px">
+                            <div class="panel-body">
+                                <div class="col-md-6" style="padding-left:0px; padding-right:0px">
+                                    <!-- <img src="[[user.data.profilePicture]]" class="img-thumbnail" width="200px" height="200px"> -->
+                                </div>
+                                <div class="col-md-6" style="padding-left:0px; padding-right:0px">
+                                    <h3 style="margin-top:0px">[[user.data.local.firstName]] [[user.data.local.lastName]]</h3>
+                                </div>
+                            </div>
+                           
+                        </div>
+                    </div>
+                    
+                </div>
+                <!-- END OF LEFT SIDEBAR -->
+
+<!-- MAIN -->
+<div class="col-md-8" style="padding-left:5px">
+    <div class="panel panel-default">
+        <div class="panel-body" ng-if="user.article != null">
+            <h3>[[user.article.title]]</h3>
+            <p style="color: #999;font-size: 12px;">
+                <span>[[user.article.dateCreated | date:'hh:mm dd MMM yyyy']]</span>&nbsp
+                <span>[[user.article.privacy.name]]</span>
+            </p>
+            <p>[[user.article.category.name]]</p>
+            <p ng-bind-html="trustedHtml(user.article.content)" class="postContent"></p>
+            <ul class="list-inline">
+                <li ng-repeat="tag in user.article.tags"><a href="/[[user.username]]/tags/[[tag.slug]]"><span class="glyphicon glyphicon-tag" aria-hidden="true"></span> <span>[[tag.name]]</span></a></li>
+            </ul>
+            <br>
+            <ul class="list-inline">
+                <li>
+                    <a href="#" ng-click="likeUnlikeArticle(user.article._id)" ng-if="user.article.liked == false">Like</a>
+                    <a href="#" ng-click="likeUnlikeArticle(user.article._id)" ng-if="user.article.liked == true">Unlike</a>
+                </li>
+                <li> · </li>
+                <li><a href="">Comment</a></li>
+                <li> · </li>
+                <li><a href="">Share</a></li>
+            </ul>
+            <hr />
+            <p ng-if="user.article.likes.length != 0">
+                <span ng-if="user.article.liked == true">You </span>
+                <span ng-if="user.article.likes.length > 0 && user.article.liked == false"><a href="">[[user.article.likes.length]] people</a></span>
+                <span ng-if="user.article.likes.length > 0 && user.article.liked == true"> and <a href="">[[user.article.likes.length - 1]] other</a> people</span>
+                <span ng-if="user.article.likes.length == 1">likes this</span>
+
+                <span ng-if="user.article.likes.length > 1">like this</span>
+            </p>
+            <hr />
+            <div>
+                <div class="media" ng-repeat="comment in user.article.comments">
+                    <a class="pull-left" href="#">
+                        <img src="[[comment.commenter.profilePicture]]" class="media-object" width="60px" height="60px">
+                    </a>
+                    <div class="media-body" >
+                        <p ng-bind-html="trustedHtml(comment.content)" class="postContent"></p>
+
+                        <ul class="list-inline">
+                            <li>
+                                <a href="#" ng-click="likeComment(comment)">
+                                    <span ng-if="comment.commentLiked">Unlike</span>
+                                    <span ng-if="!comment.commentLiked">Like</span>
+                                    <span ng-if="comment.commentLikes != 0">([[comment.commentLikes.length]])</span></a>
+                            </li>
+                            <li> · </li>
+                            <li><a href="#" ng-click="showReplyTextEditor(comment)">Reply</a></li>
+                        </ul>
+                        <div>
+                            <div class="media" ng-repeat="reply in comment.replies">
+                                <a class="pull-left" href="#">
+                                    <img src="[[reply.author.profilePicture]]" class="media-object" width="60px" height="60px">
+                                </a>
+                             <div class="media-body">
+                                <p ng-bind-html="trustedHtml(reply.content)" class="postContent"></p>
+                                <ul class="list-inline">
+                                    <li>
+                                        <a href="#" ng-click="likeReply(reply)">
+                                            <span ng-if="reply.liked">Unlike</span>
+                                            <span ng-if="!reply.liked">Like</span>
+                                            <span ng-if="reply.likes != 0">([[reply.likes.length]])</span></a>
+                                    </li>
+                                </ul>
+                             </div>
+                          </div>
+                        </div>
+                        
+                        <div class="comments-editor" id="comment-[[comment._id]]">
+
+                        </div>
+
+                        
+
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+        <div class="media">
+                <a class="pull-left" href="#">
+                    <img src="[[user.data.profilePicture]]" class="media-object" width="60px" height="60px">
+                </a>
+                <div class="media-body">
+                    <div class="form-group comments-editor" id="article-comment">
+                        <textarea class="form-control" rows="3" placeholder="Comment..." ng-focus="showCommentTextEditor()"></textarea>
+                    </div>
+                    <div>
+                        <button type="button" class="btn btn-primary btn-block" ng-click="commentArticle()">Comment</button>
+                    </div>
+                </div>
+
+            </div>
+        
+    </div>
+</div>
+<!-- END OF MAIN -->
+
+            </div>
+    </div>
+{% include "../partials/footer.html" %}
+{% include "../partials/tail.html" %}
+</body></html>

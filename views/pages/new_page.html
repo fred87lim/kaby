@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en" ng-app="phonecatApp" ng-controller="MainCtrl">
+<head>
+    {% include "../partials/head.html" %}
+    <script type="text/javascript" src="/vendors/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/bootstrap/js/docs.min.js"></script>
+    <script type="text/javascript" src="/vendors/angular-file-upload/angular-file-upload-shim.min.js"></script>
+    <script type="text/javascript" src="/vendors/angular.js"></script>
+    <script type="text/javascript" src="/vendors/angular-file-upload/angular-file-upload.min.js"></script> 
+
+    <script type="text/javascript" src="/vendors/angular-route.js"></script>
+    <script type="text/javascript" src="/vendors/angular-resource.js"></script>
+    <script type="text/javascript" src="/vendors/angular-animate.js"></script>
+    <script type="text/javascript" src="/vendors/angular-sanitize.js"></script>
+
+    <!-- AngularJS Google Maps -->
+    <script type="text/javascript" src='//maps.googleapis.com/maps/api/js?sensor=false'></script>
+    <script type="text/javascript" src="/vendors/underscore.js"></script>
+    <script type="text/javascript" src="/vendors/angular-google-maps.js"></script>
+  
+    <script type="text/javascript" src="/vendors/ui-bootstrap-tpls-0.12.0.js"></script>
+    <!-- ACE code highlight -->
+    <script type="text/javascript" src="/vendors/ace-noconflict/ace.js"></script>
+    <script type="text/javascript" src="/vendors/ace-noconflict/ext-modelist.js"></script>
+    <script type="text/javascript" src="/vendors/ui-ace.js"></script>
+
+    <script type="text/javascript" src="/vendors/tinymce/tinymce.min.js"></script>
+    <script type="text/javascript" src="/controllers/new-page-controller.js"></script>
+    <script type="text/javascript" src="/controllers/new-biz-ctrl.js"></script>
+    <link href="/app.css" rel="stylesheet">
+
+    <script type="text/ng-template" id="customTemplate.html">
+    <a ng-if="match._id != -1">
+    <span bind-html-unsafe="match.label | typeaheadHighlight:query"></span>
+    </a>
+  </script>
+  <style type="text/css">
+  .tag-label {
+    background-color: #5bc0de;
+    padding: .2em .6em .3em;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: .25em;
+}
+</style>
+</head>
+<body data-twttr-rendered="true" style="background-color: #C0DEED;">
+    <a class="sr-only sr-only-focusable" href="#content">Skip to main content</a>
+    {% include "../partials/header.html" %}
+    <div class="container bs-docs-container" >
+        <div class="row" style="margin-top:10px"></div>
+        
+            <div class="row">
+
+<!-- MAIN -->
+<div class="col-md-12">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <ul class="list-inline">
+                <li><a href="#company">Company</a></li>
+                <li><a href="#school">School</a></li>
+            </ul>
+        </div>
+    </div>
+    <div ng-view></div>
+</div>
+<!-- END OF MAIN -->
+
+            </div>
+    </div>
+{% include "../partials/footer.html" %}
+{% include "../partials/tail.html" %}
+</body></html>

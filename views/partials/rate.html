@@ -1,0 +1,38 @@
+<!-- This page is meant for only registered and activated user -->
+<div class="new-biz" data-ng-init="init()">
+	<h1>Create New Rate</h1>
+	<p>Add information about your business below. Popintown reviews each submission, which may take a few days.</p>
+	<div class="row">
+		<div class="col-sm-7">
+			<form class="form-horizontal" role="form" ng-submit="createNewRate()" >
+			  <div class="form-group">
+			    <label for="inputOperatingCost" class="col-sm-3 control-label">Operating Cost:</label>
+			    <div class="col-sm-9">
+			      <input ng-model="rate.operatingCost" required class="form-control" name="operatingCost" id="operatingCost">
+			    </div>
+			  </div>
+			  <div class="form-group">
+			    <label for="charity" class="col-sm-3 control-label">Charity:</label>
+			    <div class="col-sm-9">
+			      <input required class="form-control" id="charity" name="charity" ng-model="rate.charityCost">
+			    </div>
+			  </div>
+			  <div class="form-group">
+                  <div class="col-sm-offset-3 col-sm-9">
+                    <div class="checkbox">
+                      <label>
+                        <input type="checkbox" ng-model="rate.isActive"> Is Active
+                      </label>
+                    </div>
+                  </div>
+                </div>
+			  <div class="form-group">
+			    <div class="col-sm-offset-3 col-sm-9">
+			      <button type="submit" class="btn btn-primary btn-block">Create New Rate</button>
+			    </div>
+			  </div>
+			</form>
+		</div>
+	</div>
+	
+</div>

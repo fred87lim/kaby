@@ -1,0 +1,97 @@
+<!-- This page is meant for only registered and activated user -->
+<div class="new-biz" data-ng-init="init()">
+	<h1>Create New Business</h1>
+	<p>Add information about your business below. Popintown reviews each submission, which may take a few days.</p>
+	<div class="row">
+		<div class="col-sm-7">
+			<form class="form-horizontal" role="form" ng-submit="registerNewBiz()" >
+				<div class="form-group">
+			    	<label for="inputCompanyName" class="col-sm-3 control-label">Company Name:</label>
+			    	<div class="col-sm-9">
+			      		<input pattern=".{3,}" ng-model="biz.name" required title="3 characters minimum" class="form-control" name="companyName" autocomplete="off" id="companyName">
+			    	</div>
+			  	</div>
+				<div class="form-group">
+			    	<label for="inputUsername" class="col-sm-3 control-label">Username:</label>
+			    	<div class="col-sm-9">
+			      		<input pattern=".{3,}" ng-model="biz.username" required title="3 characters minimum" class="form-control" name="username" autocomplete="off" id="username">
+			    	</div>
+			  	</div>
+			  	
+			  	<div class="form-group">
+			    	<label for="address1" class="col-sm-3 control-label">Address 1:</label>
+				    <div class="col-sm-9">
+				      	<input pattern=".{3,}" required title="3 characters minimum" class="form-control" id="address1" name="address1" placeholder="Ex: 6 Eu Tong Seng" autocomplete="off" ng-model="biz.address1">
+				    </div>
+			  	</div>
+			  	<div class="form-group">
+			    	<label for="address2" class="col-sm-3 control-label">Address 2:</label>
+			    		<div class="col-sm-9">
+			      		<input pattern=".{3,}" required title="3 characters minimum" class="form-control" id="address2" name="address2" placeholder="Ex: #05-34 Singapura Plaze" autocomplete="off" ng-model="biz.address2">
+			    	</div>
+			  	</div>
+			  	<div class="form-group">
+			    	<label for="city" class="col-sm-3 control-label">City</label>
+			    	<div class="col-sm-9">
+			      		<input type="text" ng-model="biz.city.name" placeholder="" typeahead="tag as tag.name for tag in getTags($viewValue) | filter:{name:$viewValue}" typeahead-on-select='onTypeaheadSelect($item, $model, $label)' typeahead-template-url="customTemplate.html" autocomplete="off" class="form-control">
+			    	</div>
+			  	</div>
+			  	<div class="form-group">
+			    	<label for="country" class="col-sm-3 control-label">Country:</label>
+			    		<div class="col-sm-9">
+			      		<input pattern=".{3,}" required title="3 characters minimum" class="form-control" id="country" name="country" placeholder="" ng-model="biz.country" autocomplete="off">
+			    	</div>
+			  	</div>
+			  
+			  <div class="form-group">
+			    <label for="postalCode" class="col-sm-3 control-label">Postal Code</label>
+			    <div class="col-sm-9">
+			      <input pattern=".{6,18}" required title="6 to 18 characters" class="form-control" id="postalCode" autocomplete="off" name="postalCode" ng-model="biz.postalCode">
+			    </div>
+			  </div>
+			  	<div class="form-group">
+			    	<label for="phone" class="col-sm-3 control-label">Phone</label>
+			    	<div class="col-sm-9">
+			      		<input pattern=".{6,18}" required title="6 to 18 characters" autocomplete="off" class="form-control" id="phone" name="phone" ng-model="biz.phone">
+			    	</div>
+			  	</div>
+			  	<div class="form-group">
+			    	<label for="phone" class="col-sm-3 control-label">Year Founded</label>
+			    	<div class="col-sm-9">
+			      		<input class="form-control" id="yearFounded" name="yearFounded" autocomplete="off" ng-model="biz.yearFounded">
+			    	</div>
+			  	</div>
+			  <div class="form-group">
+			    <label for="webAddress" class="col-sm-3 control-label">URL:</label>
+			    <div class="col-sm-9">
+			      <input pattern=".{6,18}" required title="6 to 18 characters" class="form-control" autocomplete="off" id="webAddress" name="webAddress" ng-model="biz.url">
+			    </div>
+			  </div>
+			  <div class="form-group">
+			    <label for="about" class="col-sm-3 control-label">Desciption:</label>
+			    <div class="col-sm-9">
+			    	<textarea class="form-control" id="about" name="about" ng-model="biz.about"></textarea>
+			    </div>
+			  </div>
+			  <div class="form-group">
+			    <div class="col-sm-offset-3 col-sm-9">
+			      <button type="submit" class="btn btn-primary btn-block">Create New Business</button>
+			    </div>
+			  </div>
+			</form>
+		</div>
+
+		<!-- 
+			Display Google Map for business address. It will listen for keystroke on biz's address field and 
+			update the map accordingly.
+		 -->
+		<div class="col-sm-5 social-buttons">
+			<div class="google-map" center="map.center" draggable="true" options="map.options" pan="true" zoom="map.zoom">
+				<marker ng-repeat="m in map.markers" coords="m" icon="m.icon">
+		            <marker-label content="m.title" anchor="22 0" class="marker-labels"/>		            
+		        </marker>
+			</div>
+		</div>
+	</div>
+	
+</div>

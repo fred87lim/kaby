@@ -1,0 +1,111 @@
+<div>
+<div class="row">
+	<div class="col-md-8">
+		
+    <!-- Action Bar -->
+    <div class='col-md-12' ng-if='isLoggedIn'>
+      <ul id="myTab" class="nav nav-tabs" role="tablist">
+          <li ng-class="{ active: actionTab == 'status' }">
+            <a ng-click='actionTab = "status"'>Status</a>
+          </li>
+          <li ng-class="{ active: actionTab == 'blog' }">
+            <a ng-click='actionTab = "blog"'>Blog</a>
+          </li>
+          <li ng-class="{ active: actionTab == 'link' }">
+            <a ng-click='actionTab = "link"'>Link</a>
+          </li>         
+      </ul>
+
+      <div class="tab-content" ng-switch='actionTab' >
+       
+          <div ng-switch-when='status'>
+              <textarea class="form-control" rows="3" placeholder='What are you working on today?'></textarea>
+
+              <div class='col-md-12'>
+                <button type="button" class="btn btn-primary pull-right" >Share</button>
+                <span class='pull-right'>Share With:
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown">Public <b class="caret"></b></a>
+                  <ul class="dropdown-menu">
+                    <li><a href="#">Connection</a></li>
+                  </ul>
+                </span>
+              </div>
+              
+          </div>
+          <div ng-switch-when='blog' >
+              <h1>Blog</h1>
+          </div>
+          <div ng-switch-when='link' >
+              <h1>Link</h1>
+          </div>
+                 
+      </div>
+    </div>
+
+	</div>
+
+  <div class="col-md-4">
+    <button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#topupModal" ng-click="setAmount(1)">Top Up</button>
+  </div>
+</div>	
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="topupModal" tabindex="-1" role="dialog" aria-labelledby="topupModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="topupModalLabel">Balance Topup - {{topup.amount}} {{topup.currency}}</h4>
+      </div>
+      <div class="modal-body">
+          <div class="row">
+            <div class="alert alert-danger" ng-if="topup.message != ''">{{topup.message}}</div>
+            <div class="col-sm-5">
+            	<form class="form-horizontal" role="form" ng-submit="topupPayPal()" >
+            		<div class="form-group">
+	                  <div class="col-sm-offset-1 col-sm-9">
+	                    <button type="submit" class="btn btn-primary btn-block">Topup With PayPal</button>
+	                  </div>
+	                </div>
+            	</form>
+            </div>
+            <div class="col-sm-7">
+              <form class="form-horizontal" role="form" ng-submit="topupCreditCard()" >
+                <div class="form-group">
+                  <label for="inputFirstName" class="col-sm-3 control-label">Card Number:</label>
+                  <div class="col-sm-9">
+                    <input pattern=".{3,}" ng-model="topup.cardNumber" required title="3 characters minimum" class="form-control" name="cardNumber" id="cardNumber" autocomplete="off">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="inputLastName" class="col-sm-3 control-label">Cardholder Name:</label>
+                  <div class="col-sm-9">
+                    <input pattern=".{3,}" ng-model="topup.cardName" required title="3 characters minimum" class="form-control" id="cardName" name="cardName" autocomplete="off">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="inputEmail3" class="col-sm-3 control-label">Expiry Date</label>
+                  <div class="col-sm-9">
+                    <input ng-model="topup.expiry" class="form-control" id="expiry" name="expiry" autocomplete="off">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="inputCVV" class="col-sm-3 control-label">CVV</label>
+                  <div class="col-sm-9">
+                    <input pattern=".{6,18}" required title="6 to 18 characters" class="form-control" id="cvv" name="cvv" ng-model="topup.cvv" autocomplete="off">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="col-sm-offset-3 col-sm-9">
+                    <button type="submit" class="btn btn-primary btn-block">Topup With Credit Card</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+            
+          </div>              
+      </div>
+    </div>
+  </div>
+</div>

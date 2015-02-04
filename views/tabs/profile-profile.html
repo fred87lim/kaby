@@ -1,0 +1,193 @@
+<h1>This is profile</h1>
+<div>
+	<button type="button" class="btn btn-primary btn-block" ng-click='showAddExpDialog()'>Add Experience</button>
+	<button type="button" class="btn btn-primary btn-block" ng-click='showAddEduDialog()'>Add Education</button>
+</div>
+
+<!-- Display education -->
+<div>
+	<div ng-repeat='exp in targetUser.experiences'>
+		<p>{{exp.title}} at {{exp.company}}</p>
+		<button type="button" class="btn btn-primary btn-block" ng-click='removeExperience(exp._id)'>Remove Experience</button>
+	</div>
+</div>
+
+<!-- Display education -->
+<div>
+	<div ng-repeat='edu in targetUser.educations'>
+		<p>{{edu.educationLevel}} at {{edu.school}}</p>
+		<button type="button" class="btn btn-primary btn-block" ng-click='removeEducation(edu._id)'>Remove Education</button>
+	</div>
+</div>
+<!-- End of Display education -->
+
+<!-- Add Education Modal -->
+<div class="modal fade" id="addEduModal" tabindex="-1" role="dialog" aria-labelledby="addEduModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="addEduModalLabel">Add Education</h4>
+      </div>
+      <div class="modal-body">
+          <div class="row">
+            <div class="alert alert-danger" ng-if='edu.message'>{{edu.message}}</div>
+            <div class="col-sm-10">
+              <form class="form-horizontal" role="form" ng-submit="addEducation()" >
+                <div class="form-group">
+                  <label for="inputSchool" class="col-sm-3 control-label">School:</label>
+                  <div class="col-sm-9">
+                    <input  required ng-model='edu.school' class="form-control" name="school" id="school">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="inputDates" class="col-sm-3 control-label">Dates Attended:</label>
+                  <div class="col-sm-9">
+                  	<span  class="nullable">
+					    <select ng-model="edu.dateStarted.year">
+					      <option value="">--</option>
+					      <option ng-repeat="year in eduYears.yearStarted" >{{year}}</option>
+					    </select> --
+					    <select ng-model="edu.dateEnded.year">
+					      <option value="">--</option>
+					      <option ng-repeat="year in eduYears.yearEnded" >{{year}}</option>
+					    </select>
+					  </span>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="inputEduLevel" class="col-sm-3 control-label">Education Level:</label>
+                  <div class="col-sm-9">
+                  	<span  class="nullable">
+					    <select ng-model="edu.educationLevel">
+					      <option value="Undergraduate">Undergraduate</option>
+					      <option value="Graduate">Graduate</option>
+					      <option value="Postgraduate">Postgraduate</option>
+					    </select> 
+					  </span>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="inputDegree" class="col-sm-3 control-label">Degree:</label>
+                  <div class="col-sm-9">
+                    <input ng-model="edu.degree" class="form-control" name="degree" id="degree">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="inputFieldofStudy" class="col-sm-3 control-label">Field of Study:</label>
+                  <div class="col-sm-9">
+                    <input ng-model="edu.studyField" class="form-control" id="lastName" name="fieldOfStudy">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="inputGrade" class="col-sm-3 control-label">Grade:</label>
+                  <div class="col-sm-9">
+                    <input ng-model="edu.grade" class="form-control" id="grade" name="grade">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="inputActivities" class="col-sm-3 control-label">Activities and Societies:</label>
+                  <div class="col-sm-9">
+                    <textarea class="form-control" rows="3" ng-model='edu.activities'></textarea>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="inputDescription" class="col-sm-3 control-label">Description:</label>
+                  <div class="col-sm-9">
+                    <textarea class="form-control" rows="3" ng-model='edu.description'></textarea>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="col-sm-offset-3 col-sm-9">
+                    <button type="submit" class="btn btn-primary btn-block" >Add Education</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+            
+          </div>              
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add Experience Modal -->
+<div class="modal fade" id="addExpModal" tabindex="-1" role="dialog" aria-labelledby="addExpModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="addExpModalLabel">Add Experience</h4>
+      </div>
+      <div class="modal-body">
+          <div class="row">
+            <div class="alert alert-danger" ng-if='exp.message'>{{exp.message}}</div>
+            <div class="col-sm-10">
+              <form class="form-horizontal" role="form" ng-submit="addExperience()" >
+                <div class="form-group">
+                  <label for="inputCompany" class="col-sm-3 control-label">Company:</label>
+                  <div class="col-sm-9">
+                    <input  required ng-model='exp.company' class="form-control" name="company" id="company">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="inputTitle" class="col-sm-3 control-label">Title:</label>
+                  <div class="col-sm-9">
+                    <input ng-model="exp.title" class="form-control" name="title" id="title">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="inputDates" class="col-sm-3 control-label">Time Period:</label>
+                  <div class="col-sm-9">
+                  	<span  class="nullable">
+                  		<select ng-model="exp.dateStarted.month">
+					      <option value="">--</option>
+					      <option ng-repeat="month in months" >{{month}}</option>
+					    </select>
+					    <select ng-model="exp.dateStarted.year">
+					      <option ng-repeat="year in eduYears.yearStarted" >{{year}}</option>
+					    </select> --
+					    <span ng-if='!exp.isWorking'>
+					    	<select ng-model="exp.dateEnded.month">
+						      <option value="">--</option>
+						      <option ng-repeat="month in months" >{{month}}</option>
+						    </select>
+						    <select ng-model="exp.dateEnded.year">
+						      <option value="">--</option>
+						      <option ng-repeat="year in eduYears.yearEnded" >{{year}}</option>
+						    </select>
+					    </span>
+					    <span ng-if='exp.isWorking'>Present</span>
+					  </span>
+					  <br>
+					  <span>
+					  	<input class='pull-left' type="checkbox" ng-model="exp.isWorking" name='isWorking' id='isWorking'>
+					  	&nbsp;&nbsp;<label  for="isWorking" >I am currently working here</label>
+					  </span>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="location" class="col-sm-3 control-label">Location:</label>
+                  <div class="col-sm-9">
+                    <input ng-model="exp.location" class="form-control" name="location" id="location">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="inputDescription" class="col-sm-3 control-label">Description:</label>
+                  <div class="col-sm-9">
+                    <textarea class="form-control" rows="3" ng-model='exp.description'></textarea>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="col-sm-offset-3 col-sm-9">
+                    <button type="submit" class="btn btn-primary btn-block" >Add Experience</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+            
+          </div>              
+      </div>
+    </div>
+  </div>
+</div>

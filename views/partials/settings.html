@@ -1,0 +1,28 @@
+<ul class="nav nav-pills nav-stacked col-md-2" ng-init="init()">
+  <li ng-class="{active: currentTab == 'general' }">
+    <a ng-click="currentTab = 'general'" href="">General</a></li>
+  <li ng-class="{active: currentTab == 'security' }">
+    <a ng-click="currentTab = 'security'" href="">Security</a></li>
+  <li ng-class="{active: currentTab == 'privacy' }">
+      <a ng-click="currentTab = 'privacy'" href="" >Privacy</a>
+  </li>
+</ul>
+<div class="tab-content col-md-10">
+    <div ng-switch="currentTab">
+        <div ng-switch-when="general">
+            <h1>{{user.local.email}}</h1>
+
+        </div>
+        <div ng-switch-when="security">
+            <h1>Categories</h1>
+            <select ng-model="choice">
+
+                <option ng-repeat="item in countries" data-image="{{item.url}}">{{item.countryName}}</option>
+            <select>
+              <p>Select: {{choice}}</p>
+        </div>
+        <div ng-switch-when="privacy">
+            <h1>Pages</h1>
+        </div>
+    </div>
+</div><!-- tab content -->

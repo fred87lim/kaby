@@ -1,0 +1,52 @@
+<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation" style="-webkit-border-radius: 0; -moz-border-radius: 0; border-radius: 0; background-color: #6f5499">
+      <div class="container">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-9">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Photunate</a>
+        </div>
+
+        <form class="navbar-form navbar-left" role="search">
+  <div class="form-group">
+    <input type="text" class="search-query span2" placeholder="Search">
+  </div>
+</form>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse navbar-right" id="bs-example-navbar-collapse-9">
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="#">Home</a></li>
+            <li><a href="#/{{username}}">{{username}}</a></li>
+            <li><a href="#" ng-click="logout()">Log Out</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><a href="#/biz/new">Create New Business</a></li>
+                <li class="divider"></li>
+                <li><a href="#/settings">Settings</a></li>
+                <li class="divider"></li>
+                <li><a href="#/transactions">Transactions</a></li>
+                <li><a href="#/post/new">Create New Post</a></li>
+              </ul>
+            </li>
+
+            <!-- Only for admin -->
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Admin <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><a href="#/rate">Create New Rate</a></li>
+                <li class="divider"></li>
+                <li><a href="#/settings">Settings</a></li>
+                <li class="divider"></li>
+                <li><a href="#">One more separated link</a></li>
+              </ul>
+            </li>
+
+          </ul>
+        </div><!-- /.navbar-collapse -->
+      </div><!-- /.container-fluid -->
+    </nav>

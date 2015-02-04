@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+    {% include "../partials/head.html" %}
+
+</head>
+    <body data-twttr-rendered="true">
+    <a class="sr-only sr-only-focusable" href="#content">Skip to main content</a>
+    {% include "../partials/header.html" %}
+    <div class="container bs-docs-container">
+        <div class="col-sm-9 col-sm-offset-2">
+
+            <h1><span class="fa fa-sign-in"></span>Log in to Project X</h1>
+            <br />
+            
+
+            <div class="panel panel-default">
+              <div class="panel-body" style="padding-top: 40px; padding-bottom: 40px; padding-left:80px; padding-right:80px">
+
+                <!-- show any messages that come back with authentication -->
+            {% if data.message %}
+                <div class="alert alert-danger">{{ data.message }}</div>
+            {% endif %}
+                <!-- LOGIN FORM -->
+            <form action="/login" method="post">
+              <input type="hidden" name="redirect_url" value="{{ data.redirect_url }}">
+                <div class="form-group">
+                    <input type="text" class="form-control" name="email">
+                    
+                </div>
+                <div class="form-group">
+                    <input type="password" class="form-control" name="password">
+                </div>
+                <div class="form-group">
+                  <div class="checkbox">
+                      <label>
+                        <input type="checkbox"> Remember me
+                      </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                  <div class="forget-password">
+                      <a href="/request_password_reset">Forget your password?</a>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-warning btn-lg">Login</button>
+            </form>
+
+              </div>
+              <div class="panel-footer" style="padding-left:80px; padding-right:80px">
+                <p>New to Project X? <a href="/signup">Sign up now</a></p>
+              </div>
+            </div>
+
+            
+
+        </div>
+    </div>
+
+{% include "../partials/footer.html" %}
+{% include "../partials/tail.html" %}
+
+</body></html>

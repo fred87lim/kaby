@@ -1,0 +1,15 @@
+<div ng-init="init()">
+	<ul>
+		<li ng-repeat="topup in user.topups">
+			<ul>
+				<li>Amount: {{topup.amount}}</li>
+				<li>Payment: {{topup.payment}}</li>
+				<li>Operation Amount: {{topup.operationAmount}}</li>
+				<li>Charity Amount: {{topup.charityAmount}}</li>
+				<li>Fee: {{topup.feeAmount}}</li>
+				<li>Transaction: {{topup.transactionId}}</li>
+				<li>Actual Amount: {{topup.actualAmount}}</li>
+			</ul>
+		</li>
+	</ul>
+</div>

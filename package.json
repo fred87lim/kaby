@@ -1,0 +1,60 @@
+{
+  "name": "testnodejs",
+  "version": "0.0.0",
+  "description": "this example app is so cool",
+  "main": "web.js",
+  "scripts": {
+    "start": "node_modules/.bin/supervisor app",
+    "test": "node_modules/.bin/mocha -c"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kabuky/testnodejs.git"
+  },
+  "keywords": [
+    "example",
+    "heroku"
+  ],
+  "author": "kabuky",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kabuky/testnodejs/issues"
+  },
+  "homepage": "https://github.com/kabuky/testnodejs",
+  "dependencies": {
+    "logfmt": "^1.1.2",
+    "express": "^4.0.0",
+    "mongoose": "^3.8.8",
+    "ejs": "~0.8.5",
+    "passport": "~0.1.17",
+    "passport-local": "~0.1.6",
+    "passport-facebook": "~1.0.2",
+    "passport-twitter": "~1.0.2",
+    "passport-google-oauth": "~0.1.5",
+    "connect-flash": "~0.1.1",
+    "bcrypt-nodejs": "latest",
+    "nodemailer": "0.6.3",
+    "paypal-rest-sdk": "^0.8.0",
+    "socket.io": "^0.9.16",
+    "node-uuid": "^1.4.1",
+    "serve-favicon": "^2.0.1",
+    "gm": "^1.16.0",
+    "imagemagick": "^0.1.3",
+    "graphicsmagick": "0.0.1",
+    "mocha": "*",
+    "should": ">= 0.0.1",
+    "supertest": "0.3.x",
+    "superagent": "^0.18.2",
+    "chai": "^1.9.1",
+    "underscore.string": "^2.3.3",
+    "oauth2orize": "^1.0.1",
+    "passport-http": "^0.2.2",
+    "Faker": "^0.7.2",
+    "passport-http-bearer": "^1.0.1",
+    "passport-oauth2-client-password": "^0.1.2",
+    "winston": "^0.8.3",
+    "node-oauth2-server": "^2.2.2",
+    "swig": "^1.4.2",
+    "underscore": "^1.7.0"
+  }
+}
