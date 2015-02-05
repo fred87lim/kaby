@@ -203,7 +203,7 @@ module.exports = function (app, passport) {
 
 		var data = {
 			username: 	req.body.username,
-			name: 		req.body.name,
+			companyName: 		req.body.companyName,
 			address1: 	req.body.address1,
 			address2: 	req.body.address2,
 			city: 		req.body.city,
@@ -212,12 +212,14 @@ module.exports = function (app, passport) {
 			longitude: 	req.body.longitude,
 			phone: 		req.body.phone,
 			postalCode: req.body.postalCode,
-			type: 		req.body.type,
+			pageType: 		req.body.pageType,
 			url: 		req.body.url,
 			yearFounded:req.body.yearFounded,
 			about: 		req.body.about,
 			userId: 	null,
 		}
+
+		console.log(data);
 
 		// Redirect if user not logged in
 		if (req.user == null) {
@@ -1283,21 +1285,33 @@ module.exports = function (app, passport) {
 			title: title,
 			user: req.user,
 			redirect_url: redirect_url,
-			target_user: null
+			target_user: null,
+			page: null
 		}
 
 		// find target user
-		userController.findUserByUsername(username, function (callbackResult) {
+		userController.findByUsername(username, function (callbackResult) {
 			if (callbackResult.status) {
-				data.target_user = callbackResult.data;
-			}
-
+				console.log(callbackResult);
 			// If user is not found, look up for company and school and render
 			// respectively.
 			// user is logged in user
-			res.render('pages/user.html', {
-				loggedInUser : req.user, loginToken: loginToken, user: req.user, data: data
-			});
+			if (callbackResult.data.pageType) {
+				data.page = callbackResult.data;
+				res.render('pages/company.html', { data: data });
+			} else {
+				data.target_user = callbackResult.data;
+				res.render('pages/user.html', {
+					loggedInUser : req.user, loginToken: loginToken, user: req.user, data: data
+				});
+			}
+			} else {
+				res.render('pages/404.html', { });
+			}
+
+			
+			
+			
 		});		
 	});
 

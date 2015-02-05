@@ -106,9 +106,11 @@ UserRoute.prototype.createNewPage = function (data, callback) {
 						return callback(result);
 					}
 
+					console.log(data);
+
 					// Create new page
 					var page = new Page();
-					page.name = data.name;
+					page.name = data.companyName;
 					page.username = data.username;
 					page.address.address1 = data.address1;
 					page.address.address2 = data.address2;
@@ -116,7 +118,7 @@ UserRoute.prototype.createNewPage = function (data, callback) {
 					page.address.country = country;
 					page.address.postalCode = data.postalCode;
 					page.address.phone = data.phone;
-					page.pageType = data.type;
+					page.pageType = data.pageType;
 					page.website = data.url;
 					page.about = data.about;
 					page.admins.push(user);
@@ -1179,12 +1181,19 @@ UserRoute.prototype.findUserByUsernameAPI = function(req, res) {
  * @return [ActionResult]
  */
 UserRoute.prototype.findByUsername = function (username, callback) {
+	var result = {
+		status: false,
+		message: '',
+		data: null
+	};
+
 	User.findOne({'local.username' : username}, function (err, user) {
 		if (err) {
 			result.message = constants.ERROR2000;
 			return callback(result);	
 		} 
 		if (!user) {
+			console.log('Find page: ' + username);
 			// Find page
 			Page.findOne({ username: username}, function (err, page) {
 				if (err) {
@@ -1199,10 +1208,93 @@ UserRoute.prototype.findByUsername = function (username, callback) {
 				}
 
 				// Find logo
+				var findLogo = function (photoId, callbackParallel) {
+					Photo.findById(photoId, function (err, logo) {
+						if (err) {
+							callbackParallel(err);
+						} else {
+							callbackParallel(null, logo);
+						}
+					});
+				};
 
 				// Find cover
+				var findCover = function (photoId, callbackParallel) {
+					Photo.findById(photoId, function (err, cover) {
+						if (err) {
+							callbackParallel(err);
+						} else {
+							callbackParallel(null, cover);
+						}
+					})
+				};
+
+				// Find City
+				var findCity = function (cityId, callbackParallel) {
+					City.findById(cityId, function (err, city) {
+						if (err) {
+							callbackParallel(err);
+						} else {
+							callbackParallel(null, city);
+						}
+					});
+				}
+
+				// Find Country
+				var findCountry = function (countryId, callbackParallel) {
+					Country.findById(countryId, function (err, country) {
+						if (err) {
+							callbackParallel(err);
+						} else {
+							callbackParallel(null, country);
+						}
+					});
+				}
+
+
+				// async query
+				// async
+				async.parallel({
+					logo: function (next) {
+						findLogo(page.coverPhoto, next);
+					},
+					cover: function (next) {
+						findCover(page.coverPhoto, next);
+					},
+					city: function (next) {
+						findCity(page.address.city, next);
+					},
+					country: function (next) {
+						findCountry(page.address.country, next);
+					}
+				}, function (err, results) {
+					var logo 		= results.logo;
+					var cover 		= results.cover;
+					var city 		= results.city;
+					var country     = results.country;
+
+					var pageJson = {
+						_id: page._id,
+						pageType: page.pageType,
+						name: page.name,
+						username: page.username,
+						about: page.about,
+						address: {
+							address1: page.address1,
+							address2: page.address2,
+							city: city,
+							country: country
+						}
+					}
+
+					result.status = true;
+					result.data = pageJson;
+
+					return callback(result);
+				});
 			});
 		} else {
+			console.log('Find User');
 			var userInfo = {
 				'_id': user.id,
 				'local': {
@@ -1328,7 +1420,7 @@ UserRoute.prototype.findByUsername = function (username, callback) {
 					userInfo.languages = results.languages;
 					result.status = true;
 					result.data = userInfo;
-					return callback(result);	
+					return callback(result);
 				});
 			}
 		

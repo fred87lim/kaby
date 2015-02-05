@@ -136,7 +136,7 @@ PopInTownControllers.controller('MainCtrl', ['$scope', '$location', '$window', '
 
     $scope.registerNewBiz = function () {
         var data = {
-            name:           $scope.biz,
+            companyName:           $scope.biz.name,
             username:       $scope.biz.username,
             address1:       $scope.biz.address1,
             address2:       $scope.biz.address2,
@@ -149,8 +149,10 @@ PopInTownControllers.controller('MainCtrl', ['$scope', '$location', '$window', '
             longitude:      $scope.biz.longitude,
             about:          $scope.biz.about,
             country:        $scope.biz.city.country._id,
-            type:           $scope.type,
+            pageType:           $scope.biz.type,
         };
+
+        console.log(data);
 
         ProfileService.createNewPage(data).success(function (result) {
             if (result.status) {
@@ -159,7 +161,7 @@ PopInTownControllers.controller('MainCtrl', ['$scope', '$location', '$window', '
 
             }
         });
-        console.log($scope.biz);
+        
     };
 
   	$scope.onTypeaheadSelect = function ($item, $model, $label) {
