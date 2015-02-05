@@ -190,6 +190,9 @@ module.exports = function (app, passport) {
 		});
 	});
 
+	/*
+	 * Create new page
+	 */
 	app.post('/ajax/page/new', function (req, res, next) {
 		var result = {
 			status: false,
@@ -211,7 +214,8 @@ module.exports = function (app, passport) {
 			postalCode: req.body.postalCode,
 			type: 		req.body.type,
 			url: 		req.body.url,
-			yearFounded:req.body.yearFounded
+			yearFounded:req.body.yearFounded,
+			about: 		req.body.about,
 			userId: 	null,
 		}
 

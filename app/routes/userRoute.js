@@ -44,10 +44,110 @@ var UserRoute = function(app, passport) {
 };
 
 /**
+ * Create new page.
+ * 
+ * @param  {Json} data - Data submitted from web form.
+ * @param  {Function} callbacl - Callback function.
+ * @return [ActionResult]
+ */
+UserRoute.prototype.createNewPage = function (data, callback) {
+	var result = {
+		status: false,
+		message: '',
+		data: null,
+		errors: []
+	};
+
+	// Find authenticated user
+	User.findById(data.userId, function (err, user) {
+		if (err) {
+			result.message = constants.ERROR2000;
+			return callback(result);
+		}
+
+		if (!user) {
+			result.message = constants.ERROR9015;
+			return callback(result);
+		}
+
+		// Check if page's username has already been taken
+		Page.findOne({username: data.username}, function (err, page) {
+			if (err) {
+				result.message = constants.ERROR2000;
+				return callback(result);
+			}
+
+			if (page) {
+				result.message = constants.ERROR9015;
+				return callback(result);
+			}
+
+			// Find City
+			City.findById(data.city, function (err, city) {
+				if (err) {
+					result.message = constants.ERROR2000;
+					return callback(result);
+				}
+
+				if (!city) {
+					result.message = 'This city is not support yest';
+					return callback(result);
+				}
+
+				// Find Country
+				Country.findById(data.country, function (err, country) {
+					if (err) {
+						result.message = constants.ERROR2000;
+						return callback(result);
+					}
+
+					if (!country) {
+						result.message = 'This country is not support yest';
+						return callback(result);
+					}
+
+					// Create new page
+					var page = new Page();
+					page.name = data.name;
+					page.username = data.username;
+					page.address.address1 = data.address1;
+					page.address.address2 = data.address2;
+					page.address.city = city;
+					page.address.country = country;
+					page.address.postalCode = data.postalCode;
+					page.address.phone = data.phone;
+					page.pageType = data.type;
+					page.website = data.url;
+					page.about = data.about;
+					page.admins.push(user);
+
+					// Assign this new page to the authenticated user. We dont maintain list of
+					// admin users in the page because not all users managing page. So it's better
+					// to assign page to individual.
+					//user.pageManaging = page;
+					page.save(function (err) {
+						if (err) {
+							result.message = constants.ERROR2000;
+							return callback(result);
+						}
+
+						// return json to request
+						result.status = true;
+						result.data = page;
+
+						return callback(result);
+					});
+				});
+			});
+		});
+	});
+};
+
+/**
  * Get all replies of a particular comment.
  * 
  * @param  {String} commentId - Comment Id.
- * @param  {Function} callbacl - Callback function.
+ * @param  {Function} callback - Callback function.
  * @return [{Replies}]
  */
 UserRoute.findReplies = function (commentId, authenticatedUserId, callback) {
@@ -1708,51 +1808,51 @@ UserRoute.prototype.changePassword = function (req, res) {
  * CREATE NEW PAGE
  *
  */
-UserRoute.prototype.createNewPage = function (req, res) {
-	var loginToken 	= req.body.login_token;
-	var name 		= req.body.name;
-	var username 	= req.body.username;
-	var description = req.body.description;
-	var website 	= req.body.website;
-	var pageType 	= req.body.page_type;
+// UserRoute.prototype.createNewPage = function (req, res) {
+// 	var loginToken 	= req.body.login_token;
+// 	var name 		= req.body.name;
+// 	var username 	= req.body.username;
+// 	var description = req.body.description;
+// 	var website 	= req.body.website;
+// 	var pageType 	= req.body.page_type;
 
-	var result = {
-		status: 'FAILED',
-		message: '',
-		data: null
-	};
+// 	var result = {
+// 		status: 'FAILED',
+// 		message: '',
+// 		data: null
+// 	};
 
-	User.findOne({'platforms.token' : loginToken}, function (err, user) {
-		if (err) {
-			result.message = constants.ERROR2000;
-			return res.send(result);
-		}
+// 	User.findOne({'platforms.token' : loginToken}, function (err, user) {
+// 		if (err) {
+// 			result.message = constants.ERROR2000;
+// 			return res.send(result);
+// 		}
 
-		if (!user) {
-			result.message = constants.ERROR9015;
-			return res.send(result);
-		}
+// 		if (!user) {
+// 			result.message = constants.ERROR9015;
+// 			return res.send(result);
+// 		}
 
-		var page = new Page();
-		page.name = name;
-		page.username = username;
-		page.description = description;
-		page.website = website;
-		page.pageType = pageType;
-		page.admins.push(user);
+// 		var page = new Page();
+// 		page.name = name;
+// 		page.username = username;
+// 		page.description = description;
+// 		page.website = website;
+// 		page.pageType = pageType;
+// 		page.admins.push(user);
 
-		page.save(function (err) {
-			if (err) {
-				result.message = constants.ERROR9015;
-				return res.send(result);
-			}
+// 		page.save(function (err) {
+// 			if (err) {
+// 				result.message = constants.ERROR9015;
+// 				return res.send(result);
+// 			}
 
-			result.status = 'OK';
-			result.data = page;
-			return res.send(result);
-		});
-	});
-}
+// 			result.status = 'OK';
+// 			result.data = page;
+// 			return res.send(result);
+// 		});
+// 	});
+// }
 
 /*
  *	ADD NEW EDUCATION

@@ -48,7 +48,10 @@ phonecatServices.factory('ProfileService', function ($http) {
 	return {
 		replyComment: function (inputs) {
 			return $http.post('/ajax/comment/reply', inputs);
-		}
+		},
+        createNewPage: function (inputs) {
+            return $http.post('/ajax/page/new', inputs);
+        }
 	}
 });
 
@@ -128,6 +131,30 @@ PopInTownControllers.controller('MainCtrl', ['$scope', '$location', '$window', '
   	}
 
     $scope.registerNewBiz = function () {
+        var data = {
+            name:           $scope.biz,
+            username:       $scope.biz.username,
+            address1:       $scope.biz.address1,
+            address2:       $scope.biz.address2,
+            phone:          $scope.biz.phone,
+            url:            $scope.biz.url,
+            city:           $scope.biz.city._id,
+            postalCode:     $scope.biz.postalCode,
+            yearFounded:    $scope.biz.yearFounded,
+            latitude:       $scope.biz.latitude,
+            longitude:      $scope.biz.longitude,
+            about:          $scope.biz.about,
+            country:        $scope.biz.city.country._id,
+            type:           $scope.type,
+        };
+
+        ProfileService.createNewPage(data).success(function (result) {
+            if (result.status) {
+                console.log(result);
+            } else {
+
+            }
+        });
         console.log($scope.biz);
     };
 
@@ -265,6 +292,7 @@ PopInTownControllers.controller('MainCtrl', ['$scope', '$location', '$window', '
           // loop through current selected response.data.data
           tags.push(response.data.data[i]);         
         }
+        console.log(tags);
         return tags;
     	});
   	};

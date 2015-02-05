@@ -112,7 +112,8 @@ var userSchema = mongoose.Schema({
     profilePicture: { type: Schema.ObjectId, ref: 'PhotoSchema', default: null},
     following: [{type: Schema.ObjectId, ref: 'userSchema'}], // a list of users whom this user is following
     followers: [{type: Schema.ObjectId, ref: 'userSchema'}], // a list of users who is following this user
-    pagesFollowing: [{type: Schema.ObjectId, ref: 'PageSchema'}]
+    pagesFollowing: [{type: Schema.ObjectId, ref: 'PageSchema'}],
+    pageManaging: {type: Schema.ObjectId, ref: 'PageSchema'}
 });
 
 // methods ======================

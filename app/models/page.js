@@ -27,14 +27,15 @@ var PageSchema = mongoose.Schema({
 	address : {
 		address1: 		String, // Street address, P.O. box, company name, c/o
 		address2: 		String, // Apartment, suite, unit, building, floor, etc.
-		city: 			String,
-		country: 		String,
+		city: 			{ type: Schema.ObjectId, ref: 'CitySchema', default: null},
+		country: 		{ type: Schema.ObjectId, ref: 'CountrySchema', default: null},
 		postalCode: 	String,
 		phone: 			String,
 	},
 	adminLogins        : [adminToken],
 	profilePhoto: { type: Schema.ObjectId, ref: 'PhotoSchema', default: null},
 	coverPhoto: { type: Schema.ObjectId, ref: 'PhotoSchema', default: null},
+	about: String
 });
 
 // create the model for users and expose it to our app
