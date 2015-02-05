@@ -1,0 +1,29 @@
+<!-- This page is meant for only registered and activated user -->
+<div class="page-logo" data-ng-init="init()">
+	<h1>Upload Logo</h1>
+	<div class="row">
+		<div class="col-sm-7">
+			<form class="form-horizontal" role="form" ng-submit="registerNewBiz()" >
+				
+			  <div class="form-group">
+			    <div class="col-sm-offset-3 col-sm-9">
+			      <button type="submit" class="btn btn-primary btn-block">Create New Business</button>
+			    </div>
+			  </div>
+			</form>
+		</div>
+
+		<!-- 
+			Display Google Map for business address. It will listen for keystroke on biz's address field and 
+			update the map accordingly.
+		 -->
+		<div class="col-sm-5 social-buttons">
+			<div class="google-map" center="map.center" draggable="true" options="map.options" pan="true" zoom="map.zoom">
+				<marker ng-repeat="m in map.markers" coords="m" icon="m.icon">
+		            <marker-label content="m.title" anchor="22 0" class="marker-labels"/>		            
+		        </marker>
+			</div>
+		</div>
+	</div>
+	
+</div>

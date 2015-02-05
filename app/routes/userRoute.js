@@ -1115,6 +1115,7 @@ UserRoute.prototype.signup = function (req, res, next) {
 	})(req, res, next);
 };
 
+
 /*
  *	Find user by username
  *	Required:
@@ -1165,6 +1166,173 @@ UserRoute.prototype.findUserByUsernameAPI = function(req, res) {
 			}
 		}
 		res.send(result);			
+	});
+}
+
+
+/**
+ * Find user/company/school by username. Priority will be given to user first.
+ * If user is not found, continue looking up username in company/school table.
+ * 
+ * @param  {String} username - Username that need to query.
+ * @param  {Function} callbacl - Callback function.
+ * @return [ActionResult]
+ */
+UserRoute.prototype.findByUsername = function (username, callback) {
+	User.findOne({'local.username' : username}, function (err, user) {
+		if (err) {
+			result.message = constants.ERROR2000;
+			return callback(result);	
+		} 
+		if (!user) {
+			// Find page
+			Page.findOne({ username: username}, function (err, page) {
+				if (err) {
+					result.message = constants.ERROR2000;
+					return callback(result);	
+				}
+
+				// Return page not found
+				if (!page) {
+					result.message = constants.ERROR9002;
+					return callback(result);
+				}
+
+				// Find logo
+
+				// Find cover
+			});
+		} else {
+			var userInfo = {
+				'_id': user.id,
+				'local': {
+					'lastName': user.local.lastName,
+						'firstName': user.local.firstName,
+						'username': user.local.username,
+						'email': user.local.email
+					},
+					birthday: {
+						date: user.birthday.date,
+						privacy: user.birthday.privacy
+					},
+					livesin: user.livesin,
+					'educations': user.educations,
+					'experiences': user.experiences,
+					description : _.unescape(user.description),
+					'languages': null,	
+					'profilePicture': null,
+					following: null,
+					followers: null
+				};
+
+				// find education and experience with
+				var findEducation = function (userId, callback) {
+					Education.find({ user: userId}, function (err, educations) {
+						if (err) {
+							callback(err);
+						} else {
+							callback(null, educations);
+						}
+					})
+				}
+
+				// Find experience
+				var findExperience = function (userId, callback) {
+					Experience.find({ user: userId }, function (err, experiences) {
+						if (err) {
+							callback(err);
+						} else {
+							// Need to unescape   
+							for (var i = 0; i < experiences.length; i++) {
+								experiences[i].description = _.unescape(experiences[i].description);
+							}
+							callback(null, experiences);
+						}
+					});
+				}
+
+				// Find languages
+				var findLanguages = function (userId, callback) {
+					Language.find({ user: userId }, function (err, languages) {
+						if (err) {
+							callback(err);
+						} else {
+							callback(null, languages);
+						}
+					});
+				};
+
+				// Find profile photo
+				var findProfilePhoto = function (profilePicture, callback) {
+					/* Get profile picture */
+					Photo.findById(profilePicture, function (err, photo) {
+						
+						if (err) {
+							callback(err);
+						} else {
+							callback(null, photo);
+						}			
+					});
+				};
+
+				// Find following
+				var findFollowing = function (userId, callback) {
+					Follow.find({user: userId}, function (err, following) {
+						if (err) {
+							callback(err);
+						} else {
+							callback(null, following);
+						}
+					});
+				};
+				// Find followers
+				var findFollowers = function (userId, callback) {
+					Follow.find({following: userId}, function (err, followers) {
+						if (err) {
+							callback(err);
+						} else {
+							callback(null, followers);
+						}
+					});
+				};
+
+				async.parallel({
+					educations: function (next) {
+						findEducation(user._id, next);
+					},
+					experiences: function (next) {
+						findExperience(user._id, next);
+					},
+					languages: function (next) {
+						findLanguages(user._id, next);
+					},
+					profilePicture: function (next) {
+						findProfilePhoto(user.profilePicture, next);
+					},
+					following: function (next) {
+						findFollowing(user._id, next);
+					},
+					followers: function (next) {
+						findFollowers(user._id, next);
+					}
+				}, function (err, results) {
+					userInfo.educations = results.educations;
+					userInfo.experiences = results.experiences;
+					userInfo.followers = results.followers;
+					userInfo.following = results.following;
+					
+					if (results.profilePicture != null) {
+						userInfo.profilePicture = results.profilePicture.url;
+					}
+					
+					userInfo.languages = results.languages;
+					result.status = true;
+					result.data = userInfo;
+					return callback(result);	
+				});
+			}
+		
+				
 	});
 }
 

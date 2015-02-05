@@ -1292,6 +1292,8 @@ module.exports = function (app, passport) {
 				data.target_user = callbackResult.data;
 			}
 
+			// If user is not found, look up for company and school and render
+			// respectively.
 			// user is logged in user
 			res.render('pages/user.html', {
 				loggedInUser : req.user, loginToken: loginToken, user: req.user, data: data
