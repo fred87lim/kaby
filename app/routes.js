@@ -170,6 +170,26 @@ module.exports = function (app, passport) {
 		});
 	});
 
+	app.get('/ajax/company/:username', function (req, res) {
+		var username = req.params.username;
+
+		var loginUser = null;
+		if (req.user) {
+			loginUser = req.user;
+		}
+
+		userController.findCompanyByUsername(username, loginUser, function (callbackResult) {
+			var result = {
+				status: callbackResult.status,
+				message: callbackResult.message,
+				data: callbackResult.data,
+			}
+			//console.log('routes');
+			//console.log(result);
+			return res.send(callbackResult);
+		});
+	});
+
 	app.get('/ajax/:username/articles/:article_slug', function (req, res) {
 		var username = req.params.username;
 		var articleSlug = req.params.article_slug;
@@ -219,7 +239,7 @@ module.exports = function (app, passport) {
 			userId: 	null,
 		}
 
-		console.log(data);
+		//console.log(data);
 
 		// Redirect if user not logged in
 		if (req.user == null) {
@@ -234,6 +254,48 @@ module.exports = function (app, passport) {
 			return res.send(callbackResult);
 		});
 	});
+
+	app.post('/ajax/page/manage', function (req, res, next) {
+		var pageId = req.body.pageId;
+
+		var result = {
+			status: false,
+			message: '',
+			data: null,
+			errors: []
+		};
+
+		// Check authenticated user
+		if (req.user == null) {
+			var error = 'User not authenticated';
+			result.message = error;
+			return res.send(result);
+		}
+
+		// Check page managing token
+		var managingToken = null;
+		if (req.session.managingToken) {
+			managingToken = req.session.managingToken;
+		}
+
+		// If there is no managing token --> create new one
+		if (managingToken) {
+			result.status = true;
+			return res.send(result);
+		} else {
+			userController.managePage(req.user._id, pageId, function (callbackResult) {
+				console.log(callbackResult);
+				if (callbackResult.status) {
+					req.session.managingToken = callbackResult.data.token;
+					result.data = req.session.managingToken;
+					result.status = true;
+				}
+
+				console.log(result);	
+				return res.send(result);
+			});
+		}
+	})
 
 	app.post('/ajax/unlike/article', function (req, res, next) {
 		var articleId = req.body.articleId;
@@ -267,7 +329,7 @@ module.exports = function (app, passport) {
 			errors: []
 		};
 
-		console.log(commentId);
+		//console.log(commentId);
 
 		// Redirect if user not logged in
 		if (req.user == null) {
@@ -277,7 +339,7 @@ module.exports = function (app, passport) {
 		}
 
 		userController.likeComment(req.user._id, commentId, function (callbackResult) {
-			console.log(callbackResult);
+			//console.log(callbackResult);
 			return res.send(callbackResult);
 		});
 	});
@@ -293,7 +355,7 @@ module.exports = function (app, passport) {
 			errors: []
 		};
 
-		console.log(commentId);
+		//console.log(commentId);
 
 		// Redirect if user not logged in
 		if (req.user == null) {
@@ -501,7 +563,7 @@ module.exports = function (app, passport) {
 			if (reset_code) {
 				// Validate reset code
 				userController.validatePasswordResetToken(user_id, reset_code, function (callbackResult) {
-					console.log(callbackResult);
+					//console.log(callbackResult);
 					if (!callbackResult.status) {
 						// Redirect to request password reset page with expire link error
 						//req.session.reset_email_sent = true;
@@ -642,7 +704,7 @@ module.exports = function (app, passport) {
 			description: 	_.escape(req.body.description)
 		};
 
-		console.log(info);
+		//console.log(info);
 
 		userController.editBasicInfo(info, function (callbackResult) {
 			return res.send(callbackResult);
@@ -910,7 +972,7 @@ module.exports = function (app, passport) {
 			return res.redirect('/');
 		}
 
-		console.log('Title');
+		//console.log('Title');
 
 		var data = {
 			title: title,
@@ -922,7 +984,7 @@ module.exports = function (app, passport) {
 
 		// find settings
 		userController.findSettings(req.user._id, function (callbackResult) {
-			console.log(callbackResult);
+			//console.log(callbackResult);
 			if (callbackResult.status) {
 				data.settings = callbackResult.data;
 			}
@@ -1070,10 +1132,31 @@ module.exports = function (app, passport) {
 			redirect_url: redirect_url
 		}
 
-		// user is logged in user
-		res.render('pages/index.html', {
-			loggedInUser : req.user, loginToken: loginToken, user: req.user, data: data
-		});
+		// check if user is logged in
+		var loggedUser = null;
+		if (req.user) {
+			loggedUser = req.user;
+		}
+
+		if (loggedUser) {
+			// Find logged in user
+			userController.findUserByUsername(loggedUser.local.username, function (callbackResult) {
+				if (callbackResult.status) {
+					data.user = callbackResult.data;
+				} else {
+					data.user = null;
+				}
+
+				res.render('pages/index.html', {
+					loggedInUser : req.user, loginToken: loginToken, user: req.user, data: data
+				});
+			});
+		} else {
+			
+			res.render('pages/index.html', {
+				loggedInUser : req.user, loginToken: loginToken, user: req.user, data: data
+			});
+		}
 	});
 
 	/*
@@ -1260,8 +1343,6 @@ module.exports = function (app, passport) {
 		});		
 	});
 
-	
-
 	// Home Page 
 	app.get('/:username', function(req, res) {
 		var username = req.params.username;
@@ -1286,7 +1367,8 @@ module.exports = function (app, passport) {
 			user: req.user,
 			redirect_url: redirect_url,
 			target_user: null,
-			page: null
+			page: null,
+			isManaging: false,
 		}
 
 		// find target user
@@ -1297,7 +1379,15 @@ module.exports = function (app, passport) {
 			// respectively.
 			// user is logged in user
 			if (callbackResult.data.pageType) {
+
+				// Check if authenticated user is managing page
+				if (req.session.managingToken) {
+					data.isManaging = true;
+				}
+
 				data.page = callbackResult.data;
+
+				console.log('Managing token: ' + req.session.managingToken);
 				res.render('pages/company.html', { data: data });
 			} else {
 				data.target_user = callbackResult.data;
@@ -1308,11 +1398,26 @@ module.exports = function (app, passport) {
 			} else {
 				res.render('pages/404.html', { });
 			}
-
-			
-			
-			
 		});		
+	});
+
+	// Page edit
+	app.get('/company/:username/edit', function (req, res) {
+		var username = req.params.username;
+		var data = {
+			username: username
+		};
+
+		// check if user is authenticated.
+		if (!req.user) {
+			return res.redirect('/');
+		}
+
+		// check if user has admin priviledge
+		if (!req.session.managingToken) {
+			return res.redirect('/');
+		}
+		res.render('pages/company_edit.html', { data: data });
 	});
 
 	// Home Page 
@@ -2534,52 +2639,7 @@ module.exports = function (app, passport) {
 		});
 	});
 
-	// Individual user page
-	app.get('/:username', function (req, res) {
-
-		// Get target username from url query
-		var targetUsername = req.params.username;
-
-		console.log('Username: ' + targetUsername);
-		console.log(req.params);
-
-		
-
-		/* Get login token from session */
-		var loginToken = null;
-		if (req.session.loginToken) {
-			loginToken = req.session.loginToken;
-		}
-
-		/* Render user page with target username and login token */
-		res.render('user.ejs', {
-
-					targetUsername: targetUsername, loginToken: loginToken
-				});
-
-		// models.User.findOne({'local.username' : username}, function (err, user) {
-		// 	if (err) {
-		// 		throw err;
-		// 	}
-
-		// 	if (!user) {
-		// 		// User not found
-		// 		res.render('user.ejs', {
-
-		// 			loggedInUser: loggedInUser, targetUser: null, loginToken: loginToken
-		// 		});
-
-		// 	} else {
-		// 		// User not found
-		// 		res.render('user.ejs', {
-		// 			loggedInUser: loggedInUser, 
-		// 			targetUser: user,
-		// 			loginToken: loginToken
-		// 		});
-		// 	}		
-		// });
-
-	});
+	
 };
 
 // route middleware to make sure a user is logged in

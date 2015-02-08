@@ -7,6 +7,18 @@
             <h3>{{ data.user.local.firstName }}</h3>
         </div>
     </div>
+
+    {% if data.user.page %}
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <img src="{{ data.user.page.cover.url }}" width="200" height="100">
+                <h3>{{ data.user.page.name }}</h3>
+                <a href="#" class="btn btn-primary btn-sm btn-block" ng-click="managePage('{{data.user.page._id.toString()}}', '{{data.user.page.username}}')">Manage</a>
+            </div>
+
+        </div> 
+    {% endif %}
+    
 </div>
 <!-- END OF LEFT SIDEBAR -->
 

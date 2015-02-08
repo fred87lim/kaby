@@ -22,6 +22,8 @@ var Country			= require('../../app/models/country');
 var Dummy				= require('../../app/models/dummy');
 var PrivacySetting				= require('../../app/models/privacy_setting');
 
+var GlobalFunction = require('../../app/utils/global_function');
+
 var passport = require('passport');
 var mongoose = require('mongoose');
 var async = require('async');
@@ -38,10 +40,297 @@ var bcrypt   = require('bcrypt-nodejs');
 var crypto = require('crypto');
 var _s = require('underscore.string');
 var _ = require('underscore');
+
 var UserRoute = function(app, passport) { 
 	this.app = app;
 	this.passport = passport;
 };
+
+/**
+ * Find page that authenticated user is managing.
+ * 
+ * @param  {String} userId - Data submitted from web form.
+ * @return [ActionResult]
+ */
+UserRoute.prototype.managePage = function (userId, pageId, callback) {
+
+	var result = {
+		status: false,
+		message: '',
+		data: null
+	};
+
+	User.findById(userId, function (err, user) {
+		if (err) {
+			result.message = constants.ERROR2000;
+			return callback(result);
+		} 
+
+		if (!user) {
+			result.message = constants.ERROR9015;
+			return callback(result);
+		}
+
+		/* Find page with Id and admin user id */
+		Page.findOne({ $and: [ {'_id': pageId }, {'admins': user._id}]}, function (err, page) {
+			if (err) {
+				result.message = constants.ERROR2000;
+				return callback(result);
+			}
+
+			if (!page) {
+				result.message = constants.ERROR9020;
+				return callback(result);
+			}
+
+			require('crypto').randomBytes(48, function (ex, buf) {
+            	var adminToken = buf.toString('hex');
+
+            	var adminLogin = {
+					admin: user,
+					token: adminToken
+				}
+
+				page.adminLogins.push(adminLogin);
+				page.save(function (err) {
+					if (err) {
+						console.log(err);
+						result.message = constants.ERROR2000;
+						return res.send(result);
+					}
+
+					result.status = true;
+					result.data = adminLogin;
+					return callback(result);
+				});
+        	});
+		});	
+	});
+}
+
+/**
+ * Find page that authenticated user is managing.
+ * 
+ * @param  {String} userId - Data submitted from web form.
+ * @return [ActionResult]
+ */
+UserRoute.findManagingPage = function (userId, callback) {
+	var result = {
+		status: false,
+		message: '',
+		data: null,
+		errors: []
+	};
+
+	Page.findOne({ admins: userId}, function (err, page) {
+		if (err) {
+			return callback(err);
+		}
+
+		if (!page) {
+			return callback(null);
+		}
+
+		// Find page data
+		var findLogo = function (photoId, callbackParallel) {
+			console.log('Find logo: ' + photoId);
+			GlobalFunction.findProfilePicture(photoId, function (photo) {
+				console.log(photo);
+				callbackParallel(null, photo);
+			});
+		};
+
+			// Find cover
+			var findCover = function (photoId, callbackParallel) {
+				GlobalFunction.findCoverPicture(photoId, function (cover) {
+					callbackParallel(null, cover);
+				});
+			};
+
+			// Find City
+			var findCity = function (cityId, callbackParallel) {
+				City.findById(cityId, function (err, city) {
+					if (err) {
+						callbackParallel(err);
+					} else {
+						callbackParallel(null, city);
+					}
+				});
+			}
+
+			// Find Country
+			var findCountry = function (countryId, callbackParallel) {
+				Country.findById(countryId, function (err, country) {
+					if (err) {
+						callbackParallel(err);
+					} else {
+						callbackParallel(null, country);
+					}
+				});
+			}
+
+			// async query
+			// async
+			async.parallel({
+				logo: function (next) {
+					findLogo(page.coverPhoto, next);
+				},
+				cover: function (next) {
+					findCover(page.coverPhoto, next);
+				},
+				city: function (next) {
+					findCity(page.address.city, next);
+				},
+				country: function (next) {
+					findCountry(page.address.country, next);
+				}
+			}, function (err, results) {
+				var logo 		= results.logo;
+				var cover 		= results.cover;
+				var city 		= results.city;
+				var country     = results.country;
+
+				var pageJson = {
+					_id: page._id,
+					pageType: page.pageType,
+					name: page.name,
+					username: page.username,
+					about: page.about,
+					address: {
+						address1: page.address1,
+						address2: page.address2,
+						city: city,
+						country: country
+					},
+					logo: logo,
+					cover: cover,
+				}
+
+				return callback(pageJson);
+			});
+		});
+}
+
+/**
+ * Create new page.
+ * 
+ * @param  {String} username - Data submitted from web form.
+ * @param  {User} user - authenticated user.
+ * @return [ActionResult]
+ */
+UserRoute.prototype.findCompanyByUsername = function (username, userId, callback) {
+	var result = {
+		status: false,
+		message: '',
+		data: null,
+		errors: []
+	};
+
+	User.findById(userId, function (err, user) {
+		if (err) {
+			result.message = constants.ERROR2000;
+			return callback(result);
+		}
+
+		//console.log('Find page: ' + username);
+		// Find company page
+		Page.findOne({ username: username}, function (err, page) {
+			if (err) {
+				result.message = constants.ERROR2000;
+				return callback(result);	
+			}
+
+			//console.log('Username: ' + username);
+
+			// Return page not found
+			if (!page) {
+				result.message = constants.ERROR9002;
+				return callback(result);
+			}
+
+			// Find logo
+			var findLogo = function (photoId, callbackParallel) {
+				GlobalFunction.findProfilePicture(photoId, function (photo) {
+					callbackParallel(null, photo);
+				});
+			};
+
+			// Find cover
+			var findCover = function (photoId, callbackParallel) {
+				console.log('photo: ' + photoId);
+				GlobalFunction.findCoverPicture(photoId, function (cover) {
+					console.log(cover);
+					callbackParallel(null, cover);
+				});
+			};
+
+			// Find City
+			var findCity = function (cityId, callbackParallel) {
+				City.findById(cityId, function (err, city) {
+					if (err) {
+						callbackParallel(err);
+					} else {
+						callbackParallel(null, city);
+					}
+				});
+			}
+
+			// Find Country
+			var findCountry = function (countryId, callbackParallel) {
+				Country.findById(countryId, function (err, country) {
+					if (err) {
+						callbackParallel(err);
+					} else {
+						callbackParallel(null, country);
+					}
+				});
+			}
+
+			// async query
+			// async
+			async.parallel({
+					logo: function (next) {
+						findLogo(page.coverPhoto, next);
+					},
+					cover: function (next) {
+						findCover(page.coverPhoto, next);
+					},
+					city: function (next) {
+						findCity(page.address.city, next);
+					},
+					country: function (next) {
+						findCountry(page.address.country, next);
+					}
+				}, function (err, results) {
+					var logo 		= results.logo;
+					var cover 		= results.cover;
+					var city 		= results.city;
+					var country     = results.country;
+
+					var pageJson = {
+						_id: page._id,
+						pageType: page.pageType,
+						name: page.name,
+						username: page.username,
+						about: page.about,
+						address: {
+							address1: page.address1,
+							address2: page.address2,
+							city: city,
+							country: country
+						},
+						logo: logo,
+						cover: cover,
+					}
+
+					result.status = true;
+					result.data = pageJson;
+
+					return callback(result);
+				});
+			});
+});
+}
 
 /**
  * Create new page.
@@ -106,7 +395,7 @@ UserRoute.prototype.createNewPage = function (data, callback) {
 						return callback(result);
 					}
 
-					console.log(data);
+					//console.log(data);
 
 					// Create new page
 					var page = new Page();
@@ -1193,7 +1482,7 @@ UserRoute.prototype.findByUsername = function (username, callback) {
 			return callback(result);	
 		} 
 		if (!user) {
-			console.log('Find page: ' + username);
+			//console.log('Find page: ' + username);
 			// Find page
 			Page.findOne({ username: username}, function (err, page) {
 				if (err) {
@@ -1294,7 +1583,7 @@ UserRoute.prototype.findByUsername = function (username, callback) {
 				});
 			});
 		} else {
-			console.log('Find User');
+			//console.log('Find User');
 			var userInfo = {
 				'_id': user.id,
 				'local': {
@@ -1469,7 +1758,8 @@ UserRoute.prototype.findUserByUsername = function(username, callback) {
 					'languages': null,	
 					'profilePicture': null,
 					following: null,
-					followers: null
+					followers: null,
+					page:null
 				};
 
 				// find education and experience with
@@ -1543,6 +1833,13 @@ UserRoute.prototype.findUserByUsername = function(username, callback) {
 					});
 				};
 
+				// Find page managing
+				var findPageManaging = function (userId, callback) {
+					UserRoute.findManagingPage(userId, function (pageResult) {
+						callback(null, pageResult);
+					});
+				}
+
 				async.parallel({
 					educations: function (next) {
 						findEducation(user._id, next);
@@ -1561,12 +1858,16 @@ UserRoute.prototype.findUserByUsername = function(username, callback) {
 					},
 					followers: function (next) {
 						findFollowers(user._id, next);
+					},
+					page: function (next) {
+						findPageManaging(user._id, next);
 					}
 				}, function (err, results) {
 					userInfo.educations = results.educations;
 					userInfo.experiences = results.experiences;
 					userInfo.followers = results.followers;
 					userInfo.following = results.following;
+					userInfo.page = results.page;
 					
 					if (results.profilePicture != null) {
 						userInfo.profilePicture = results.profilePicture.url;
@@ -2660,7 +2961,7 @@ UserRoute.prototype.editBasicInfo = function (info, callback) {
 		user.livesin = info.livesin;
 		user.description = info.description;
 
-		console.log(info);
+		//console.log(info);
 
 		if (info.birthday) {
 			var date = info.birthday.date;

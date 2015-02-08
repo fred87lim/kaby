@@ -88,6 +88,9 @@ phonecatServices.factory('ProfileService', function ($http) {
 		},
 		findPeopleSuggestions: function (targetUsername) {
 			return $http.get('/ajax/user/' + targetUsername + '/people_suggestions');
+		},
+		managePage: function (inputs) {
+			return $http.post('/ajax/page/manage', inputs);
 		}
 	}
 });
@@ -313,6 +316,21 @@ PopInTownControllers.controller('MainCtrl', ['$scope', '$location', '$window', '
 		// find article
 		$scope.findPeopleSuggestions();
 	};
+
+	$scope.managePage = function (pageId, pageUsername) {
+		console.log(pageId );
+		var object = {
+			pageId: pageId
+		}
+		ProfileService.managePage(object).success(function (result) {
+    		console.log(result);
+    		if (result.status) {
+    			window.location = "/" + pageUsername;
+    		} else {
+
+    		}
+    	});
+	}
 
 	$scope.findPeopleSuggestions = function () {
 		ProfileService.findPeopleSuggestions($scope.user.username).success(function (result) {

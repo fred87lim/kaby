@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" ng-app="phonecatApp" ng-controller="MainCtrl">
+<html lang="en" ng-app="phonecatApp" ng-controller="MainCtrl" ng-init="init('{{data.page.username}}')">
 <head>
     {% include "../partials/head.html" %}
     <script type="text/javascript" src="/vendors/jquery-1.11.0.min.js"></script>
@@ -21,18 +21,55 @@
     <script type="text/javascript" src="/vendors/ui-ace.js"></script>
 
     <script type="text/javascript" src="/vendors/tinymce/tinymce.min.js"></script>
-    <script type="text/javascript" src="/controllers/user-controller.js"></script>
+    <script type="text/javascript" src="/controllers/company-ctrl.js"></script>
 
 </head>
-<body data-twttr-rendered="true" style="background-color: #C0DEED;">
+<body data-twttr-rendered="true" >
     <a class="sr-only sr-only-focusable" href="#content">Skip to main content</a>
     {% include "../partials/header.html" %}
+<div class="row" id="company-profile" style="margin-left:0px">
+    <div id="company-cover">
+        <img src="[[company.cover.url]]" width="1280" height="400">
+    </div>
+    <div id="company-info" class="container bs-docs-containter">
+        <div id="company-logo" class="col-md-3" style="width:20%">
+            <img src="[[company.logo.url]]" width="200" height="200" style="position:relative;margin-top:-80px">
+        </div>
+        <div id="company-basics" class="col-md-7">
+            <h2>[[company.name]]</h2>
+            <div>
+                <ul class="list-inline">
+                    <li></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    {% if data.isManaging %}
+    <div id="company-action" class="container bs-docs-containter" style="margin-top:15px">
+        <ul class="list-inline">
+            <li><a href="/company/[[company.username]]/edit" class="btn btn-primary btn-sm">Edit Information</a></li>
+            <li><a href="/edit_profile" class="btn btn-primary btn-sm">Post Article</a></li>
+            <li><a href="/edit_profile" class="btn btn-primary btn-sm">Post Job</a></li>
+            <li><a href="/edit_profile" class="btn btn-primary btn-sm">Add Album</a></li>
+        </ul>
+    </div>
+    {% endif %}
+</div>
+<div class="clearfix"></div>
     <div class="container bs-docs-container" >
         <div class="row" style="margin-top:10px"></div>
-            
-    <div>
+
+
+    
+
+
+    <div ng-if="company">
         <h1>asdfasdfasjdfjasdfj</h1>
-        <h1>{{data.page.name}}</h1>
+        <h1>[[company.name]]</h1>
+        {% if data.isManaging %}
+            <h1>Managing</h1>
+        {% endif %}
     </div>
 </div>
 {% include "../partials/footer.html" %}
