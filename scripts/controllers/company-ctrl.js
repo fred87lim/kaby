@@ -93,6 +93,10 @@ PopInTownControllers.controller('MainCtrl', ['$scope', '$location', '$window', '
 		$scope.findCompany(username);
 	};
 
+  $scope.showProfilePicModal = function () {
+    $('#profilePicModal').modal('toggle');
+  }
+
 	$scope.findCompany = function (username) {
 		ProfileService.findCompany(username).success(function (result) {
 			console.log(result);
