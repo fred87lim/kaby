@@ -1281,8 +1281,6 @@ module.exports = function (app, passport) {
 		var w = req.body.w;
 		var h = req.body.h;
 
-
-
 		var relativePath = '/public/img/profile_temp/';
         var lastIndex = __dirname.lastIndexOf('/');
         var appDir = __dirname.substring(0, lastIndex );
@@ -1320,6 +1318,7 @@ module.exports = function (app, passport) {
 							console.log(err);
 						}
 
+						// Assign this photo as his profile picture.
 						user.profilePicture = photo;
 
 						user.save(function (err) {
@@ -1418,6 +1417,24 @@ module.exports = function (app, passport) {
 			return res.redirect('/');
 		}
 		res.render('pages/company_edit.html', { data: data });
+	});
+
+	// Page new job
+	app.get('/company/:username/jobs/new', function (req, res) {
+		var username = req.params.username;
+
+		// Check if user is authenticated
+		if (!req.user) {
+			return res.redirect('/');
+		}
+
+		// check if user has admin priviledge
+		if (!req.session.managingToken) {
+			return res.redirect('/');
+		}
+
+		// Render page
+		res.render('pages/new_job.html', { data: data });
 	});
 
 	// Home Page 
