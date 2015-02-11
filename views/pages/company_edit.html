@@ -107,9 +107,6 @@
     </div>
     <hr />
     <div>
-        <div class="col-md-4" style="padding-left:0px">
-        
-        </div>
         <div class="col-md-8">
             <table class="table table-striped">
                 <thead>
@@ -119,23 +116,43 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td>First Name:</td>
+                        <td>Company Name:</td>
                         <td>[[ company.username ]]</td>
                     </tr>
                     <tr>
-                        <td>Last Name:</td>
+                        <td>Company Username:</td>
                         <td>[[ company.name ]]</td>
                     </tr>
                     <tr>
-                        <td>Email:</td>
+                        <td>Address:</td>
                         <td></td>
                     </tr>
                     <tr>
-                        <td>Birthday:</td>
+                        <td>City:</td>
                         <td></td>
                     </tr>
                     <tr>
-                        <td>Lives in:</td>
+                        <td>Country:</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Industry:</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Phone:</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Website:</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Year Founded:</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>About:</td>
                         <td></td>
                     </tr>
                 </tbody>
@@ -149,38 +166,6 @@
     </div>
 </div>
 <!-- END OF EDIT PROFILE TAB -->
-
-<!-- PROFILE PICTURE DIALOG MODAL -->
-<div class="modal fade" id="profilePicModal" tabindex="-1" role="dialog" aria-labelledby="profilePicModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <div class="pull-right">
-                    <div>
-                        <button type="button" class="btn btn-default margin-right:10px" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary " ng-click="cropProfilePicture()">Save</button>
-                    </div>
-                </div>
-                
-                <h4 class="modal-title" id="expEditModalLabel">Edit Profile Picture</h4>
-            </div>
-            <div class="modal-body">
-                <div class="col-md-7">
-                    <input type="file" ng-file-select="onFileSelect($files)" >
-                   
-                </div>
-                <div class="col-md-5">
-                    <div id="preview-pane">
-                        <div class="preview-container">
-                        </div>
-                    </div>
-                </div>
-                <div class="clearfix visible-xs-block"></div>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- END OF PROFILE PICTURE DIALOG MODAL -->
 
 <!-- EDIT BASIC INFORMATION TAB -->
 <div class="modal fade" id="infoEditModal" tabindex="-1" role="dialog" aria-labelledby="infoEditModalLabel" aria-hidden="true">
@@ -205,68 +190,66 @@
         </div>
         <form class="form-horizontal" role="form">
         <div class="form-group">
-          <label for="edit-info-first-name" class="col-sm-3 control-label">First Name:</label>
+          <label for="edit-info-first-name" class="col-sm-3 control-label">Company Name:</label>
           <div class="col-sm-9">
-            <input type="text" ng-model="infoEdit.firstName" class="form-control" id="edit-info-first-name">
+            <input type="text" ng-model="companyEdit.name" class="form-control" id="edit-info-first-name">
           </div>
         </div>
         <div class="form-group">
-          <label for="edit-info-lastname" class="col-sm-3 control-label">Last Name:</label>
+          <label for="edit-info-lastname" class="col-sm-3 control-label">Company Username:</label>
           <div class="col-sm-9">
-            <input type="text" ng-model="infoEdit.lastName" class="form-control" id="edit-info-lastName">
+            <input type="text" ng-model="companyEdit.username" class="form-control" id="edit-info-lastName">
           </div>
         </div>
         <div class="form-group">
-            <label for="edit-info-birthday" class="col-sm-3 control-label">Birthday:</label>
-            <div class="col-sm-9">
-                <div class="col-sm-12" ng-if="data.target_user.birthday.date">
-                    <span>
-                        <select ng-model="birthdayEdit.day" ng-options="day.name for day in data.days">
-                        </select> &nbsp;
-                        <select ng-model="birthdayEdit.month" ng-options="month.name for month in data.months">
-                        </select> &nbsp;
-                        <select ng-model="birthdayEdit.year" ng-options="year.name for year in data.years">
-                        </select>
-                        
-                    </span>&#8212;
-                    <span>
-                        <select ng-model="birthdayEdit.privacy" ng-options="privacy.name for privacy in data.privacy_setting">
-                        </select>
-                    </span>
-              </div>
-              <div class="col-sm-12" ng-if="!data.target_user.birthday.date">
-                    <span>
-                        <select ng-model="birthdayEdit.day" ng-options="day.name for day in data.days">
-                            <option value="">-- Day --</option>
-                        </select> &nbsp;
-                        <select ng-model="birthdayEdit.month" ng-options="month.name for month in data.months">
-                            <option value="">-- Month --</option>
-                        </select> &nbsp;
-                        <select ng-model="birthdayEdit.year" ng-options="year.name for year in data.years">
-                            <option value="">-- Year --</option>
-                        </select>
-                        
-                    </span>&#8212;
-                    <span>
-                        <select ng-model="birthdayEdit.privacy" ng-options="privacy.name for privacy in data.privacy_setting">
-                            <option value="">-- Who can see my birthday? --</option>
-                        </select>
-                    </span>
-              </div>
-            </div>
+          <label for="edit-info-lastname" class="col-sm-3 control-label">Address:</label>
+          <div class="col-sm-9">
+            <input type="text" ng-model="companyEdit.address1" class="form-control" id="edit-info-lastName">
+          </div>
         </div>
         <div class="form-group">
-            <label for="edit-info-livesin" class="col-sm-3 control-label">Lives In:</label>
-            <div class="col-sm-9">
-                <input type="text" ng-model="infoEdit.livesin" class="form-control" id="edit-info-livesin">
-            </div>
+          <label for="edit-info-lastname" class="col-sm-3 control-label">City:</label>
+          <div class="col-sm-9">
+            <input type="text" ng-model="companyEdit.city" class="form-control" id="edit-info-lastName">
+          </div>
         </div>
         <div class="form-group">
-            <label for="edit-info-description" class="col-sm-3 control-label">Description:</label>
-            <div class="col-sm-9">
-                <textarea id='info-editor' class='mceEditor' ng-model="infoEdit.description" style='height: 200px'></textarea>
-            </div>
+          <label for="edit-info-lastname" class="col-sm-3 control-label">Country:</label>
+          <div class="col-sm-9">
+            <input type="text" ng-model="companyEdit.country" class="form-control" id="edit-info-lastName">
+          </div>
         </div>
+        <div class="form-group">
+          <label for="edit-info-lastname" class="col-sm-3 control-label">Industry:</label>
+          <div class="col-sm-9">
+            <input type="text" ng-model="companyEdit.industry" class="form-control" id="edit-info-lastName">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="edit-info-lastname" class="col-sm-3 control-label">Phone:</label>
+          <div class="col-sm-9">
+            <input type="text" ng-model="companyEdit.phone" class="form-control" id="edit-info-lastName">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="edit-info-lastname" class="col-sm-3 control-label">Website:</label>
+          <div class="col-sm-9">
+            <input type="text" ng-model="companyEdit.website" class="form-control" id="edit-info-lastName">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="edit-info-lastname" class="col-sm-3 control-label">Year Founded:</label>
+          <div class="col-sm-9">
+            <input type="text" ng-model="companyEdit.yearFounded" class="form-control" id="edit-info-lastName">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="edit-info-lastname" class="col-sm-3 control-label">About:</label>
+          <div class="col-sm-9">
+            <input type="text" ng-model="companyEdit.about" class="form-control" id="edit-info-lastName">
+          </div>
+        </div>
+        
 </form>
       </div>
     </div>

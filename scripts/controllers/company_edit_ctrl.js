@@ -226,12 +226,25 @@ PopInTownControllers.controller('MainCtrl', ['$scope', '$location', '$window', '
 
 	$scope.company = null;
 
+	$scope.companyEdit = {
+		name : null,
+		username : null,
+		address1 : null,
+		address2 : null,
+		city : null,
+		country : null,
+		industry : null,
+		phone :null,
+		website :null,
+		yearFounded : null,
+		about :null
+	}
+
 	/*
 	 * Init when the page is load
 	 */
 	$scope.init = function (username) {
 		// Find company information by username
-		console.log(username);
 		$scope.findCompany(username);
 	};
 
@@ -240,6 +253,18 @@ PopInTownControllers.controller('MainCtrl', ['$scope', '$location', '$window', '
 			console.log(result);
 			if (result.status) {
 				$scope.company = result.data;
+
+				$scope.companyEdit.name = $scope.company.name;
+				$scope.companyEdit.username = $scope.company.username;
+				$scope.companyEdit.address1 = $scope.company.address.address1;
+				$scope.companyEdit.address2 = $scope.company.address.address2;
+				$scope.companyEdit.city = $scope.company.address.city.name;
+				$scope.companyEdit.country = $scope.company.address.country.name;
+				$scope.companyEdit.industry = $scope.company.industry;
+				$scope.companyEdit.phone = $scope.company.address.phone;
+				$scope.companyEdit.website = $scope.company.website;
+				$scope.companyEdit.yearFounded = $scope.company.yearFounded;
+				$scope.companyEdit.about = $scope.company.about;
 			} else {	
 				// handler error
 			}
@@ -459,49 +484,7 @@ PopInTownControllers.controller('MainCtrl', ['$scope', '$location', '$window', '
 	}
 
 	$scope.showUserEditModal = function () {
-		$scope.infoEdit.id = $scope.data.target_user._id;
-		$scope.infoEdit.firstName = $scope.data.target_user.local.firstName;
-		$scope.infoEdit.lastName = $scope.data.target_user.local.lastName;
-		$scope.infoEdit.email = $scope.data.target_user.local.email;
-		$scope.infoEdit.livesin = $scope.data.target_user.livesin;
-		$scope.infoEdit.description = $scope.data.target_user.description;
-
-		var value = $scope.infoEdit.description.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&#39;/g, '\'').replace(/&quot;/g, '"');
-		tinyMCE.get('info-editor').setContent(value);
-
-		// calculate birthday date
-		if ($scope.data.target_user.birthday.date) {
-			var date = new Date($scope.data.target_user.birthday.date);
-
-			$scope.birthdayEdit.month  = $scope.data.months[date.getMonth()];
-
-			// year
-			for (var i = 0; i < $scope.data.years.length; i++) {
-				if (date.getFullYear() == $scope.data.years[i].value) {
-					$scope.birthdayEdit.year = $scope.data.years[i];
-					break;
-				}
-			}
-
-			// day
-			for (var i = 0; i < $scope.data.days.length; i++) {
-				if (date.getDate() == $scope.data.days[i].value) {
-					$scope.birthdayEdit.day = $scope.data.days[i];
-					break;
-				}
-			}
-
-			// assign privacy
-			for (var i = 0; i < $scope.data.privacy_setting.length; i++) {
-				if ($scope.data.target_user.birthday.privacy == $scope.data.privacy_setting[i]._id) {
-					$scope.birthdayEdit.privacy = $scope.data.privacy_setting[i];
-					console.log($scope.birthdayEdit.privacy);
-					break;
-				}
-			}
-		} else {
-
-		}
+		
 
 		$('#infoEditModal').modal('toggle');
 	};

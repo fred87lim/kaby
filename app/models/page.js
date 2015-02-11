@@ -35,7 +35,8 @@ var PageSchema = mongoose.Schema({
 	adminLogins        : [adminToken],
 	profilePhoto: { type: Schema.ObjectId, ref: 'PhotoSchema', default: null},
 	coverPhoto: { type: Schema.ObjectId, ref: 'PhotoSchema', default: null},
-	about: String
+	about: String,
+	yearFounded: { type: Number}
 });
 
 // create the model for users and expose it to our app
