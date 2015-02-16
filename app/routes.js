@@ -222,21 +222,21 @@ module.exports = function (app, passport) {
 		};
 
 		var data = {
-			username: 	req.body.username,
-			companyName: 		req.body.companyName,
-			address1: 	req.body.address1,
-			address2: 	req.body.address2,
-			city: 		req.body.city,
-			country: 	req.body.country,
-			latitude: 	req.body.latitude,
-			longitude: 	req.body.longitude,
-			phone: 		req.body.phone,
-			postalCode: req.body.postalCode,
+			username: 		req.body.username,
+			companyName: 	req.body.companyName,
+			address1: 		req.body.address1,
+			address2: 		req.body.address2,
+			city: 			req.body.city,
+			country: 		req.body.country,
+			latitude: 		req.body.latitude,
+			longitude: 		req.body.longitude,
+			phone: 			req.body.phone,
+			postalCode: 	req.body.postalCode,
 			pageType: 		req.body.pageType,
-			url: 		req.body.url,
-			yearFounded:req.body.yearFounded,
-			about: 		req.body.about,
-			userId: 	null,
+			url: 			req.body.url,
+			yearFounded: 	req.body.yearFounded,
+			about: 			req.body.about,
+			userId: 		null,
 		}
 
 		//console.log(data);

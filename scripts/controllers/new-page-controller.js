@@ -136,7 +136,7 @@ PopInTownControllers.controller('MainCtrl', ['$scope', '$location', '$window', '
 
     $scope.registerNewBiz = function () {
         var data = {
-            companyName:           $scope.biz.name,
+            companyName:    $scope.biz.name,
             username:       $scope.biz.username,
             address1:       $scope.biz.address1,
             address2:       $scope.biz.address2,
@@ -149,7 +149,7 @@ PopInTownControllers.controller('MainCtrl', ['$scope', '$location', '$window', '
             longitude:      $scope.biz.longitude,
             about:          $scope.biz.about,
             country:        $scope.biz.city.country._id,
-            pageType:           $scope.biz.type,
+            pageType:       $scope.biz.type,
         };
 
         console.log(data);

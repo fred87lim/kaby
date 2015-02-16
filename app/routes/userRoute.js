@@ -410,6 +410,7 @@ UserRoute.prototype.createNewPage = function (data, callback) {
 					page.pageType = data.pageType;
 					page.website = data.url;
 					page.about = data.about;
+					page.yearFounded = data.yearFounded;
 					page.admins.push(user);
 
 					// Assign this new page to the authenticated user. We dont maintain list of
