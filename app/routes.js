@@ -255,6 +255,56 @@ module.exports = function (app, passport) {
 		});
 	});
 
+	/*
+	 * Edit Company
+	 */
+	app.put('/ajax/company/edit', function (req, res, next) {
+		var result = {
+			status: false,
+			message: '',
+			data: null,
+			errors: []
+		};
+
+		var data = {
+			companyId 	: req.body.companyId,
+			companyName: 	req.body.companyName,
+			address1: 		req.body.address1,
+			address2: 		req.body.address2,
+			city: 			req.body.city,
+			country: 		req.body.country,
+			latitude: 		req.body.latitude,
+			longitude: 		req.body.longitude,
+			phone: 			req.body.phone,
+			postalCode: 	req.body.postalCode,
+			pageType: 		req.body.pageType,
+			url: 			req.body.url,
+			yearFounded: 	req.body.yearFounded,
+			about: 			req.body.about,
+			userId: 		null,
+		}
+
+		// Redirect if user not logged in
+		if (req.user == null) {
+			var error = 'User not authenticated';
+			result.message = error;
+			return res.send(result);
+		}
+
+		// check if user has admin priviledge
+		if (!req.session.managingToken) {
+			var error = 'User not authorized';
+			result.message = error;
+			return res.send(result);
+		}
+
+		data.userId = req.user._id;
+
+		userController.editCompany(data, function (callbackResult) {
+			return res.send(callbackResult);
+		});
+	});
+
 	app.post('/ajax/page/manage', function (req, res, next) {
 		var pageId = req.body.pageId;
 

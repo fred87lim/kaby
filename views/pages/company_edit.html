@@ -24,6 +24,12 @@
     <script type="text/javascript" src="/vendors/tinymce/tinymce.min.js"></script>
 
     <script type="text/javascript" src="/controllers/company_edit_ctrl.js"></script>
+
+    <script type="text/ng-template" id="customTemplate.html">
+        <a ng-if="match._id != -1">
+        <span bind-html-unsafe="match.label | typeaheadHighlight:query"></span>
+        </a>
+    </script>
     
     <style type="text/css">
 
@@ -125,35 +131,35 @@
                     </tr>
                     <tr>
                         <td>Address:</td>
-                        <td></td>
+                        <td>[[ company.address.address1 ]]</td>
                     </tr>
                     <tr>
                         <td>City:</td>
-                        <td></td>
+                        <td>[[ company.address.city.name ]]</td>
                     </tr>
                     <tr>
                         <td>Country:</td>
-                        <td></td>
+                        <td>[[ company.address.country.name ]]</td>
                     </tr>
                     <tr>
                         <td>Industry:</td>
-                        <td></td>
+                        <td>[[  ]]</td>
                     </tr>
                     <tr>
                         <td>Phone:</td>
-                        <td></td>
+                        <td>[[ company.address.phone ]]</td>
                     </tr>
                     <tr>
                         <td>Website:</td>
-                        <td></td>
+                        <td>[[ company.website ]]</td>
                     </tr>
                     <tr>
                         <td>Year Founded:</td>
-                        <td></td>
+                        <td>[[ company.yearFounded ]]</td>
                     </tr>
                     <tr>
                         <td>About:</td>
-                        <td></td>
+                        <td>[[ company.about ]]</td>
                     </tr>
                 </tbody>
             </table>
@@ -170,47 +176,55 @@
 <!-- EDIT BASIC INFORMATION TAB -->
 <div class="modal fade" id="infoEditModal" tabindex="-1" role="dialog" aria-labelledby="infoEditModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
+        <form class="form-horizontal" role="form" ng-submit="saveCompanyEdit()">
         <div class="modal-content">
             <div class="modal-header">
                 <div class="pull-right">
                     <div>
                         <button type="button" class="btn btn-default margin-right:10px" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary " ng-click="saveBasicInfo()">Save</button>
+                        <button type="submit" class="btn btn-primary " ng-click="saveBasicInfo()">Save</button>
                     </div>
                 </div>
                 
                 <h4 class="modal-title" id="infoEditModalLabel">Edit Basic Information</h4>
             </div>
-      <div class="modal-body">
+        <div class="modal-body">
         <div class="alert alert-danger" ng-if="infoEdit.errorMessages.length">
             <ul>
                 <li ng-repeat="error in infoEdit.errorMessages">
                 </li>
             </ul>
         </div>
-        <form class="form-horizontal" role="form">
+        
         <div class="form-group">
           <label for="edit-info-first-name" class="col-sm-3 control-label">Company Name:</label>
           <div class="col-sm-9">
-            <input type="text" ng-model="companyEdit.name" class="form-control" id="edit-info-first-name">
+            <input type="text" ng-model="companyEdit.name" required class="form-control" id="edit-info-first-name">
           </div>
         </div>
         <div class="form-group">
           <label for="edit-info-lastname" class="col-sm-3 control-label">Company Username:</label>
           <div class="col-sm-9">
-            <input type="text" ng-model="companyEdit.username" class="form-control" id="edit-info-lastName">
+            <input type="text" ng-model="companyEdit.username" required placeholder="Ex: 6 Eu Tong Seng" class="form-control" id="edit-info-lastName">
           </div>
         </div>
         <div class="form-group">
-          <label for="edit-info-lastname" class="col-sm-3 control-label">Address:</label>
+          <label for="edit-info-lastname" class="col-sm-3 control-label">Address 1:</label>
           <div class="col-sm-9">
             <input type="text" ng-model="companyEdit.address1" class="form-control" id="edit-info-lastName">
           </div>
         </div>
         <div class="form-group">
+          <label for="edit-info-lastname" class="col-sm-3 control-label">Address 2:</label>
+          <div class="col-sm-9">
+            <input type="text" ng-model="companyEdit.address2" class="form-control" id="edit-info-lastName">
+          </div>
+        </div>
+        <div class="form-group">
           <label for="edit-info-lastname" class="col-sm-3 control-label">City:</label>
           <div class="col-sm-9">
-            <input type="text" ng-model="companyEdit.city" class="form-control" id="edit-info-lastName">
+            
+            <input type="text" ng-model="companyEdit.city" placeholder="" typeahead="tag as tag.name for tag in getTags($viewValue) | filter:{name:$viewValue}" typeahead-on-select='onTypeaheadSelect($item, $model, $label)' typeahead-template-url="customTemplate.html" autocomplete="off" class="form-control">
           </div>
         </div>
         <div class="form-group">
@@ -250,9 +264,10 @@
           </div>
         </div>
         
-</form>
+
       </div>
     </div>
+    </form>
   </div>
 </div>
 <!-- END OF BASIC INFORMATION TAB -->

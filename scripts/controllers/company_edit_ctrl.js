@@ -1,5 +1,5 @@
 var phonecatApp = angular.module('phonecatApp', ['ngRoute', 'ngResource', 'PopInTownControllers', 'phonecatServices', 
-	'ngSanitize', 'phonecatFilters', 'angularFileUpload'],
+	'ngSanitize', 'phonecatFilters', 'ui.bootstrap','angularFileUpload'],
 	function ($interpolateProvider) {
 		$interpolateProvider.startSymbol('[[');
         $interpolateProvider.endSymbol(']]');
@@ -108,12 +108,15 @@ phonecatServices.factory('ProfileService', function ($http) {
 	return {
 		findCompany: function (username) {
             return $http.get('/ajax/company/' + username);
+        },
+        saveCompanyEdit: function (inputs) {
+            return $http.put('/ajax/company/edit', inputs);
         }
 	}
 });
 
-PopInTownControllers.controller('MainCtrl', ['$scope', '$location', '$window', 'ProfileService', '$sce', '$upload',
-	function ($scope, $location, $window, ProfileService, $sce, $upload) {
+PopInTownControllers.controller('MainCtrl', ['$scope', '$location', '$window', 'ProfileService', '$sce', '$upload', '$http',
+	function ($scope, $location, $window, ProfileService, $sce, $upload, $http) {
 
 	$scope.data = null;
 
@@ -237,7 +240,9 @@ PopInTownControllers.controller('MainCtrl', ['$scope', '$location', '$window', '
 		phone :null,
 		website :null,
 		yearFounded : null,
-		about :null
+		about :null,
+		cityTypeAhead: null,
+		countryTypeAhead: null
 	}
 
 	/*
@@ -253,7 +258,7 @@ PopInTownControllers.controller('MainCtrl', ['$scope', '$location', '$window', '
 			console.log(result);
 			if (result.status) {
 				$scope.company = result.data;
-
+				$scope.companyEdit._id = $scope.company._id;
 				$scope.companyEdit.name = $scope.company.name;
 				$scope.companyEdit.username = $scope.company.username;
 				$scope.companyEdit.address1 = $scope.company.address.address1;
@@ -265,12 +270,90 @@ PopInTownControllers.controller('MainCtrl', ['$scope', '$location', '$window', '
 				$scope.companyEdit.website = $scope.company.website;
 				$scope.companyEdit.yearFounded = $scope.company.yearFounded;
 				$scope.companyEdit.about = $scope.company.about;
+				$scope.companyEdit.postalCode = $scope.company.address.postalCode;
+				$scope.companyEdit.cityTypeAhead = $scope.company.address.city;
+				$scope.companyEdit.countryTypeAhead = $scope.company.address.country;
 			} else {	
 				// handler error
 			}
 		});
 	};
 
+	$scope.saveBasicInfo = function () {
+
+		var data = {
+			companyId : $scope.companyEdit._id,
+            companyName:    $scope.companyEdit.name,
+            username:       $scope.companyEdit.username,
+            address1:       $scope.companyEdit.address1,
+            address2:       $scope.companyEdit.address2,
+            phone:          $scope.companyEdit.phone,
+            url:            $scope.companyEdit.website,
+            city:           $scope.companyEdit.cityTypeAhead._id,
+            postalCode:     $scope.companyEdit.postalCode,
+            yearFounded:    $scope.companyEdit.yearFounded,
+            latitude:       $scope.companyEdit.latitude,
+            longitude:      $scope.companyEdit.longitude,
+            about:          $scope.companyEdit.about,
+            country:        $scope.companyEdit.countryTypeAhead._id
+        };
+
+        console.log(data);
+
+		ProfileService.saveCompanyEdit(data).success(function (result) {
+			console.log(result);
+			if (result.status) {
+				$scope.company = result.data;
+				$scope.companyEdit._id = $scope.company._id;
+				$scope.companyEdit.name = $scope.company.name;
+				$scope.companyEdit.username = $scope.company.username;
+				$scope.companyEdit.address1 = $scope.company.address.address1;
+				$scope.companyEdit.address2 = $scope.company.address.address2;
+				$scope.companyEdit.city = $scope.company.address.city.name;
+				$scope.companyEdit.country = $scope.company.address.country.name;
+				$scope.companyEdit.industry = $scope.company.industry;
+				$scope.companyEdit.phone = $scope.company.address.phone;
+				$scope.companyEdit.website = $scope.company.website;
+				$scope.companyEdit.yearFounded = $scope.company.yearFounded;
+				$scope.companyEdit.about = $scope.company.about;
+				$scope.companyEdit.postalCode = $scope.company.address.postalCode;
+				$scope.companyEdit.cityTypeAhead = $scope.company.address.city;
+				$scope.companyEdit.countryTypeAhead = $scope.company.address.country;
+				$('#infoEditModal').modal('toggle');
+			} else {	
+				// handler error
+			}
+		});
+	}
+
+	$scope.onTypeaheadSelect = function ($item, $model, $label) {
+
+    	//console.log($scope.tagsSelected);
+    	console.log($model);
+    	$scope.companyEdit.city = $model.name;
+        $scope.companyEdit.country = $model.country.name;
+        $scope.companyEdit.cityTypeAhead = $model;
+        $scope.companyEdit.countryTypeAhead = $model.contry;
+        
+	};
+
+	$scope.getTags = function(val) {
+		console.log('get countries');
+    	return $http.get('/api/v2/cities', { params: { k: val }
+    	}).then(function(response){
+    		var tags= [];
+
+        var indice = [];
+        
+        // loop through all returned tags
+        for (var i = 0; i < response.data.data.length; i++) {
+          // loop through current selected response.data.data
+          tags.push(response.data.data[i]);         
+        }
+        console.log(tags);
+        return tags;
+    	});
+  	};
 	
 	$scope.trustedHtml = function (plainText) {
 		var value = plainText.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&#39;/g, '\'').replace(/&quot;/g, '"');
@@ -278,352 +361,27 @@ PopInTownControllers.controller('MainCtrl', ['$scope', '$location', '$window', '
             return $sce.trustAsHtml(value);
     }
 
-    $scope.deleteEducation = function () {
-    	if ($scope.eduEdit.id) {
-    		ProfileService.deleteEducation($scope.eduEdit.id).success(function (data) {
-				if (data.status) {
-					// remove this id from the list
-					var index = -1;
-					for (var i = 0; i < $scope.data.target_user.educations.length; i++) {
-						if ($scope.data.target_user.educations[i]._id == $scope.eduEdit.id) {
-							index = i;
-							break;
-						}
-					}
-
-					if (index != -1) {
-						$scope.data.target_user.educations.splice(index, 1);
-						$('#eduEditModal').modal('hide');
-					}
-				} else {
-					
-				}
-			});
-    	}
-    };
-
-    $scope.addEdu = function () {
-		$scope.eduEdit.yearStarted = $scope.eduDateStarted.name;
-		$scope.eduEdit.yearEnded = $scope.eduDateEnded.name;
-		$scope.eduEdit.educationLevel = $scope.educationLevel.name;
-
-		ProfileService.addEducation({
-    		school_name: 		$scope.eduEdit.schoolName, 
-    		school_id: 			$scope.eduEdit.schoolId,
-    		degree: 			$scope.eduEdit.degree,
-    		study_field: 		$scope.eduEdit.studyField,
-    		education_level: 	$scope.eduEdit.educationLevel,
-    		year_started: 		$scope.eduEdit.yearStarted,
-    		year_ended: 		$scope.eduEdit.yearEnded,
-    		grade: 				$scope.eduEdit.grade,
-    		description: 		$scope.eduEdit.description
-    	}).success(function (result) {
-    		if (result.status) {
-    			$scope.data.target_user.educations.push(result.data);
-    			$('#eduEditModal').modal('toggle');
-    		}
-    	});
-
-    };
-
-    $scope.deleteExp = function () {
-    	if ($scope.expEdit.id) {
-    		ProfileService.deleteExperience($scope.expEdit.id).success(function (data) {
-    			console.log(data);
-				if (data.status) {
-					// remove this id from the list
-					var index = -1;
-					for (var i = 0; i < $scope.data.target_user.experiences.length; i++) {
-						if ($scope.data.target_user.experiences[i]._id == $scope.expEdit.id) {
-							index = i;
-							break;
-						}
-					}
-
-					if (index != -1) {
-						$scope.data.target_user.experiences.splice(index, 1);
-						$('#expEditModal').modal('hide');
-					}
-				} else {
-					
-				}
-			});
-    	}
-    };
-
-    $scope.addLanguage = function () {
-    	ProfileService.addLanguage({
-    		language: $scope.languageEdit.language, 
-    		proficiency: $scope.languageEdit.proficiency.name
-    	}).success(function (result) {
-    		if (result.status) {
-    			$scope.data.target_user.languages.push(result.data);
-    			$('#languageEditModal').modal('toggle');
-    		}
-    	});
-    }
-
-    $scope.addExp = function () {
-    	// get content from tiny mce editor.
-    	$scope.expEdit.description = tinyMCE.activeEditor.getContent();
-
-    	$scope.expEdit.dateStarted.month = $scope.expDateStarted.month.value;
-		$scope.expEdit.dateStarted.year = $scope.expDateStarted.year.value;
-		$scope.expEdit.dateEnded.month = $scope.expDateEnded.month.value;
-		$scope.expEdit.dateEnded.year = $scope.expDateEnded.year.value;
-
-		ProfileService.addExperience({
-    		companyName: 		$scope.expEdit.companyName, 
-    		companyId: 			$scope.expEdit.companyId,
-    		title: 				$scope.expEdit.title,
-    		isStillHere: 		$scope.expEdit.isStillHere,
-    		location: 			$scope.expEdit.location,
-    		dateStarted: 		$scope.expEdit.dateStarted,
-    		dateEnded: 			$scope.expEdit.dateEnded,
-    		description: 		$scope.expEdit.description
-    	}).success(function (result) {
-    		if (result.status) {
-    			$scope.data.target_user.experiences.push(result.data);
-    			$('#expEditModal').modal('hide');
-    		}
-    	});
-    };
-
-	$scope.saveExp = function () {
-		$scope.expEdit.description = tinyMCE.activeEditor.getContent();
-
-		$scope.expEdit.dateStarted.month = $scope.expDateStarted.month.value;
-		$scope.expEdit.dateStarted.year = $scope.expDateStarted.year.value;
-		$scope.expEdit.dateEnded.month = $scope.expDateEnded.month.value;
-		$scope.expEdit.dateEnded.year = $scope.expDateEnded.year.value;
-
-		ProfileService.editExperience({
-                experienceId: 	$scope.expEdit.id,
-                companyName: 	$scope.expEdit.companyName,
-                companyId: 		$scope.expEdit.companyId,
-                title: 			$scope.expEdit.title,
-                location: 		$scope.expEdit.location,
-                isStillHere: 	$scope.expEdit.isStillHere,
-                dateStarted: 	$scope.expEdit.dateStarted,
-    			dateEnded: 		$scope.expEdit.dateEnded,
-                description: 	$scope.expEdit.description
-        }).success(function (result) {
-        	console.log(result);
-			if (result.status) {
-				// edit successfully. Now need to update experience model with latest data.
-				var counter = 0;
-				angular.forEach($scope.data.target_user.experiences, function (value, key) {
-					if (value._id === $scope.expEdit.id) {
-						value.companyName = $scope.expEdit.companyName;
-						value.title = $scope.expEdit.title;
-						value.location = $scope.expEdit.location;
-                		value.isWorking = $scope.expEdit.isStillHere;
-                		value.description = result.data.description;
-                		value.dateStarted = result.data.dateStarted;
-                		value.dateEnded = result.data.dateEnded;
-
-                		$('#expEditModal').modal('hide')
-					}
-				});
-			} else {
-				for (var i = 0; i < result.messages.length; i++) {
-					$scope.expEdit.errorMessages.push(result.messages[i]);
-				}
-				
-			}
-		});
-	}
-
 	$scope.showProfilePicModal = function () {
 		$('#profilePicModal').modal('toggle');
 	}
 
-	$scope.showEduAddModal = function () {
-		$scope.isNewEducation = true;
-		$scope.eduModalTitle = 'Add New Education';
-		$scope.eduEdit.companyName 			= null;
-		$scope.eduEdit.id 					= null;
-		$scope.eduEdit.degree 				= null;
-		$scope.eduEdit.studyField 			= null;
-		$scope.eduEdit.schoolStarted.month 	= null;
-		$scope.eduEdit.schoolStarted.year 	= null;
-		$scope.eduEdit.description 			= null;
-		$scope.eduEdit.activities 			= null;
-		$scope.eduEdit.schoolEnded.month 	= null;
-		$scope.eduEdit.schoolEnded.year 	= null;
-		$('#eduEditModal').modal('toggle');
-		tinyMCE.activeEditor.setContent('');
-	}
-
-	$scope.showExpAddModal = function () {
-		$scope.isNewExperience = true;
-		$scope.expModalTitle = 'Add New Experience';
-		$scope.expEdit.id 					= null;
-		$scope.expEdit.title 				= null;
-		$scope.expEdit.companyName			= null;
-		$scope.expEdit.isStillHere 			= false;
-		$scope.expEdit.dateStarted.month 	= null;
-		$scope.expEdit.dateStarted.year 	= null;
-		$scope.expEdit.description 			= null;
-		$scope.expEdit.location 			= null;
-		$scope.expEdit.dateEnded.month 	= null;
-		$scope.expEdit.dateEnded.year 	= null;
-		$scope.expDateStarted.month = $scope.data.months[0];
-		$scope.expDateEnded.month  = $scope.data.months[0];
-		$scope.expDateStarted.year = $scope.data.years[0];
-		$scope.expDateEnded.year  = $scope.data.years[0];
-		$('#expEditModal').modal('toggle');
-		tinyMCE.activeEditor.setContent('');
-	}
-
-	$scope.showLanguageAddModal = function () {
-		$scope.languageModalTitle = 'Add New Language';
-		$scope.languageEdit.language = null;
-		$scope.languageEdit.proficiency = null;
-		$('#languageEditModal').modal('toggle');
-	}
-
 	$scope.showUserEditModal = function () {
-		
+		// Refresh company information
+		$scope.companyEdit.name = $scope.company.name;
+		$scope.companyEdit.username = $scope.company.username;
+		$scope.companyEdit.address1 = $scope.company.address.address1;
+		$scope.companyEdit.address2 = $scope.company.address.address2;
+		$scope.companyEdit.city = $scope.company.address.city.name;
+		$scope.companyEdit.country = $scope.company.address.country.name;
+		$scope.companyEdit.industry = $scope.company.industry;
+		$scope.companyEdit.phone = $scope.company.address.phone;
+		$scope.companyEdit.website = $scope.company.website;
+		$scope.companyEdit.yearFounded = $scope.company.yearFounded;
+		$scope.companyEdit.about = $scope.company.about;
+		$scope.companyEdit.postalCode = $scope.company.address.postalCode;
 
 		$('#infoEditModal').modal('toggle');
 	};
-
-	// save basic information
-	$scope.saveBasicInfo = function () {
-		$scope.infoEdit.description = tinyMCE.activeEditor.getContent();
-
-		$scope.infoEdit.errorMessages = [];
-		// If any field of birthday is null, birthday is null
-		if ($scope.birthdayEdit.month != null && $scope.birthdayEdit.year != null && 
-			$scope.birthdayEdit.day != null && $scope.birthdayEdit.privacy != null) {
-			var day = $scope.birthdayEdit.day.value;
-			var month = $scope.birthdayEdit.month.value;
-			var year = $scope.birthdayEdit.year.value;
-			var privacy = $scope.birthdayEdit.privacy._id;
-
-			var date = new Date(year, month, day);
-			console.log(date.getDate() + '/' + date.getMonth());
-			console.log(Number(day) + '/' + Number(month));
-			// validate date
-			if (date.getDate() == Number(day) && (date.getMonth()) == Number(month)) {
-				$scope.infoEdit.birthday.date = date;
-				$scope.infoEdit.birthday.privacy = privacy;
-			} else {
-				$scope.infoEdit.errorMessages.push('It does not seem a valid date. Please try again.');
-				return;
-			}
-			
-		} else if ($scope.birthdayEdit.month == null && $scope.birthdayEdit.year == null && 
-			$scope.birthdayEdit.day == null && $scope.birthdayEdit.privacy == null) {
-			// user does not want to declare his birthday
-			$scope.infoEdit.birthday.date = null;
-			$scope.infoEdit.birthday.privacy = null;
-		} else {
-
-			$scope.infoEdit.errorMessages.push('Please complete your birthday.');
-			return;
-		}
-		console.log($scope.birthdayEdit);
-		console.log($scope.infoEdit);
-
-		ProfileService.editBasicInfo({
-			firstName: $scope.infoEdit.firstName,
-			lastName : $scope.infoEdit.lastName,
-			livesin	: $scope.infoEdit.livesin,
-			description: $scope.infoEdit.description,
-			birthday: $scope.infoEdit.birthday
-		}).success(function (result) {
-			console.log(result);
-			if (result.status) {
-				$scope.data.target_user.local.firstName = result.data.firstName;
-				$scope.data.target_user.local.lastName = result.data.lastName;
-				$scope.data.target_user.livesin = result.data.livesin;
-				$scope.data.target_user.description = result.data.description;
-				$scope.data.target_user.birthday.date = result.data.birthday.date;
-				$scope.data.target_user.birthday.privacy = result.data.birthday.privacy;
-				$('#infoEditModal').modal('hide');
-			}
-		});
-		
-	}
-
-	$scope.showEduEditPanel = function (exp) {
-		$scope.isNewEducation = false;
-		// convert to json object
-		var json = exp;//eval("(" + exp + ")");
-		$scope.eduModalTitle = 'Edit Education';
-		//$scope.eduDateStarted.month = $scope.data.months[json.schoolStarted.month];
-		//$scope.eduDateStarted.month = $scope.data.years[json.schoolStarted.month];
-
-		// update with new data
-		$scope.eduEdit.schoolName 			= json.schoolName;
-		$scope.eduEdit.id 					= json._id;
-		$scope.eduEdit.degree 				= json.degree;
-		$scope.eduEdit.studyField 			= json.studyField;
-		$scope.eduEdit.yearStarted 			= json.yearStarted;
-		$scope.eduEdit.yearStarted 			= json.yearEnded;
-		$scope.eduEdit.description 			= json.description;
-		$scope.eduEdit.activities 			= json.activities;
-
-		if (!$scope.eduEdit.description) {
-			$scope.eduEdit.description = "";
-		}
-
-		// display modal
-		$('#eduEditModal').modal('toggle');
-		var value = $scope.eduEdit.description.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&#39;/g, '\'').replace(/&quot;/g, '"');
-		tinyMCE.get('edu-editor').setContent(value);
-	}
-
-	$scope.showExpEditPanel = function (exp) {
-		$scope.isNewExperience = false;
-		$scope.expModalTitle = 'Edit Experience';
-		var json = exp;//eval("(" + exp + ")");
-
-		// update with new data
-		$scope.expEdit.companyName 			= json.companyName;
-		$scope.expEdit.id 					= json._id;
-		$scope.expEdit.title 				= json.title;
-		$scope.expEdit.isStillHere 			= json.isWorking;
-		$scope.expEdit.dateStarted.month 	= $scope.data.months[4];//json.dateStarted.month;
-		$scope.expEdit.dateStarted.year 	= json.dateStarted.year;
-		$scope.expEdit.description 			= json.description;
-		$scope.expEdit.location 			= json.location;
-
-		var dateStarted = new Date(exp.dateStarted);
-		var dateEnded 	= new Date(exp.dateEnded);
-		// calculate datetime and assign to model
-		$scope.expDateStarted.month = $scope.data.months[dateStarted.getMonth()];
-		$scope.expDateEnded.month  = $scope.data.months[dateEnded.getMonth()];
-
-		// year
-		for (var i = 0; i < $scope.data.years.length; i++) {
-			if (dateStarted.getFullYear() == $scope.data.years[i].value) {
-				$scope.expDateStarted.year = $scope.data.years[i];
-				break;
-			}
-		}
-
-		for (var i = 0; i < $scope.data.years.length; i++) {
-			if (dateEnded.getFullYear() == $scope.data.years[i].value) {
-				$scope.expDateEnded.year = $scope.data.years[i];
-				break;
-			}
-		}
-
-		console.log($scope.expEdit.dateStarted.month);
-
-		if (json.isWorking == false) {
-			$scope.expEdit.dateEnded.month 	= json.dateEnded.month;
-			$scope.expEdit.dateEnded.year 	= json.dateEnded.year;
-		}
-
-		// display modal
-		$('#expEditModal').modal('toggle');
-		var value = $scope.expEdit.description.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&#39;/g, '\'').replace(/&quot;/g, '"');
-		tinyMCE.get('exp-editor').setContent(value);
-	}
 
 	/*
 	 * Find user by username. Used to get user and check username availibility

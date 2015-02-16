@@ -204,6 +204,7 @@ UserRoute.findManagingPage = function (userId, callback) {
 					},
 					logo: logo,
 					cover: cover,
+					yearFounded: page.yearFounded
 				}
 
 				return callback(pageJson);
@@ -314,13 +315,18 @@ UserRoute.prototype.findCompanyByUsername = function (username, userId, callback
 						username: page.username,
 						about: page.about,
 						address: {
-							address1: page.address1,
-							address2: page.address2,
+							address1: page.address.address1,
+							address2: page.address.address2,
+							phone: 	page.address.phone,
+							postalCode: page.address.postalCode,
 							city: city,
 							country: country
 						},
 						logo: logo,
 						cover: cover,
+						website: page.website,
+						about: page.about,
+						yearFounded: page.yearFounded
 					}
 
 					result.status = true;
@@ -412,6 +418,102 @@ UserRoute.prototype.createNewPage = function (data, callback) {
 					page.about = data.about;
 					page.yearFounded = data.yearFounded;
 					page.admins.push(user);
+
+					// Assign this new page to the authenticated user. We dont maintain list of
+					// admin users in the page because not all users managing page. So it's better
+					// to assign page to individual.
+					//user.pageManaging = page;
+					page.save(function (err) {
+						if (err) {
+							result.message = constants.ERROR2000;
+							return callback(result);
+						}
+
+						// return json to request
+						result.status = true;
+						result.data = page;
+
+						return callback(result);
+					});
+				});
+			});
+		});
+	});
+};
+
+/**
+ * Edit Company
+ * 
+ * @param  {Json} data - Data submitted from web form.
+ * @param  {Function} callbacl - Callback function.
+ * @return [ActionResult]
+ */
+UserRoute.prototype.editCompany = function (data, callback) {
+	var result = {
+		status: false,
+		message: '',
+		data: null,
+		errors: []
+	};
+
+	// Find authenticated user
+	User.findById(data.userId, function (err, user) {
+		if (err) {
+			result.message = constants.ERROR2000;
+			return callback(result);
+		}
+
+		if (!user) {
+			result.message = constants.ERROR9015;
+			return callback(result);
+		}
+
+		// Check if page's username has already been taken
+		Page.findById(data.companyId, function (err, page) {
+			if (err) {
+				result.message = constants.ERROR2000;
+				return callback(result);
+			}
+
+			if (!page) {
+				result.message = constants.ERROR9015;
+				return callback(result);
+			}
+
+			// Find City
+			City.findById(data.city, function (err, city) {
+				if (err) {
+					result.message = constants.ERROR2000;
+					return callback(result);
+				}
+
+				if (!city) {
+					result.message = 'This city is not support yest';
+					return callback(result);
+				}
+
+				// Find Country
+				Country.findById(data.country, function (err, country) {
+					if (err) {
+						result.message = constants.ERROR2000;
+						return callback(result);
+					}
+
+					if (!country) {
+						result.message = 'This country is not support yest';
+						return callback(result);
+					}
+					
+					page.name = data.companyName;
+					page.address.address1 = data.address1;
+					page.address.address2 = data.address2;
+					page.address.city = city;
+					page.address.country = country;
+					page.address.postalCode = data.postalCode;
+					page.address.phone = data.phone;
+					page.website = data.url;
+					page.about = data.about;
+					page.yearFounded = data.yearFounded;
 
 					// Assign this new page to the authenticated user. We dont maintain list of
 					// admin users in the page because not all users managing page. So it's better
