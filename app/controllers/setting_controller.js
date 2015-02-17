@@ -1,0 +1,6 @@
+
+
+var SettingController = function() {
+
+}
+

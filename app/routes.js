@@ -1483,6 +1483,10 @@ module.exports = function (app, passport) {
 			return res.redirect('/');
 		}
 
+		var data = {
+			authUser: req.user
+		}
+
 		// Render page
 		res.render('pages/new_job.html', { data: data });
 	});
