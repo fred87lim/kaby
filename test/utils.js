@@ -18,7 +18,7 @@ before(function (done) {
  	function clearDB() {
  		console.log('Clearing database....')
    		for (var i in mongoose.connection.collections) {
-    		mongoose.connection.collections[i].remove(function() {});
+    		//mongoose.connection.collections[i].remove(function() {});
    		}
 
         // save client Id

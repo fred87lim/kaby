@@ -13,6 +13,8 @@ var UserRoute = require('../app/routes/userRoute');
 var constants = require('../app/utils/constants');
 var passport = require('passport');
 
+var SettingController = require('../app/controllers/setting_controller');
+
 /* add node js app reference */
 var app = require('../web');
 
@@ -30,7 +32,18 @@ before (function (done) {
     done();
 });
 
-describe('Recruitment', function () {
+describe('Test', function () {
+    describe('Industry', function () {
+        it('Find Industry By Keyword', function (done) {
+            SettingController.findIndustryByKeyword('Infor', function (industries) {
+                console.log(industries);
+                done();
+            });
+        });
+    })
+})
+
+describe.skip('Recruitment', function () {
     describe('#Signup()', function () {
         it('SIGNUP: kabuky_knight@yahoo.com', function (done) {
             agent.post('http://localhost:5000/api/v2/signup')
