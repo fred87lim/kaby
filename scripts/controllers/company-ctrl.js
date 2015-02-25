@@ -1,5 +1,5 @@
 var phonecatApp = angular.module('phonecatApp', ['ngRoute', 'ngResource', 'PopInTownControllers', 'phonecatServices', 
-	'ngSanitize', 'angularFileUpload', 'ui.bootstrap'],
+	'ngSanitize', 'phonecatFilters', 'angularFileUpload', 'ui.bootstrap'],
 	function ($interpolateProvider) {
 		$interpolateProvider.startSymbol('[[');
         $interpolateProvider.endSymbol(']]');
@@ -30,57 +30,59 @@ phonecatApp.filter('titlecase', function() {
     };
 });
 
+var bountestds = {};
+
 phonecatApp.directive('imgCropped', function () {
     return {
-        restrict: 'E',
-        replace: true,
-        scope: { src: '@', selected: '&', changed: '&'},
-        link: function (scope, element, attr) {
-            var myImg;
-            var clear = function () {
-            if (myImg) {
-                myImg.next().remove();
-                myImg.remove();
-                myImg = undefined;
-            }
+      restrict: 'E',
+      replace: true,
+      scope: { src: '@', selected: '&', changed: '&'},
+      link: function (scope, element, attr) {
+          var myImg;
+          var clear = function () {
+          if (myImg) {
+              myImg.next().remove();
+              myImg.remove();
+              myImg = undefined;
+          }
         };
 
         scope.$watch('src', function (nv) {
-            clear();
-            if (nv) {
-                element.after('<img />');
-                myImg = element.next();
-                myImg.attr('src', nv);
-                //console.log(Jcrop);
+          clear();
+          if (nv) {
+              element.after('<img />');
+              myImg = element.next();
+              myImg.attr('src', nv);
+              console.log(myImg);
 
-                $(myImg).Jcrop({
-                    trackDocument: true,
-                    onSelect: function (x) {
-                        scope.$apply(function () {
-                            scope.selected({ cords: x });
-                        });
-                    },
-                    onChange: function (x) {
-                        scope.$apply(function () {
-                            scope.changed({cords: x});
-                        });
-                    },
-                    aspectRatio: 1,
-                    setSelect: [0, 0, 200, 200]
-                    }, function () {
-                         // Use the API to get the real image size 
-                         var bounds = this.getBounds();
-                         boundx = bounds[0];
-                         boundy = bounds[1];
+              $(myImg).Jcrop({
+                trackDocument: true,
+                onSelect: function (x) {
+                    scope.$apply(function () {
+                      scope.selected({ cords: x });
+                    });
+                },
+                onChange: function (x) {
+                    scope.$apply(function () {
+                      scope.changed({cords: x});
+                    });
+                },
+                aspectRatio: 1,
+                setSelect: [0, 0, 200, 200]
+                }, function () {
+                   // Use the API to get the real image size 
+                   var bounds = this.getBounds();
+                   boundx = bounds[0];
+                   boundy = bounds[1];
 
-                         if (boundx && boundy) {
-                            console.log('Bounds: ' + boundx + '/' + boundy);
-                            
-                            
-                            bountestds.x = boundx;
-                            bountestds.y = boundy;
-                            
-                         }
+                   if (boundx && boundy) {
+                      console.log('Bounds: ' + boundx + '/' + boundy);
+                      
+                      
+                      bountestds.x = boundx;
+                      bountestds.y = boundy;
+                      
+                   }
              
             });
         }
@@ -89,6 +91,27 @@ phonecatApp.directive('imgCropped', function () {
         }
     };
 });
+
+phonecatApp.directive('compile', ['$compile', function ($compile) {
+  return function (scope, element, attr) {
+    scope.$watch(
+      function (scope) {
+      // watch the 'compile' expression for changes
+      return scope.$eval(attr.compile);
+      },
+      function (value) {
+        // when the 'compile' expression changes
+              // assign it into the current DOM
+              element.html(value);
+
+              // compile the new DOM and link it to the current
+              // scope.
+              // NOTE: we only compile .childNodes so that
+              // we don't get into infinite loop compiling ourselves
+              $compile(element.contents())(scope);
+            });
+  };
+}]);
 
 phonecatApp.config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
 	$routeProvider.
@@ -145,6 +168,15 @@ PopInTownControllers.controller('MainCtrl', ['$scope', '$location', '$window', '
     };
 
     $scope.company = null;
+
+    // Used to store crop dimesion
+  $scope.cropValue = {
+    x: 0,
+    y: 0,
+    w: 0,
+    h: 0,
+    loginToken: ''
+  }
 
 	/*
 	 * Init when the page is load

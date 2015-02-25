@@ -28,7 +28,7 @@ phonecatApp.directive('imgCropped', function () {
           		element.after('<img />');
           		myImg = element.next();
           		myImg.attr('src', nv);
-          		//console.log(Jcrop);
+          		console.log(myImg);
 
           		$(myImg).Jcrop({
             		trackDocument: true,
