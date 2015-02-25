@@ -35,8 +35,15 @@ before (function (done) {
 describe('Test', function () {
     describe('Industry', function () {
         it('Find Industry By Keyword', function (done) {
-            SettingController.findIndustryByKeyword('Infor', function (industries) {
+            SettingController.findIndustryByKeyword('tech', function (industries) {
                 console.log(industries);
+                done();
+            });
+        });
+		
+		it('Find Industry By Id', function (done) {
+            SettingController.findIndustryById('54e3f743aba48f04065ff258', function (industry) {
+                console.log(industry);
                 done();
             });
         });
