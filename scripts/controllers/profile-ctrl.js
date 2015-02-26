@@ -245,7 +245,8 @@ PopInTownControllers.controller('MainCtrl', ['$scope', '$location', '$window', '
 		y: 0,
 		w: 0,
 		h: 0,
-		loginToken: ''
+		loginToken: '',
+		type: 'USER'
 	}
 
 	/*

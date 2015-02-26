@@ -46,7 +46,9 @@ var PageSchema = mongoose.Schema({
 	},
 	adminLogins        : [adminToken],
 	profilePhoto: { type: Schema.ObjectId, ref: 'PhotoSchema', default: null},
+	profilePicture: { type: Schema.ObjectId, ref: 'PhotoSchema', default: null},
 	coverPhoto: { type: Schema.ObjectId, ref: 'PhotoSchema', default: null},
+	coverPicture: { type: Schema.ObjectId, ref: 'PhotoSchema', default: null},
 	about: String,
 	yearFounded: { type: Number},
 	size : { type: Number, enum: size}

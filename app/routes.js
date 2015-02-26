@@ -1331,6 +1331,11 @@ module.exports = function (app, passport) {
 		var w = req.body.w;
 		var h = req.body.h;
 
+		// type can be USER, COMPANY or SCHOOL. For each type, we set different picture's owner
+		var type = req.body.type;
+
+		var pageId = req.body.pageId;
+
 		var relativePath = '/public/img/profile_temp/';
         var lastIndex = __dirname.lastIndexOf('/');
         var appDir = __dirname.substring(0, lastIndex );
@@ -1363,28 +1368,70 @@ module.exports = function (app, passport) {
 					photo.url = data.url;
 					photo.user = user;
 
-					photo.save(function (err) {
-						if (err) {
-							console.log(err);
-						}
+					if (type === 'USER') {
+						photo.owner = user;
 
-						// Assign this photo as his profile picture.
-						user.profilePicture = photo;
-
-						user.save(function (err) {
+						photo.save(function (err) {
 							if (err) {
-								console.log(err);	
+								console.log(err);
 							}
-							
-							
-						});
 
-						// set image as profile picture
-						result.status = true;
-						result.data = photo;
-						console.log(result);
-						return res.send(result);
-					});
+							// Assign this photo as his profile picture.
+							user.profilePicture = photo;
+
+							user.save(function (err) {
+								if (err) {
+									console.log(err);	
+								}
+								
+								
+							});
+
+							// set image as profile picture
+							result.status = true;
+							result.data = photo;
+							return res.send(result);
+						});
+					} else {
+						// Find page
+						Page.findById(pageId, function (err, page) {
+							if (err) {
+								console.log(err);
+							}
+
+							if (!page) {
+								result.message = 'Unable to save picture to page.';
+								return res.send(result);
+							}
+
+							photo.owner = page;
+
+							photo.save(function (err) {
+								if (err) {
+									console.log(err);
+								}
+
+								// Assign this photo as his profile picture.
+								page.profilePicture = photo;
+
+								page.save(function (err) {
+									if (err) {
+										console.log(err);	
+									}
+									
+									
+								});
+
+								// set image as profile picture
+								result.status = true;
+								result.data = photo;
+								return res.send(result);
+							});
+						});
+					}
+					
+
+					
 					
 				}
 			});

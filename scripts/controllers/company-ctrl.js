@@ -175,7 +175,9 @@ PopInTownControllers.controller('MainCtrl', ['$scope', '$location', '$window', '
     y: 0,
     w: 0,
     h: 0,
-    loginToken: ''
+    loginToken: '',
+    type: 'COMPANY',
+    pageId: null
   }
 
 	/*
@@ -242,9 +244,9 @@ PopInTownControllers.controller('MainCtrl', ['$scope', '$location', '$window', '
             if (result.status) {
                 console.log(result);
 
-                $scope.data.target_user.profilePicture = result.data.url;
-                console.log($scope.data.target_user.profilePicture);
-                $scope.data.user.profilePicture = result.data.url;
+                ///$scope.data.target_user.profilePicture = result.data.url;
+                //console.log($scope.data.target_user.profilePicture);
+                //$scope.data.user.profilePicture = result.data.url;
                 /* exit photo dialog modal and set profile picture */
                 $('#profilePicModal').modal('hide');
             }
@@ -298,6 +300,7 @@ PopInTownControllers.controller('MainCtrl', ['$scope', '$location', '$window', '
 			console.log(result);
 			if (result.status) {
 				$scope.company = result.data;
+        $scope.cropValue.pageId = $scope.company._id;
 			} else {	
 				// handler error
 			}
