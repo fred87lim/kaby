@@ -1,0 +1,26 @@
+{"level":"info","message":"Mode: development","timestamp":"2015-02-27T03:36:57.467Z"}
+{"level":"info","message":"Mode: development","timestamp":"2015-02-27T03:38:42.616Z"}
+{"level":"info","message":"Mode: development","timestamp":"2015-02-27T03:42:18.571Z"}
+{"level":"info","message":"Mode: development","timestamp":"2015-02-27T03:44:09.471Z"}
+{"level":"info","message":"Console page controller","timestamp":"2015-02-27T03:44:09.494Z"}
+{"level":"info","message":"Mode: development","timestamp":"2015-02-27T06:01:35.921Z"}
+{"level":"info","message":"Mode: development","timestamp":"2015-02-27T06:02:04.774Z"}
+{"level":"info","message":"Mode: development","timestamp":"2015-02-27T06:03:09.916Z"}
+{"level":"info","message":"Mode: development","timestamp":"2015-02-27T06:16:41.521Z"}
+{"level":"info","message":"Mode: development","timestamp":"2015-02-27T06:25:59.006Z"}
+{"level":"info","message":"Mode: development","timestamp":"2015-02-27T06:26:47.915Z"}
+{"level":"info","message":"Mode: development","timestamp":"2015-02-27T06:34:25.302Z"}
+{"level":"info","message":"Mode: development","timestamp":"2015-02-27T06:37:16.915Z"}
+{"level":"info","message":"","timestamp":"2015-02-27T06:37:17.872Z"}
+{"level":"info","message":"Mode: development","timestamp":"2015-02-27T06:38:55.310Z"}
+{"level":"info","message":"","timestamp":"2015-02-27T06:38:56.213Z"}
+{"level":"info","message":"Mode: development","timestamp":"2015-02-27T06:40:43.876Z"}
+{"_id":{"_bsontype":"ObjectID","id":"TzýãlBÅX\u0005S`¬"},"pageType":"COMPANY","name":"ASE Singapore","username":"ASE_SG","address":{"city":null,"country":{"$__":{"strictMode":true,"getters":{},"wasPopulated":false,"activePaths":{"paths":{"__v":"init","name":"init","code":"init","iso":"init","_id":"init"},"states":{"default":{},"init":{"__v":true,"name":true,"code":true,"iso":true,"_id":true},"modify":{},"require":{}},"stateNames":["require","modify","init","default"]}},"isNew":false,"_maxListeners":0,"_doc":{"__v":0,"name":"United States","code":1,"iso":"US","_id":{"_bsontype":"ObjectID","id":"TÒ.ô-Ð;Q\u0003Áö"}},"_pres":{"save":[null,null,null]},"_posts":{"save":[]},"_events":{}}},"logo":null,"cover":null,"yearFounded":1970,"level":"info","message":"","timestamp":"2015-02-27T06:40:44.853Z"}
+{"level":"info","message":"Mode: development","timestamp":"2015-02-27T06:42:14.582Z"}
+{"_id":{"_bsontype":"ObjectID","id":"TzýãlBÅX\u0005S`¬"},"pageType":"COMPANY","name":"ASE Singapore","username":"ASE_SG","address":{"city":null,"country":{"$__":{"strictMode":true,"getters":{},"wasPopulated":false,"activePaths":{"paths":{"__v":"init","name":"init","code":"init","iso":"init","_id":"init"},"states":{"default":{},"init":{"__v":true,"name":true,"code":true,"iso":true,"_id":true},"modify":{},"require":{}},"stateNames":["require","modify","init","default"]}},"isNew":false,"_maxListeners":0,"_doc":{"__v":0,"name":"United States","code":1,"iso":"US","_id":{"_bsontype":"ObjectID","id":"TÒ.ô-Ð;Q\u0003Áö"}},"_pres":{"save":[null,null,null]},"_posts":{"save":[]},"_events":{}}},"logo":null,"cover":null,"yearFounded":1970,"level":"info","message":"","timestamp":"2015-02-27T06:42:15.482Z"}
+{"level":"info","message":"Mode: development","timestamp":"2015-02-27T06:45:09.417Z"}
+{"level":"info","message":"Mode: development","timestamp":"2015-02-27T06:46:14.524Z"}
+{"level":"info","message":"Mode: development","timestamp":"2015-02-27T06:46:42.829Z"}
+{"level":"info","message":"Mode: development","timestamp":"2015-02-27T06:47:42.634Z"}
+{"level":"info","message":"Mode: development","timestamp":"2015-02-27T08:07:41.781Z"}
+{"_id":{"_bsontype":"ObjectID","id":"TzýãlBÅX\u0005S`¬"},"pageType":"COMPANY","name":"ASE Singapore","username":"ASE_SG","address":{"address1":"2 Woodlands Loop","city":{"_id":{"_bsontype":"ObjectID","id":"TÒ.ô-Ð;Q\u0003Áö"},"name":"San Diego","country":{"_id":{"_bsontype":"ObjectID","id":"TÒ.ô-Ð;Q\u0003Áö"},"name":"United States"}},"country":{"$__":{"strictMode":true,"getters":{},"wasPopulated":false,"activePaths":{"paths":{"__v":"init","name":"init","code":"init","iso":"init","_id":"init"},"states":{"default":{},"init":{"__v":true,"name":true,"code":true,"iso":true,"_id":true},"modify":{},"require":{}},"stateNames":["require","modify","init","default"]}},"isNew":false,"_maxListeners":0,"_doc":{"__v":0,"name":"United States","code":1,"iso":"US","_id":{"_bsontype":"ObjectID","id":"TÒ.ô-Ð;Q\u0003Áö"}},"_pres":{"save":[null,null,null]},"_posts":{"save":[]},"_events":{}}},"logo":null,"cover":null,"yearFounded":1970,"level":"info","message":"","timestamp":"2015-02-27T08:07:42.718Z"}

@@ -22,9 +22,24 @@ var oauthserver = require('node-oauth2-server');
 /* We need to export app for unit testing */
 var app = exports.app = express();
 
+
+// Winston for log
+var winston = require('winston');
+// By default, only the Console transport is set on the default logger
+// add or remove transports via the add() and remove() methods
+winston.add(winston.transports.File, { filename: 'logs/somefile.log' });
+//winston.remove(winston.transports.Console);
+
 /* Set database connection string based on current setting. It is either 'production', 'test' or 'development' */
-console.log('Mode: ' + app.settings.env);
+winston.log('info', 'Mode: ' + app.settings.env);
 app.set('dbUrl', config.db[app.settings.env]);
+
+// test winston page controller
+var PageController = require('./app/controllers/page_controller');
+PageController.findPageByUsername({username: 'ASE_SG'}, function (result) {
+    //console.log(result);
+    //winston.log('info', result);
+});
 
 var session = require('express-session');
 var cookieParser = require('cookie-parser');

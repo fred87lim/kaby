@@ -258,13 +258,22 @@ PopInTownControllers.controller('MainCtrl', ['$scope', '$location', '$window', '
 			console.log(result);
 			if (result.status) {
 				$scope.company = result.data;
+
 				$scope.companyEdit._id = $scope.company._id;
 				$scope.companyEdit.name = $scope.company.name;
 				$scope.companyEdit.username = $scope.company.username;
 				$scope.companyEdit.address1 = $scope.company.address.address1;
 				$scope.companyEdit.address2 = $scope.company.address.address2;
-				$scope.companyEdit.city = $scope.company.address.city.name;
-				$scope.companyEdit.country = $scope.company.address.country.name;
+
+				if ($scope.company.address.city) {
+					$scope.companyEdit.city = $scope.company.address.city.name;
+				}
+
+				if ($scope.company.address.country) {
+					$scope.companyEdit.country = $scope.company.address.country.name;
+				}
+				
+				
 				$scope.companyEdit.industry = $scope.company.industry;
 				$scope.companyEdit.phone = $scope.company.address.phone;
 				$scope.companyEdit.website = $scope.company.website;
@@ -333,7 +342,7 @@ PopInTownControllers.controller('MainCtrl', ['$scope', '$location', '$window', '
     	$scope.companyEdit.city = $model.name;
         $scope.companyEdit.country = $model.country.name;
         $scope.companyEdit.cityTypeAhead = $model;
-        $scope.companyEdit.countryTypeAhead = $model.contry;
+        $scope.companyEdit.countryTypeAhead = $model.country;
         
 	};
 
@@ -371,8 +380,15 @@ PopInTownControllers.controller('MainCtrl', ['$scope', '$location', '$window', '
 		$scope.companyEdit.username = $scope.company.username;
 		$scope.companyEdit.address1 = $scope.company.address.address1;
 		$scope.companyEdit.address2 = $scope.company.address.address2;
-		$scope.companyEdit.city = $scope.company.address.city.name;
-		$scope.companyEdit.country = $scope.company.address.country.name;
+
+		if ($scope.company.address.city) {
+			$scope.companyEdit.city = $scope.company.address.city.name;
+		}
+
+		if ($scope.company.address.country) {
+			$scope.companyEdit.country = $scope.company.address.country.name;
+		}
+
 		$scope.companyEdit.industry = $scope.company.industry;
 		$scope.companyEdit.phone = $scope.company.address.phone;
 		$scope.companyEdit.website = $scope.company.website;
