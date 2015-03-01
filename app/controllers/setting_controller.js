@@ -1,7 +1,10 @@
 var Industry       	= require('../../app/models/settings/industry');
 var City			= require('../../app/models/city');
 var Country			= require('../../app/models/country');
+var PrivacySetting	= require('../../app/models/privacy_setting');
+var JobTitle	= require('../../app/models/settings/title');
 var constants 		= require('../../app/utils/constants');
+
 
 var async 			= require('async');
 var winston 		= require('winston');
@@ -251,5 +254,38 @@ SettingController.findCountryById = function (data, callback) {
 		}
 
 		return callback(country);
+	});
+};
+
+SettingController.findPrivacySettings = function (callback) {
+	PrivacySetting.find({}, function (err, privacies) {
+		if (err) {
+			winston.log('error', err);
+		}
+
+		return callback(privacies);
+	});
+}
+
+/**
+ * Find job title by keyword.
+ *
+ * @param  {JSON} 	data - user data.
+ *					data = {
+ *						keyword: keyword
+ *					}
+ *
+ *
+ * @return [JobTitle]
+ */
+SettingController.findJobTitlesByKeyword = function (data, callback) {
+	var re = new RegExp(data.keyword, 'i');
+
+	JobTitle.find({ name: { $regex: re }	}, function (err, titles) {
+		if (err) {
+			winston.log('error', err);
+		}
+
+		return callback(titles);
 	});
 };

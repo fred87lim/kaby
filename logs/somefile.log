@@ -24,3 +24,21 @@
 {"level":"info","message":"Mode: development","timestamp":"2015-02-27T06:47:42.634Z"}
 {"level":"info","message":"Mode: development","timestamp":"2015-02-27T08:07:41.781Z"}
 {"_id":{"_bsontype":"ObjectID","id":"TzýãlBÅX\u0005S`¬"},"pageType":"COMPANY","name":"ASE Singapore","username":"ASE_SG","address":{"address1":"2 Woodlands Loop","city":{"_id":{"_bsontype":"ObjectID","id":"TÒ.ô-Ð;Q\u0003Áö"},"name":"San Diego","country":{"_id":{"_bsontype":"ObjectID","id":"TÒ.ô-Ð;Q\u0003Áö"},"name":"United States"}},"country":{"$__":{"strictMode":true,"getters":{},"wasPopulated":false,"activePaths":{"paths":{"__v":"init","name":"init","code":"init","iso":"init","_id":"init"},"states":{"default":{},"init":{"__v":true,"name":true,"code":true,"iso":true,"_id":true},"modify":{},"require":{}},"stateNames":["require","modify","init","default"]}},"isNew":false,"_maxListeners":0,"_doc":{"__v":0,"name":"United States","code":1,"iso":"US","_id":{"_bsontype":"ObjectID","id":"TÒ.ô-Ð;Q\u0003Áö"}},"_pres":{"save":[null,null,null]},"_posts":{"save":[]},"_events":{}}},"logo":null,"cover":null,"yearFounded":1970,"level":"info","message":"","timestamp":"2015-02-27T08:07:42.718Z"}
+{"level":"info","message":"Mode: development","timestamp":"2015-02-27T14:47:21.634Z"}
+{"level":"info","message":"Mode: development","timestamp":"2015-02-27T16:21:53.765Z"}
+{"level":"info","message":"Mode: development","timestamp":"2015-02-27T16:23:10.455Z"}
+{"level":"info","message":"Mode: development","timestamp":"2015-02-27T18:07:12.547Z"}
+{"level":"info","message":"Mode: development","timestamp":"2015-02-27T18:11:07.727Z"}
+{"level":"info","message":"Mode: development","timestamp":"2015-02-27T18:20:30.430Z"}
+{"level":"info","message":"Mode: development","timestamp":"2015-02-27T18:48:24.410Z"}
+{"level":"info","message":"Mode: development","timestamp":"2015-02-28T02:20:12.167Z"}
+{"level":"info","message":"Mode: development","timestamp":"2015-02-28T02:20:35.400Z"}
+{"level":"info","message":"Mode: development","timestamp":"2015-02-28T16:12:03.166Z"}
+{"level":"info","message":"Mode: development","timestamp":"2015-03-01T02:22:58.512Z"}
+{"level":"info","message":"Mode: development","timestamp":"2015-03-01T13:09:16.510Z"}
+{"level":"info","message":"Mode: development","timestamp":"2015-03-01T13:09:59.788Z"}
+{"level":"info","message":"Mode: development","timestamp":"2015-03-01T13:11:46.542Z"}
+{"level":"info","message":"Mode: development","timestamp":"2015-03-01T13:33:48.470Z"}
+{"level":"info","message":"Mode: development","timestamp":"2015-03-01T13:36:28.866Z"}
+{"level":"info","message":"Mode: development","timestamp":"2015-03-01T16:55:42.363Z"}
+{"level":"info","message":"Mode: development","timestamp":"2015-03-01T16:56:30.188Z"}

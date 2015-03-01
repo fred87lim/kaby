@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en" ng-app="phonecatApp" ng-controller="MainCtrl" ng-init="init()">
+<head>
+    {% include "../partials/head.html" %}
+    <script type="text/javascript" src="/vendors/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/bootstrap/js/docs.min.js"></script>
+    <script type="text/javascript" src="/vendors/angular-file-upload/angular-file-upload-shim.min.js"></script>
+    <script type="text/javascript" src="/vendors/angular.js"></script>
+    <script type="text/javascript" src="/vendors/angular-file-upload/angular-file-upload.min.js"></script> 
+
+    <script type="text/javascript" src="/vendors/angular-route.js"></script>
+    <script type="text/javascript" src="/vendors/angular-resource.js"></script>
+    <script type="text/javascript" src="/vendors/angular-animate.js"></script>
+    <script type="text/javascript" src="/vendors/angular-sanitize.js"></script>
+
+    <script type="text/javascript" src="/vendors/jcrop/jquery.Jcrop.js"></script>
+    <link rel="stylesheet" href="/vendors/jcrop/jquery.Jcrop.css">
+  
+    <script type="text/javascript" src="/vendors/ui-bootstrap-tpls-0.12.0.js"></script>
+    <!-- ACE code highlight -->
+    <script type="text/javascript" src="/vendors/ace-noconflict/ace.js"></script>
+    <script type="text/javascript" src="/vendors/ace-noconflict/ext-modelist.js"></script>
+    <script type="text/javascript" src="/vendors/ui-ace.js"></script>
+
+    <script type="text/javascript" src="/vendors/tinymce/tinymce.min.js"></script>
+    <script type="text/javascript" src="/controllers/signup_controller.js"></script>
+    <style type="text/css">
+        /* Apply these styles only when #preview-pane has
+           been placed within the Jcrop widget */
+        .jcrop-holder #preview-pane {
+          display: block;
+          position: absolute;
+          z-index: 2000;
+          top: 10px;
+          right: -280px;
+          padding: 6px;
+          border: 1px rgba(0,0,0,.4) solid;
+          background-color: white;
+
+          -webkit-border-radius: 6px;
+          -moz-border-radius: 6px;
+          border-radius: 6px;
+
+          -webkit-box-shadow: 1px 1px 5px 2px rgba(0, 0, 0, 0.2);
+          -moz-box-shadow: 1px 1px 5px 2px rgba(0, 0, 0, 0.2);
+          box-shadow: 1px 1px 5px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        /* The Javascript code will set the aspect ratio of the crop
+           area based on the size of the thumbnail preview,
+           specified here */
+        #preview-pane .preview-container {
+          width: 200px;
+          height: 200px;
+          overflow: hidden;
+        }
+    </style>
+    <script type="text/ng-template" id="customTemplate.html">
+        <a ng-if="match._id != -1">
+        <span bind-html-unsafe="match.label | typeaheadHighlight:query"></span>
+        </a>
+    </script>
+</head>
+    <body data-twttr-rendered="true">
+    <a class="sr-only sr-only-focusable" href="#content">Skip to main content</a>
+    {% include "../partials/header.html" %}
+    <div class="container bs-docs-container">
+        <div class="col-sm-9 col-sm-offset-2">
+
+            <div ng-view></div>
+
+            <div id="account-signup" ng-if="!signup.status">
+                <h1><span class="fa fa-sign-in"></span>Join Project X</h1>
+            <br />
+            
+            
+
+            <div class="panel panel-default">
+              <div class="panel-body" style="padding-top: 40px; padding-bottom: 40px; padding-right:80px">
+
+            
+            
+                <!-- LOGIN FORM -->
+            <form class="form-horizontal" role="form" ng-submit="createNewAccount()" >
+                <div class="form-group">
+                    <label for="inputEmail" class="col-sm-2 control-label">Email:</label>
+                    <div class="col-sm-5">
+                        <input pattern=".{3,}" ng-model="signup.email.value" required title="3 characters minimum" class="form-control" name="email" autocomplete="off" id="email" ng-blur="checkEmailAvailable()">
+                    </div>
+                    <div class="col-sm-5" ng-if="signup.email.status && !signup.email.status.available">
+                        <div class="alert alert-danger" style="padding:6px 15px;margin-bottom:0px"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> &nbsp; [[signup.email.status.reason]]</div>
+                    </div>
+                    <div class="col-sm-5" ng-if="signup.email.status && signup.email.status.available">
+                        <div class="alert alert-success" style="padding:6px 15px;margin-bottom:0px"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span></div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputUsername" class="col-sm-2 control-label">Username:</label>
+                    <div class="col-sm-5">
+                        <input type="text" pattern=".{3,}" ng-model="signup.username.value" required title="3 characters minimum" class="form-control" name="username" autocomplete="off" id="username" ng-blur="checkUsernameAvailable()">
+                    </div>
+                    <div class="col-sm-5" ng-if="signup.username.status && !signup.username.status.available">
+                        <div class="alert alert-danger" style="padding:6px 15px;margin-bottom:0px"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> &nbsp; [[signup.username.status.reason]]</div>
+                    </div>
+                    <div class="col-sm-5" ng-if="signup.username.status && signup.username.status.available">
+                        <div class="alert alert-success" style="padding:6px 15px;margin-bottom:0px"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span></div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="firstName" class="col-sm-2 control-label">First Name:</label>
+                    <div class="col-sm-5">
+                        <input type="text" pattern=".{3,}" required title="3 characters minimum" class="form-control" id="firstName" name="firstName" autocomplete="off" ng-model="signup.firstName.value">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="lastName" class="col-sm-2 control-label">Last Name:</label>
+                    <div class="col-sm-5">
+                        <input type="text" class="form-control" id="lastName" name="lastName" autocomplete="off" ng-model="signup.lastName.value">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="password" class="col-sm-2 control-label">Password</label>
+                    <div class="col-sm-5">
+                        <input type="password" class="form-control" id="password" name="password" autocomplete="off" ng-model="signup.password.value">
+                    </div>
+                </div>
+                
+              <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-5">
+                  <button type="submit" class="btn btn-primary btn-block">Sign up</button>
+                </div>
+              </div>
+            </form>
+
+              </div>
+              <div class="panel-footer" style="padding-left:80px; padding-right:80px">
+                <p>New to Project X? <a href="/signup">Sign up now</a></p>
+              </div>
+            </div>
+            </div>
+
+            
+
+            
+
+        </div>
+    </div>
+
+{% include "../partials/footer.html" %}
+{% include "../partials/tail.html" %}
+
+</body></html>

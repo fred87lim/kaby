@@ -20,6 +20,8 @@ var educationLevel = ['Undergraduate', 'Graduate', 'Postgraduate'];
 
 var privacy = [1,2,3,4]; // refer to constants.js
 
+var purposeType = [1,2,3];
+
 var TimePeriodSchema = mongoose.Schema({
     month: String,
     year: Number
@@ -113,7 +115,12 @@ var userSchema = mongoose.Schema({
     following: [{type: Schema.ObjectId, ref: 'userSchema'}], // a list of users whom this user is following
     followers: [{type: Schema.ObjectId, ref: 'userSchema'}], // a list of users who is following this user
     pagesFollowing: [{type: Schema.ObjectId, ref: 'PageSchema'}],
-    pageManaging: {type: Schema.ObjectId, ref: 'PageSchema'}
+    pageManaging: {type: Schema.ObjectId, ref: 'PageSchema'},
+
+    // 1 - User is currently looking for job
+    // 2 - User is currently employed but open to better position
+    // 3 - User is currently employed and happy with current position
+    purpose: { type: Number, enum: purposeType }
 });
 
 // methods ======================

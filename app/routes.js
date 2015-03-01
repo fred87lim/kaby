@@ -26,9 +26,66 @@ var _s = require('underscore.string');
 var _ = require('underscore');
 var paypal = require('paypal-rest-sdk');
 
+var UserController		= require('../app/controllers/user_controller');
+var SettingController 	= require('../app/controllers/setting_controller');
+
 module.exports = function (app, passport) {
 
 	var userController = new UserRoute(app, passport);
+
+	// Check if an email is availabel for registration
+	app.get('/ajax/user/email_available/:email', function (req, res) {
+		var email = req.params.email;
+
+		UserController.checkEmailAvailable({ email: email }, function (callbackResult) {
+			var result = {
+				status: true,
+				message: null,
+				data: callbackResult
+			}
+
+			return res.send(callbackResult);
+		});
+	});
+
+	/*
+	 * Create new page
+	 */
+	app.post('/ajax/user/new', function (req, res, next) {
+		
+	});
+
+	app.post('/ajax/user/edit/purpose', function (req, res) {
+		var userId = req.body.userId;
+		var purpose = req.body.purpose;
+
+		// Check if user is authenticated
+
+		UserController.changePurpose({ userId: userId, purpose: purpose }, function (callbackResult) {
+			var result = {
+				status: true,
+				message: null,
+				data: callbackResult
+			}
+
+			return res.send(callbackResult);
+		});
+	});
+
+	// Check if an username is availabel for registration
+	app.get('/ajax/user/username_available/:username', function (req, res) {
+		var username = req.params.username;
+
+		UserController.checkUsernameAvailable({ username: username }, function (callbackResult) {
+			var result = {
+				status: true,
+				message: null,
+				data: callbackResult
+			}
+
+			return res.send(callbackResult);
+		});
+	});
 
 	app.all('/api/v2/oauth/token', app.oauth.grant());
 
@@ -112,6 +169,51 @@ module.exports = function (app, passport) {
 		userController.findTags(keyword, function (callbackResult) {
 			return res.send(callbackResult);
 		});
+	});
+
+	app.get('/ajax/settings/privacies', function (req, res) {
+		var result = {
+			status: false,
+			message: '',
+			data: null
+		};
+
+		SettingController.findPrivacySettings(function (callbackResult) {
+			result.status = true;
+			result.data = callbackResult;
+			return res.send(result);
+		});
+	});
+
+	app.get('/ajax/settings/job_titles', function (req, res) {
+		var result = {
+			status: false,
+			message: '',
+			data: null
+		};
+
+		var keyword = req.query.k;
+
+		SettingController.findJobTitlesByKeyword({keyword: keyword}, function (callbackResult) {
+			result.status = true;
+			result.data = callbackResult;
+			return res.send(result);
+		});
+	});
+
+	// Signup Page
+	app.get('/signup', function (req, res) {
+		// Check if user is authenticated
+		if (req.user) {
+			return res.redirect('/');
+		}
+
+		var data = {
+			
+		}
+
+		// Render page
+		res.render('pages/signup.html', { data: data });
 	});
 
 	// /api/v2/countries?k=nod
@@ -1657,10 +1759,7 @@ module.exports = function (app, passport) {
 		})(req, res, next);
 	});
 
-	// Signup Page
-	app.get('/signup', function (req, res) {
-		res.render('signup.ejs', { message: req.flash('signupMessage') });
-	});
+	
 
 	
 

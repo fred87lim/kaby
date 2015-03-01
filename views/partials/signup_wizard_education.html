@@ -1,0 +1,78 @@
+<!-- Sign up wizzard. Prefer to signup_controller.js for navigation-->
+
+<div >
+	<h1><span class="fa fa-sign-in"></span>Getting to know</h1>
+	<br />
+	<div class="panel panel-default">
+		<div class="panel-body" style="padding-top: 40px; padding-bottom: 40px; padding-right:80px">
+			<p>In order to tailor the best content for you. We would like to know a bit about you</p>
+			
+			<div>
+				<form class="form-horizontal" role="form">
+                    <div class="form-group">
+                      <label for="edit-edu-school-name" class="col-sm-3 control-label">School Name:</label>
+                      <div class="col-sm-9">
+                        <input type="text" ng-model="eduEdit.schoolName" class="form-control" id="edit-edu-school-name">
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="edit-exp-degree" class="col-sm-3 control-label">Degree:</label>
+                      <div class="col-sm-9">
+                        <input type="text" ng-model="eduEdit.degree" class="form-control" id="edit-exp-degree">
+                      </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-exp-field" class="col-sm-3 control-label">Study Field:</label>
+                        <div class="col-sm-9">
+                            <input type="lastName" ng-model="eduEdit.studyField" class="form-control" id="edit-exp-field">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="inputPassword3" class="col-sm-3 control-label">Time Period:</label>
+                        <div class="col-sm-9">
+                            <span>
+                                
+                                <select ng-model="eduDateStarted" ng-options=" year.name for year in data.years">
+                                    <option value="">Select year</option>
+                                </select>
+                                
+                            </span>&#8212;
+                            
+                            <span >
+                                <select ng-model="eduDateEnded" ng-options="year.name for year in data.eduYears">
+                                    <option value="">Select year</option>
+                                </select>
+                            </span>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="inputPassword3" class="col-sm-3 control-label">Education Level:</label>
+                        <div class="col-sm-9">
+                            <span>                    
+                                <select ng-model="educationLevel" ng-options=" eduLevel.name for eduLevel in data.educationLevels">
+                                </select>                    
+                            </span>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-exp-description" class="col-sm-3 control-label">Description:</label>
+                        <div class="col-sm-9">
+                            <textarea class='mceEditorEdu' ng-model="eduEdit.description" style='height: 200px'></textarea>
+                        </div>
+                    </div>
+                </form>
+				<div class="clearfix visible-xs-block"></div>
+				<div class="col-sm-3 pull-right">
+					<button type="submit" class="btn btn-primary btn-block" ng-click="saveEducation()">Save</button>
+				</div>
+			</div>
+			<div class="clearfix visible-xs-block"></div>
+			
+			
+		</div>
+		<div class="panel-footer" style="padding-left:80px; padding-right:80px">
+			<p>I will add my profile picture later. <a href="/signup">Next</a></p>
+		</div>
+	</div>
+</div>
+

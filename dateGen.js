@@ -8,6 +8,7 @@ var City = require('./app/models/city');
 var Country = require('./app/models/country');
 var JobFunction = require('./app/models/job_function');
 var Industry = require('./app/models/settings/industry');
+var JobTitle = require('./app/models/settings/title');
 
 /* Establish mongoose connection */
 mongoose.connect(config.db['development']);
@@ -321,11 +322,55 @@ db.once('open', function callback () {
 		});
 	}
 	{
-		var jf = new JobFunction();
-		jf.name = "Information Technology";
-		jf.slug = "it";
-		jf.save(function (err) {
-			if (err) { }
+		var it = new JobFunction();
+		it.name = "Information Technology";
+		it.slug = "information_technology";
+		it.save(function (err) {
+			if (err) { 
+
+			}
+
+			var title = new JobTitle();
+			title.name = 'Application Developer';
+			title.slug = 'application_developer';
+			title.jobFunction = it;
+			title.save(function (err) {
+				if (err) {
+
+				}
+			});
+
+			var title = new JobTitle();
+			title.name = 'Database Administrator';
+			title.slug = 'database_aministrator';
+			title.jobFunction = it;
+			title.save(function (err) {
+				if (err) {
+
+				}
+			});
+
+			var title = new JobTitle();
+			title.name = 'Software Engineer';
+			title.slug = 'software_engineer';
+			title.jobFunction = it;
+			title.save(function (err) {
+				if (err) {
+
+				}
+			});
+
+			var title = new JobTitle();
+			title.name = 'System Engineer';
+			title.slug = 'system_engineer';
+			title.jobFunction = it;
+			title.save(function (err) {
+				if (err) {
+
+				}
+			});
+
+
 		});
 	}
 	{
@@ -2196,3 +2241,1497 @@ db.once('open', function callback () {
 setTimeout(function() {
     mongoose.disconnect();
 }, 3000);
+
+
+
+
+
+
+
+
+
+// Accounting Job Titles
+
+// Accounting Clerk
+// Accounting Clerk Leader
+// Accounting Director
+// Accounting Manager
+// Accounting Supervisor
+// Accounting Vice President
+// Accounts Supervisor
+// Assistant Director of Finance
+// Assistant Director of Financial Operations
+// Audit Supervisor
+// Auditor
+// Bookkeeper
+// Budget Analyst
+// Budget Manager
+// Bursar
+// Certified Public Accountant
+// Chief Accounting Officer
+// Chief Financial Officer
+// Compliance Auditor
+// Contracts and Financial Compliance Manager
+// Controller
+// Corporate Accountant
+// Ads
+// Marie France Bodyline
+// www.mariefrance.com.sg
+// Win up to $500 treatment vouchers with our Sure-Win Ang Bao Draw!
+// Executive Jobs in SG
+// www.regionup.com
+// Advance your career in Singapore. 100K+ Jobs for 100K+ Talent.
+// accounting&payroll POLAND
+// www.macaccounting.pl
+// we ensure full compliance with Polish requirements - ltd & plc
+// Job Cost Accounting
+// I Need a New Job
+// Finance Manager
+// Accounting CPA
+// Actuary Jobs
+// Cost Accountant
+// Director of Financial Operations
+// E - L
+
+// Environmental Auditor
+// External Auditor
+// Financial Analyst
+// Financial Assurance Manager
+// Financial Assurance Specialist
+// Forensic Accountant
+// Gift Administration Specialist
+// Gift Assurance Officer
+// Government Accountant
+// Government Auditor
+// Grants and Contracts Assistant
+// Grants and Contracts Specialist
+// Industrial Accountant
+// Information Technology Audit Manager
+// Information Technology Auditor
+// Internal Auditor
+// M - R
+
+// Management Accountant
+// Managerial Accountant
+// Payroll Manager
+// Payroll Services Analyst
+// Private Accountant
+// Public Accountant
+// Revenue Cycle Administrator
+// Revenue Cycle Manager
+// Revenue Cycle Supervisor
+// S - Z
+
+// Senior Auditor
+// Senior Budget Analyst
+// Senior Cash Management Analyst
+// Senior Financial Analyst
+// Senior General Audit Manager
+// Senior Gift Assurance Officer
+// Senior Grants and Contracts Specialist
+// Senior Strategic Planner
+// Staff Accountant
+// Staff Auditor
+// Strategic Planner
+// Strategic Planning and Institutional Analysis Manager
+// Strategic Program Planning Advisor
+// Tax Accountant
+// Tax Specialist
+
+
+
+// Administrative Job Titles
+
+// A - D
+
+// Administrative Assistant
+// Administrative Coordinator
+// Administrative Director
+// Administrative Manager
+// Administrative Services Manager
+// Administrative Services Officer
+// Administrative Specialist
+// Administrative Support Manager
+// Administrative Support Supervisor
+// Administrator
+// Assistant Director
+// Billing Clerk
+// Billing Coordinator
+// Bookkeeper
+// Client Relations Manager
+// Contract Administrator
+// Credit Clerk
+// Data Entry
+// E - M
+
+// Executive Assistant
+// Executive Services Administrator
+// Facility Manager
+// File Clerk
+// General Office Clerk
+// Human Resources Administrator
+// Information Clerk
+// Legal Secretary
+// Mail Clerk
+// Mail Clerk Leader
+// Mail Equipment Operator
+// Medical Secretary
+// Ads
+// Apply to SUTD now
+// www.sutd.edu.sg
+// Find out more - 7-8 Mar SUTD Open House
+// Marie France Bodyline
+// www.mariefrance.com.sg
+// Win up to $500 treatment vouchers with our Sure-Win Ang Bao Draw!
+// Job Vacancy
+// monster.com.sg
+// Immediate Requirement. Submit CV to Apply Now!
+// I Need a New Job
+// Office Administration
+// FedEx Jobs
+// UPS Jobs
+// Graduate Jobs
+// N - R
+
+// Office Assistant
+// Office Clerk
+// Office Manager
+// Office Support Manager
+// Office Support Supervisor
+// Program Manager
+// Receptionist
+// Records Management Analyst
+// Secretary
+// Senior Administrative Analyst
+// Senior Administrative Coordinator
+// Senior Administrative Services Officer
+// Senior Coordinator
+// Senior Executive Assistant
+// Senior Special Events Coordinator
+// Senior Support Assistant
+// Senior Support Specialist
+// Special Events Coordinator
+// Special Programs Coordinator
+// Staff Assistant
+// Support Assistant
+// Support Specialist
+// T - Z
+
+// Typist
+// Virtual Assistant
+// Virtual Receptionist
+// Word Processor
+
+// Advertising Job Titles
+
+// A - C
+
+// Account Associate
+// Account Coordinator
+// Account Director
+// Account Manager
+// Account Specialist
+// Account Representative
+// Account Supervisor
+// Advertising Assistant
+// Advertising Buyer
+// Advertising Campaign Manager
+// Advertising Coordinator
+// Advertising Copywriter
+// Advertising Manager
+// Advertising Sales Director
+// Advertising Sales Representative
+// Advertising Specialist
+// Agency Account Coordinator
+// Art Director
+// Assistant Account Executive
+// Assistant Buyer
+// Assistant Media Planner
+// Ads
+// Interactive Media Display
+// www.trinaxgroup.com/media
+// Fully customized, automated and engaging for your target audience.
+// Marie France Bodyline
+// www.mariefrance.com.sg
+// Win up to $500 treatment vouchers with our Sure-Win Ang Bao Draw!
+// Executive Jobs in SG
+// www.regionup.com
+// Advance your career in Singapore. 100K+ Jobs for 100K+ Talent.
+// Marketing Executive
+// Marketing Manager
+// Executive Sales Positions
+// Advertising
+// Sales Job Description
+// Broadcast Account Manager
+// Client Strategist
+// Client Support Specialist
+// Communications Coordinator
+// Copy Associate
+// Copy Editor
+// Copywriter
+// Creative Director
+// D - M
+
+// Digital Media Planner
+// Digital Advertising Specialist
+// Digital Advertising Sales Manager
+// Director, Advertising
+// Interactive Media Buyer
+// Interactive Media Planner
+// Internet Advertising Buyer
+// Major Account Manager
+// Manager, Advertising Traffic
+// Manager, Digital Advertising
+// Marketing Coordinator
+// Media Coordinator
+// Media Director
+// Media Planner
+// Media Research Analyst
+// Media Specialist
+// Multi Media Sales Manager
+// Multi Media Advertising Sales Manager
+// N - S
+
+// National Account Coordinator
+// Online Advertising Coordinator
+// Online Advertising Director
+// Online Advertising Manager
+// Online Advertising Specialist
+// Interactive Media Buyer
+// Interactive Media Planner
+// Preprint Analyst
+// Print Traffic Coordinator
+// Print Traffic Director
+// Print Traffic Manager
+// Sales Planner
+// Social Media Advertising Manager
+// Senior Account Director
+// T - Z
+
+// Target Marketing Strategist
+// Traffic Manager
+
+
+// Account Executive
+// Agent
+// Aircraft Avionics Technician
+// Aircraft Cleaning Supervisor
+// Aircraft Sheet Metal Mechanic
+// Aircraft Structures Mechanic
+// Airline IT Product Specialist
+// Analyst
+// Assistant Manager Events
+// Attorney
+// Auditor
+// Aviation Inside Sales
+// Aviation Safety Staff Engineer
+// Aviation Security Intelligence Inspector
+// Baggage Handler
+// Base Specialty Electrician
+// Business Consultant
+// Business Systems Analyst
+// C - E
+
+// Captain
+// Cargo Agent
+// Catering Account Manger
+// Club Representative
+// Co-Pilot
+// Commercial Airline Refueler
+// Corporate Relations Manager
+// Corporate Reservations Agent
+// Corporate Travel Agent
+// Crew Schedulers
+// Crew Scheduling Manager
+// Crew Scheduling Supervisor
+// Crew Scheduling Trainee
+// Cruise Pilot
+// Customer Service Agent
+// Customer Service Manager
+// Director, Pilot Training
+// Dispatcher
+// Event Coordinator
+// Export Receiving Agent
+// Ads
+// Executive Jobs in SG
+// www.regionup.com
+// Advance your career in Singapore. 100K+ Jobs for 100K+ Talent.
+// Italy Trip Planner
+// www.routeperfect.com/Italy
+// A free tool that helps you easily Plan Your Trip to Italy. Try Now!
+// Search Flights Like a Pro
+// travelcodex.com
+// Learn to use ITA Matrix to find the exact itinerary you want!
+// FedEx Jobs
+// Airline Jobs
+// I Need a New Job
+// UPS Jobs
+// Actuary Jobs
+ 
+
+// F - M
+
+// Financial Analyst
+// First Officer
+// Flight Attendant
+// Flight Coordinator
+// Flight Instructor
+// Food and Equipment Handler
+// Gate Agent
+// Ground Service Agent
+// Ground Service Crew
+// Ground Support Equipment Mechanic
+// Human Resources Manager
+// In-Flight Training Manager
+// Infrastructure Manager
+// Instructor
+// Logistics Manager
+// Manager
+// Manager of Aircraft Appearance and Operations
+// Marketing Communications Specialist
+// Mechanic
+// Multilingual Flight Attendant
+// O - W
+
+// Operations Agent
+// Operations Manager
+// Passenger Service Agent
+// Pilot
+// Principal Service Engineer
+// Program Manager
+// Project Manager
+// Provisioning Agents
+// Quality Assurance Agent
+// Quality Assurance Coordinator
+// Quality Assurance Manager
+// Ramp Agents
+// Ramp Operator
+// Recruiter
+// Reservations Agent
+// Sales Agent
+// Sales Manager
+// Senior Analyst Airport Services
+// Senior Avionics Engineer
+// Senior Manager Yield and Revenue Management
+// Specialist - Metrics and Reporting
+// Staff Assistant - Accounting
+// Station Agent
+// Supervisor - Airline Passenger Service
+// Supervisor Aircraft Maintenance
+// Technology - Solution Architect
+// Technology Manager, Asset and Configuration
+// Technology Manager, Change/Deployment Manager
+// Ticket Agent
+// Trainee Flight Attendant
+// Transport Pilot
+// Travel Agent
+// Travel Consultant
+// Utility Specialist
+// Warehouse/Equipment Agent
+// Wheelchair agent
+
+
+// Animal Job Titles
+
+// A - C
+
+// Admissions Coordinator
+// Animal Care Assistant
+// Animal Care Courier
+// Animal Caregiver
+// Animal Caretaker 
+// Animal Care Technician
+// Animal Control Supervisor
+// Animal Health Technician
+// Animal Husbandry Technician
+// Animal Keeper
+// Animal Management Apprenticeship
+// Animal Resource Center Trainee
+// Animal Rights Attorney
+// Assistant Dog Trainer
+// Assistant Farm Manager
+// Assistant Trainer
+// Barn Manager
+// Barn Supervisor
+// Biological Science Technician Bird Department Zookeeper
+// Cashier
+// Ads
+// Executive Jobs in SG
+// www.regionup.com
+// Advance your career in Singapore. 100K+ Jobs for 100K+ Talent.
+// Better Jobs for All
+// www.e2i.com.sg
+// Get Training & Earn Higher Wages. Heavily Funded for Singaporeans/PR.
+// Hire 8000+ Interns Today
+// www.glints.com/employer
+// Attract & hire interns. Post your job for free.
+// Animal Vet Services
+// Animal Control Wildlife
+// Animal Veterinarians
+// I Pet Vet
+// Animal Hospital Of
+// Client Experience Specialist
+// Client Service Representative
+// Conservation Grazing Assistant
+// D - K
+
+// Director of Animal Operations
+// Doggie Daycare Attendant
+// Dog Handler
+// Dog Trainer
+// Dog Walker
+// Farm Sanctuary Intern
+// Field Assistant
+// Fish and Wildlife Biologist
+// Fish and Wildlife Technician
+// Fundraiser
+// Groom
+// Groomer
+// Grooming Assistant
+// Hospital Attendant
+// Kennel Assistant
+// Kennel Attendant
+// L - P
+
+// Large Animal Care/Imaging Restraint Technician
+// Large Animal Veterinary Technician
+// Lobbyist
+// Manager, Farm Animal Welfare Campaign
+// Manager of Pet Services
+// Marine Biologist
+// Naturalist
+// Nuisance Wildlife Specialist
+// Nutrition Associate
+// Park Ranger
+// Pet Care Attendant
+// Pet Sitter
+// Pet Store Associate
+// Pet Store Manager
+// R - Z
+
+// Rehabilitation Therapist
+// Registrar
+// Shelter Veterinarian Assistant
+// Shift Manager
+// Trainer
+// Veterinarian
+// Veterinary Assistant
+// Veterinary Receptionist
+// Veterinary Technician
+// Wildlife Educator
+// Wildlife Rehabilitator
+// Zoo Curator
+// Zoo Keeper
+// Zoo Laborer
+// Zoologist
+
+
+
+// Alternative Energy Job Titles
+
+// A - D
+
+// Account Manager - Alternative Fuels
+// Account Manager - Green Energy
+// Alternative Energy Sales Agent 
+// Alternative Energy Technician
+// Biomass Plant Manager
+// Business Analyst - Wind
+// Business Development Associate
+// Campaign and Policy Representative
+// Clean Energy Outreach Coordinator
+// Communications Associate
+// Communications Manager
+// Compensation Analyst
+// Corporate Communications Specialist
+// Development Officer
+// Director of Commercial Programs
+// Director of Marketing
+// Down Turbine Lead Fulfillment
+// Ads
+// Solar power for your home
+// www.rezeca.com
+// Appointed partner of Yingli Solar. 100% financing available today!
+// Renewable Solar Energy
+// www.ditrolic-solar.com
+// Get The Best Return On Investment Financing Package Avl, Call Us Now!
+// Energy svcs Consultancy
+// www.inventapartners.ltd.uk
+// Advice and assistance in financing low carbon & renewable energy
+// Alternative Energy Source
+// Wind Energy Jobs
+// Renewable Energy Careers
+// FedEx Jobs
+// Ops Manager Jobs
+// E - L
+
+// Electrical Engineer - Renewables
+// Energy Efficiency and Technology Project Leader
+// Energy Engineer
+// Energy Manager
+// Energy Project Manager
+// Energy Solutions Engineer
+// Field Service Manager
+// Field Service Representative
+// Fuel Cell Test Support Technician
+// H2 Fueling Engineer
+// Human Resources Generalist
+// Inside Sales Representative - Solar Sales
+// Inventory Coordinator 
+// Laboratory Program Manager - Geothermal Technologies
+// Lead Generator
+// Logistics Operation Planner
+// M - R
+
+// Marketing Assistant
+// Mechanical Engineer – Wind
+// Offshore Energy Analyst
+// Operations Technician
+// Outside Solar Sales Consultant
+// Portfolio Optimization - Biomass Advisor
+// Process Engineer - Waste to Energy
+// Production Assembler
+// Production Supervisor 
+// Program Assistant
+// Project Assistant
+// Project Manager - Turbine Support
+// Public Relations Specialist
+// Quality Assurance Manager
+// Regional Accounts Manager
+// Renewable Energy Advisor
+// Renewable Energy Turbine Lead Fulfillment Specialist
+// Renewable Energy Policy Analyst
+// Research Analyst - Wind Energy Association
+// Research Assistant
+// Resource Energy Manager
+// Ads
+// Hire 8000+ Interns Today
+// www.glints.com/employer
+// Attract & hire interns. Post your job for free.
+// Executive Jobs in SG
+// www.regionup.com
+// Advance your career. Jobs for Singapore's $100K Talent.
+// S - W
+
+// Sales Assistant
+// Senior Analyst - Alternative Energy
+// Senior Climate and Energy Campaigner
+// Senior Consultant -  Energy and Environmental Resources
+// Service Technician
+// Site Manager
+// Solar Alternative Energy Sales Engineer Solar Panel Alternative Energy Engineer
+// Strategic Purchaser
+// Towers and Foundations - Assistant Lead Engineer
+// Transaction Specialist - Alternative Energy
+// Turbine Equipment Specialist
+// Wind Applications Engineer
+// Wind Facility Manager
+// Wind Plant Technician
+// Wind Technician
+// Wind Turbine Electrical Engineer
+// Wind Turbine Technician
+
+
+
+// Auction House Job Titles
+
+// A - B
+
+// Account Manager, eCommerce
+// Administrative Assistant
+// Administrator, American Paintings, Drawings and Sculpture
+// Administrator, Antiquities
+// Administrator, Handbags and Accessories
+// Administrator, Jewelry
+// Appraisal Coordinator
+// Appraisals Assistant
+// Art Handler
+// Assistant Marketing Manager
+// Associate Specialist
+// Auctioneer
+// Audience Acquisition Manager
+// Bid Coordinator
+// Business Analyst, Solutions Delivery
+// Business Coordinator, Business Development
+// Business Coordinator, International Commercial Office
+// Ads
+// Executive Jobs in SG
+// www.regionup.com
+// Advance your career in Singapore. 100K+ Jobs for 100K+ Talent.
+// Assistant
+// www.freelancer.com/hire/Assistant
+// Over 13,000,000 Skilled Freelancers Get a Free Quote Today!
+// Job Vacancy
+// monster.com.sg
+// Immediate Requirement. Submit CV to Apply Now!
+// I Need a New Job
+// FedEx Jobs
+// UPS Jobs
+// Finance Manager
+// Ops Manager Jobs
+// Business Intelligence Manager
+// Business Manager - Luxury Group
+// Business Support Supervisor, Sales Coordination
+// C - F
+
+ 
+// Cataloger, Decorative Arts
+// Client Relationship Assistant Manager
+// Client Service Officer
+// Collections Clerk
+// Commercial Accounts Manager
+// Coordinator, Regional
+// Decorative Arts Appraiser 
+// Digital Designer
+// Director of Corporate Affairs
+// eCommerce Project Manager
+// Executive Assistant to CIO
+// Features Writer, Business Development
+// Finance Business Partner
+// G - I
+
+// Global Compensation Manager
+// Head of Department, Valuations
+// Head of Gallery Operations
+// Human Resource Generalist
+// Human Resources Advisor
+// Intern, American Furniture
+// Intern, American Paintings
+// Intern, Antiquities
+// Intern, Asian Art
+// Intern, Books And Manuscripts
+// Intern, Decorative Arts
+// Intern, Impressionist and Modern Art
+// Intern, Jewelry
+// Intern, Post War and Contemporary Art
+// International Commercial Director
+// Inventory Coordinator 
+// J - Z
+
+// Junior Researcher, Impressionist and Modern Art
+// Junior Specialist, Drawings and Watercolors
+// Junior Specialist, Watches
+// Manager, eCommerce, PR and Audience Acquisition Strategy
+// Manager of Special Events
+// Marketing Designer
+// Marketing Manager
+// Photographer
+// Private Sales Commissions Analyst
+// Project Director
+// Public Relations Associate
+// Recruitment Manager
+// Registrar
+// Risk and Audit Manager
+// Sales Director
+// Security Officer
+// Senior Manager, Strategic Partnerships and Education
+// Writer/Researcher
+
+
+
+// Banking Job Titles
+
+// Agricultural Lender
+// Analyst, Bankruptcy Support
+// Anti-Money Laundering Auditor
+// Assistant Branch Manager
+// Assistant Trust Administrator
+// Audit Manager
+// Bank Examiner
+// Bankruptcy/Foreclosure Coordinator
+// Bilingual Client Services Representative
+// Branch Manager
+// Business Banking Loan Administration Manager
+// Business Banking Officer
+// Business Intelligence Manager
+// Client Service Manager
+// Collector
+// Commercial Relationship Management Assistant
+// Common Trust Fund Accountant
+// Consumer Credit Analyst
+// Ads
+// Executive Jobs in SG
+// www.regionup.com
+// Advance your career in Singapore. 100K+ Jobs for 100K+ Talent.
+// Better Jobs for All
+// www.e2i.com.sg
+// Get Training & Earn Higher Wages. Heavily Funded for Singaporeans/PR.
+// Part Time Jobs for Cash
+// www.sg.surveycompare.net/Survey
+// Earn Up To S$100 For Your Opinion. It's Free and Easy - Start Now!
+// I Need a New Job
+// Banking Careers
+// Actuary Jobs
+// Teller Jobs
+// FedEx Jobs
+// Consumer Finance Assistant Manager
+// Consumer Loans Processor
+// Consumer Loan Underwriter
+// Custody Investment Specialist
+// Customer Service Representative
+// Default Specialist
+// Escrow Manager
+// eServices Quality Analyst
+// Head Teller
+// Internal Auditor
+// Investment Accounting Analyst
+// Investment Management Operations Analyst
+// Investment Management Specialist
+// Investment Planner
+// Junior Analyst - Asset Management
+// Lead Business Consultant, Banking Innovation Center
+// Lead Syndication Specialist
+// Lending Manager
+// Loan Officer Trainee
+// Loan Representative
+// Loan Support Specialist
+// Lock Box Clerk
+// Loss Recovery Manager
+// Mortgage Consultant
+// Mortgage Operations Support Technician
+// New Accounts Banker
+// Online Customer Service Representative
+// Origination Loan Officer
+// Personal Banker
+// Phone Banker
+// Premier Banker
+// Regulatory Compliance Analyst
+// Relationship Manager, Commercial Lending
+// Senior Financial Analyst
+// Senior Investment Analyst
+// Senior Teller
+// Senior Trust Consultant
+// Ads
+// Job Vacancy
+// monster.com.sg
+// Immediate Requirement. Submit CV to Apply!
+// Get Paid Doing Surveys
+// panelplace.com/free_registration
+// Earn Extra Money By Participating In Online Surveys That Really Pay.
+// Technology Risk Manager
+// Teller
+// Trust Asset Manager
+// Trust Assistant
+// Wire Department Manager
+
+
+
+// Biotechnology Job Titles
+
+// A - F
+
+// Affiliate Process Training Advisor
+// Antibody Engineering Research Associate
+// Associate Director, Portfolio Management and Operations
+// Bioprocess Technician
+// Clinical Science Associate
+// Clinical Specialist, Franchise Sales
+// Clinical Specialist, Lung
+// Compensation Manager
+// Competitive Intelligence Manager
+// Computational Biologist
+// Country Study Specialist
+// Director of Local Government Affairs
+// Fermentation Biotechnologist
+// Forecast Systems Manager
+// Ads
+// Find A Executive
+// www.freelancer.com/hire/Assistant
+// Assistant from $30 Get a Free Quote Today!
+// Job Vacancy
+// monster.com.sg
+// Immediate Requirement. Submit CV to Apply!
+// Earn Money From Home
+// www.sg.surveycompare.net
+// With paid online surveys. Register for free & see who pays the most!
+// FedEx Jobs
+// I Need a New Job
+// UPS Jobs
+// Graduate Jobs
+// Jobs Website
+// G - M
+
+ 
+
+// Global Head of Development
+// Group Manager, Field Data Operations
+// Human Resources Partner, Business Development
+// Key Account Specialist
+// Laboratory Assistant
+// Laboratory Sales Consultant
+// Leader, Global Medical Information
+// Line Manager, Study Start-Up
+// Managed Care and Customer Operations
+// Management Associate
+// Manufacturing Specialist
+// Marketing Operations Analyst
+// Marketing Science Manager
+// Market Planning Manager, Ophthalmology Pipeline
+// Medical Science Liaison, Oncology
+// P - R
+
+// Patent Attorney
+// Principal Systems Architect
+// Project Manager
+// QA Product Technical Manager
+// Quality Associate/Validation
+// Quality Control Associate
+// Regulatory Affairs Specialist
+// Research Affairs Coordinator
+// Research and Development Staff Scientist
+// Research Assistant - Bioprocessing
+// Research Associate
+// Research Associate, Oncology Biomarker Development
+// Rheumatology Clinical Coordinator
+
+//  S - Z
+
+// Safety Scientist, Immunology
+// Sales Compensation Administration Manager
+// Sales Operations Manager
+// Scientific Recruiter
+// Scientist, Immunoassay  Development
+// Scientist - Rare Disease Research Unit
+// Senior Global Project Manager
+// Senior Manager, Product Public Relations
+// Senior Manager of Industry Analytics
+// Senior Manager of Clinical Operations
+// Senior Product Manager
+// Senior Research Associate
+// Software Developer
+// Sponsored Research Administrator
+// Strategy Manager, New Product Commercialization
+// Study Start-Up Specialist
+// Therapeutic Area Leader
+// Thought Leader Liaison, Hematology
+
+
+// Business Job Titles
+
+// Actuary
+// Administrative Manager
+// Assessor
+// Benefits Officer
+// Branch Manager
+// Budget Analyst
+// Business Analyst
+// Business Office Manager
+// Business Manager
+// Cash Manager
+// Certified Financial Planner
+// Chartered Wealth Manager
+// Chief Executive Officer
+// Chief Financial Officer
+// Claims Adjuster
+// Commercial Appraiser
+// Commercial Real Estate Agent
+// Commercial Real Estate Broker
+// Controller
+// Credit Analyst
+// Credit Manager
+// Damage Appraiser
+// Financial Analyst
+// Hedge Fund Manager
+// Hedge Fund Principal
+// Ads
+// Executive Jobs in SG
+// www.regionup.com
+// Advance your career in Singapore. 100K+ Jobs for 100K+ Talent.
+// Job Vacancy
+// monster.com.sg
+// Immediate Requirement. Submit CV to Apply!
+// B2b Supplier
+// www.hktdc.com
+// Connect with over 120,000 suppliers from Hong Kong, China and Taiwan
+// I Need a New Job
+// Job Advisor
+// Job Searching Agencies
+// Rig Job
+// FedEx Jobs
+// Hedge Fund Trader
+// Insurance Adjuster
+// Insurance Agent
+// Insurance Appraiser
+// Insurance Broker
+// Insurance Claims Examiner
+// Insurance Investigator
+// Investment Advisor
+// Investment Banker
+// Investor Relations Officer
+// Leveraged Buyout Investor
+// Loan Officer
+// Loss Control Specialist
+// Mortgage Banker
+// Mutual Fund Analyst
+// Office Manager
+// Portfolio Management Marketing
+// Portfolio Manager
+// Ratings Analyst
+// Real Estate Appraiser
+// Real Estate Officer
+// Residential Appraiser
+// Residential Real Estate Agent
+// Residential Real Estate Broker
+// Risk Manager
+// Service Representative
+// Stockbroker
+// Treasurer
+// Trust Officer
+// Underwriter
+
+
+// Business Intelligence Job Titles
+
+// A - C
+
+// Advanced Business Intelligence Analyst/Project Manager
+// Application Technical Specialist
+// Associate Director Social Business Intelligence and Big Data
+// Business Intelligence Analyst
+// Business Intelligence and Foundation Services Leader
+// Business Intelligence and Reporting Analyst
+// Business intelligence Business Analyst
+// Business Intelligence Developer
+// Business Intelligence Director
+// Business Intelligence Engineer
+// Business Intelligence Solutions Developer
+// Business Objects Architect
+// Ads
+// Irisys Retail Analytics
+// www.irisys.net
+// Generate actionable, living intelligence with Irisys
+// Marketing Mix Modeling
+// www.analyticpartners.com
+// Analytic Partners - the leader in econometric modeling and ROI
+// Executive Jobs in SG
+// www.regionup.com
+// Advance your career in Singapore. 100K+ Jobs for 100K+ Talent.
+// Business Intelligence
+// Bi Reporting
+// Bi Dashboard
+// I Need a New Job
+// Bi Analytics
+// Cognos Business Development Architect
+// Cognos Business Intelligence Developer
+// Consumer Insight Manager
+// Cyber Intelligence Watch Officer
+// D - I
+
+// Data Analyst - Business Intelligence
+// Data Architect
+// Data Warehouse and Business Intelligence Developer
+// Director of Business Intelligence and Data Warehouse
+// Enterprise Account Executive - Predictive Intelligence
+// Enterprise Intelligence Reporting Architect
+// Ethics Office Business Intelligence Officer
+// Federal - Business Intelligence Lead
+// Healthcare Business Intelligence Manager
+// Informatica Extract Transform Load (ETL) Developer
+// Information Delivery, Data Analyst
+// Information Technology Business Intelligence Platform Product Manager
+// Institutional Research Business Intelligence Systems Analyst
+// Integration/Business Intelligence Technical Lead
+// J - R
+
+// Java Developer - Big Data/Business Intelligence
+// Lead Analytics Engineer
+// Lead Business Intelligence Developer
+// Manager, Business Intelligence 
+// Manager, Business Metrics/Analytics
+// Microstrategy Dashboard Developer and Architect
+// Oracle Technical Lead
+// PeopleSoft Business Analyst
+// Project Manager
+// Project Support, Business Intelligence and Fraud Agents
+// Report and Visualization Developer, Business Intelligence
+// S - W
+
+// SAP Business Intelligence Consultant
+// Senior Analyst, Retail Analytics and Reporting
+// Senior Competitive Intelligence Manager
+// Senior Developer with Pentaho Business Intelligence Suite
+// Senior Engineer Information Technology - Business intelligence Reporting
+// Senior Manager, Product Intelligence and Cost Analytics
+// Senior Market Intelligence Analyst
+// Senior Technical Consultant - Business Intelligence
+// Service Market Intelligence Manager
+// Social Media and Analytics Associate
+// Software Engineer - Data Warehouse/Business Intelligence
+// Solution Architect, Business Intelligence
+// Solutions Designer, Business Intelligence
+// SQL Business Intelligence and data Warehouse Manager
+// Strategic Business Manager
+// Subject Matter Expert - Business Intelligence Tools
+// Supply Chain Business Intelligence - Senior Consultant
+// Tableau Data Analytics Platform Lead
+// Threat Intelligence Analyst
+
+
+// IT Job Titles
+
+// A - D
+
+// Application Developer
+// Application Support Analyst
+// Applications Engineer
+// Associate Developer
+// Chief Technology Officer
+// Chief Information Officer
+// Computer and Information Systems Manager
+// Computer Systems Manager
+// Customer Support Administrator
+// Customer Support Specialist
+// Data Center Support Specialist
+// Data Quality Manager
+// Database Administrator
+// Desktop Support Manager
+// Desktop Support Specialist
+// Developer
+// Director of Technology
+// E - N
+
+// Front End Developer
+// Help Desk Specialist
+// Help Desk Technician
+// Information Technology Coordinator
+// Information Technology Director
+// Information Technology Manager
+// IT Support Manager
+// IT Support Specialist
+// IT Systems Administrator
+// Java Developer
+// Junior Software Engineer
+// Management Information Systems Director
+// .NET Developer
+// Network Architect
+// Network Engineer
+// Network Systems Administrator
+// Ads
+// Affordable IT support
+// www.care.net.sg/it-support
+// Certified IT experts in Singapore. Guarantee best price IT support.
+// Apply to SUTD now
+// www.sutd.edu.sg
+// Find out more - 7-8 Mar SUTD Open House
+// Executive Jobs in SG
+// www.regionup.com
+// Advance your career in Singapore. 100K+ Jobs for 100K+ Talent.
+// FedEx Jobs
+// I Need a New Job
+// UPS Jobs
+// Graduate Jobs
+// Jobs Website
+// P - S
+
+// Programmer
+// Programmer Analyst
+// Security Specialist
+// Senior Applications Engineer
+// Senior Database Administrator
+// Senior Network Architect
+// Senior Network Engineer
+// Senior Network System Administrator
+// Senior Programmer
+// Senior Programmer Analyst
+// Senior Security Specialist
+// Senior Software Engineer
+// Senior Support Specialist
+// Senior System Administrator
+// Senior System Analyst
+// Senior System Architect
+// Senior System Designer
+// Senior Systems Analyst
+// Senior Systems Software Engineer
+// Senior Web Administrator
+// Senior Web Developer
+// Software Architech
+// Software Engineer
+// Software Quality Assurance Analyst
+// Support Specialist
+// Systems Administrator
+// Systems Analyst
+// System Architect
+// Systems Designer
+// Systems Software Engineer
+// T - Z
+
+// Technical Operations Officer
+// Technical Support Engineer
+// Technical Support Specialist
+// Technical Specialist
+// Telecommunications Specialist
+// Web Administrator
+// Web Developer
+// Webmaster
+
+
+
+// International Business Job Titles
+
+// A - F
+
+// Account Executive
+// Analyst, International Treasury
+// Analyst, Logistics
+// Analyst - International Benefits
+// Assistant Manager, International Marketing Services
+// Bilingual Customer Service Representative
+// Bilingual Sales Representative
+// Business Development Associate
+// Business Engagement Director
+// Cocoa Trader Trainee
+// Director of International Growth
+// European Markets Team Lead
+// Export Specialist
+// Financial Analyst - Global Implementation Team
+// Foreign Banking Compliance Officer
+// Ads
+// Executive Jobs in SG
+// www.regionup.com
+// The Best Jobs for the Best Talent. 100K+ Jobs for 100K+ Talent.
+// Job Vacancy
+// monster.com.sg
+// Immediate Requirement. Submit CV to Apply!
+// Territory Account Manager
+// ch.tbe.taleo.net
+// Mentor Graphics seeks skilled Sales Professional to join our team.
+// I Need a New Job
+// Financial Sales Jobs
+// Ops Manager Jobs
+// UPS Jobs
+// FedEx Jobs
+// Foreign Currency Sales Representative
+// Foreign Trade Zone Administrator
+// G - I
+
+// Global Account Manager
+// Global Business Administrator
+// Global Business Analysis Director
+// Global Commodity Manager
+// Global Internal Communication Specialist
+// Global Product Manager
+// Global Supply Manager
+// Import/Export Specialist
+// Incident Analyst
+// International Assignment Specialist
+// International Banking Coordinator
+// International Business Analyst
+// International Business Development Director
+// International Business Meeting Planner
+// International Business Operations Associate
+// I - J
+
+// International Business Specialist
+// International Claims Manager 
+// International Division Project Coordinator
+// International Logistics Coordinator
+// International Manager, Marketing and Communications
+// International Market Coordinator
+// International Operations Accelerated Development Program
+// International Pricing, Process and Administration Analyst
+// International Retail Operations Consulting Manager
+// International Retirement Leader
+// International Sales Director
+// International Technical Coordinator
+// International Trade Specialist
+// International Travel Counselor
+// International Traveling Recruiter
+// Junior Business Development Manager
+// Ads
+// Import China
+// www.hktdc.com
+// Connect with suppliers & exporters from China & Asia. Free Service.
+// Job Fairs by e2i
+// www.e2i.com.sg/Job-Fairs
+// Register for upcoming job fairs. In hospitality to finance sector
+// L - Z
+
+// Manager, Global Sales and Marketing Operations
+// Manager International Business Development
+// Manager of Contracts
+// Marketing Manager Asia
+// Mid-Level International Associate (Attorney)
+// Middle East Business Development Manager
+// Principal International Products Manager
+// Purchasing and Planning Analyst
+// Purchasing Coordinator - International
+// Rotational International Integration Director
+// Sales Manager, International Content Sales
+// SEO/SEM Analyst - International
+// Technical Associate Country Manager
+// Technical Program Manager - International Expansion Team
+// Trade Assistant - International
+// Trade Compliance Analyst
+// Trade Compliance Leader
+// Vice President of Global Data and Platform
+
+
+
+// nvestment Banking Job Titles
+
+// A - D
+
+// Accountant
+// Administrative Assistant, Investment Banking
+// Analyst 1st Year, Corporate Client Banking
+// Analyst 2nd Year, Corporate Client Banking
+// Asset Management Analyst
+// Associate, Tech Mergers and Acquisitions
+// Associate Mergers and Acquisitions
+// Attorney
+// Business Development Associate
+// Capital Markets Business Manager
+// Capitol Advisors Manager
+// CIB Analyst
+// Client Relationship Specialist
+// Control Room Compliance Officer
+// Credit Derivatives Trade Capture Analyst
+// Derivative Products Operations Associate
+// Ads
+// Kotak Bank Exchange Rate
+// kotak.com/Money-Transfer
+// Today's Exchange Rate 1SGD=₹49.61. Send Money from Singapore at 0 fee.
+// Part Time Jobs for Cash
+// www.sg.surveycompare.net/Survey
+// Earn Up To S$100 For Your Opinion. It's Free and Easy - Start Now!
+// Better Jobs for All
+// www.e2i.com.sg
+// Get Training & Earn Higher Wages. Heavily Funded for Singaporeans/PR.
+// I Need a New Job
+// Financial Sales Jobs
+// Finance Internship
+// Finance Career
+// Hedge Fund Research
+// Derivatives Control Associate
+// Desk Assistant, Trading Services 
+// E - I
+
+// Emerging Markets Trader
+// Equity Research Analyst
+// Equity Trade Support Analyst
+// Executive Assistant to Managing Director of Investment Banking 
+// Financial Analyst
+// Fixed Income Data Analyst
+// Fixed Income Surveillance, Vice President
+// Futures Electronic Trader
+// Futures Margin Associate
+// Head of Global Investment Technology
+// Healthcare Investment Banking Associate
+// Internal Auditor
+// Investment Banking/Valuation Analyst 
+// Investment Banking Analyst in Corporate Advisory
+// Investment Banking Associate
+// Investment Banking Business Analyst
+// Investor Relations Associate
+// L - R
+
+// Leveraged Finance Director
+// Managing Director
+// Mergers and Acquisitions Analyst
+// Middle Office Analyst
+// Natural Resources Analyst
+// Oil and Gas Investment Banking Analyst
+// Operations Analyst
+// Paralegal 
+// Product Controller
+// Public Finance Analyst
+// Quantitative Analyst, Equity Research
+// Real Estate Post Closing Coordinator 
+// Relationship Manager
+// Research Analyst
+// Research Assistant
+// Restructuring Analyst
+// Ads
+// What Will Be Your Future?
+// sky-request.com/Future
+// Enter Your Birth Date & I will Tell Your Future. First Reading Now Free
+// Trading Jobs Available
+// top-banker.com
+// Jobs in Banking and Trading. Apply Here Today
+// S - Z
+
+// Sales and Trading Analyst
+// Senior Analyst - Healthcare
+// Senior Associate - Consumer
+// Senior Auditor
+// Senior Consumer Investment Banker
+// Senior Digital Media Investment Banker
+// Strategic Mergers and Acquisitions Analyst
+// Strategic Recruiter
+// Structured Products Group, Senior Associate
+// Swap Trader
+// Tax Operations Business Analyst
+// Trading Assistant
+// Treasury Services Analyst
+// Vice President, Investment Banking
+
+
+// Legal Job Titles
+
+// Administrative Assistant
+// Arbitrator
+// Attorney
+// Case Manager
+// Clerk
+// Conciliator
+// Conflict Resolution Specialist
+// Consultant
+// Contract Administrator
+// Contract Analyst
+// Contract Drafting Legal Specialist
+// Copy Center Professional
+// Counselor
+// Corrections Officer
+// Court Advocate
+// Court Messenger
+// Court Reporter
+// Court Representative
+// Court Transcriptionist
+// Document Coder
+// E-discovery Specialist
+// File Clerk
+// Judge
+// Jury Consultant
+// Law Firm Administrator
+// Lawyer
+// Legal Aide/Assistant
+// Ads
+// Freelance Admin Assistant
+// www.freelancer.sg/hire/Assistant
+// Admin Starting at $30 or $5/Hour. Find an Assistant Today For Free!
+// Vacancy
+// monster.com.sg
+// Immediate Requirement. Submit CV to Apply Now!
+// Executive Jobs in SG
+// www.regionup.com
+// Advance your career. Jobs for Singapore's $100K Talent.
+// I Need a New Job
+// FedEx Jobs
+// UPS Jobs
+// Graduate Jobs
+// Jobs Website
+// Legal Analyst
+// Legal Nurse Consultant
+// Legal Records Manager
+// Legal Secretary
+// Legal Services Director
+// Litigation Docket Manager
+// Litigation Support Director
+// Magistrate
+// Mailroom Personnel
+// Mediator
+// Paralegal
+// Regulatory Affairs Director
+// Right of Way Agent
+// Software Consultant
+
+
+// Management Job Titles
+
+// A - D
+
+// Accounting Manager 
+// Account Management, Manager
+// Advertising Manager 
+// Affiliate Management Associate
+// Assistant Manager
+// Associate Manager
+// Assistant Manager - Category Management
+// Automotive Manager
+// Branch Manager
+// Brand Manager
+// Budget Manager
+// Business Development Manager
+// Business Manager
+// Care Manager
+// Centralized Dispatch Manager
+// Client Service and Underwriting Manager
+// Clinical Management - RN Unit Manager
+// Compensation Manager
+// Compliance Manager
+// Construction Manager
+// Ads
+// Project Management $5/hr
+// www.freelancer.com/hire
+// Over 13,000,000 Skilled Freelancers Find a Project Manager Today!
+// Executive Jobs in SG
+// www.regionup.com
+// Advance your career in Singapore. 100K+ Jobs for 100K+ Talent.
+// Job Vacancy
+// monster.com.sg
+// Immediate Requirement. Submit CV to Apply Now!
+// Finance Manager
+// Ops Manager Jobs
+// I Need a New Job
+// FedEx Jobs
+// Project Management Job
+// Customer Service Manager
+// Disposal Operations Management Trainee
+// District Fleet Manager
+// District Sales Manager
+// Division Manager - Resource Management
+// E - L
+
+// Employee Benefits Manager
+// Employee Relations Manager
+// Engineering Manager
+// Financial Manager
+// Grants Management Specialist
+// Guest Services Manager
+// Human Resource Manager
+// Inside Sales Manager 
+// Leasing Manager
+// M - R
+
+// Management Trainee
+// Manager, Asset Management
+// Manager, Decision Management
+// Manager, Margin Management
+// Manager, Process Management
+// Manager, Risk Management
+// Manager, Utilization Management
+// Manager - Oilfield Services
+// Manager - Organizational Change Management
+// Manager Marketing - Change Management and Communication
+// Manager Strategic Accounts
+// Marketing Manager
+// Merchandise Manager
+// Office Manager
+// Operations Management Trainee
+// Plant Manager, Power Plant
+// Portfolio Manager
+// Practice Manager - Healthcare
+// Product Manager
+// Production Manager
+// Program Management, Manager
+// Project Manager
+// Property Management/Assistant General Manager
+// Purchasing Manager
+// Quality Assurance Manager
+// Restaurant Culinary Managers
+// Restaurant Manager
+// Route Manager
+// Ads
+// ASTA Powerproject
+// www.crownsys.com.sg
+// See how ASTA can perform functions other PM softwares can't!
+// Get Paid Doing Surveys
+// panelplace.com/free_registration
+// Earn Extra Money By Participating In Online Surveys That Really Pay.
+// S - Z
+
+// Safety Manager
+// Sales and Catering Manager
+// Senior Manager, Product Management
+// Senior Manager, Space Management
+// Senior Quality Manager
+// Senior Manager, Realty Management
+// Shift Manager
+// Store Manager
+// Strategic Sourcing Manager
+// Student Loan Collection Manager
+// Territory Manager
+// Training and Development Manager
+// Transportation Manager
+// Warehouse and Inventory Control Manager
+

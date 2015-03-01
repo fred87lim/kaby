@@ -1,0 +1,30 @@
+<!-- Sign up wizzard -->
+
+<div >
+    <h1><span class="fa fa-sign-in"></span>Update your profile picture</h1>
+    <br />
+    <div class="panel panel-default">
+        <div class="panel-body" style="padding-top: 40px; padding-bottom: 40px; padding-right:80px">
+            <p>First impression is important. Let your potential employer have an idea what you will look like</p>
+            <div class="col-md-7">
+                    <input type="file" ng-file-select="onFileSelect($files)" >
+                    <img-cropped src="[[ imgUrl ]]" changed='changed(cords)' selected='selected(cords)'></img-cropped>
+                </div>
+                <div class="col-md-5">
+                    <div id="preview-pane">
+                        <div class="preview-container">
+                            <img src="[[ imgUrl ]]" class="jcrop-preview" alt="Preview" />
+                        </div>
+                    </div>
+                </div>
+                <div class="clearfix visible-xs-block"></div>
+                <div class="col-sm-3 pull-right">
+                  <button type="submit" class="btn btn-primary btn-block" ng-click="saveProfilePicture()">Save</button>
+                </div>
+            
+        </div>
+        <div class="panel-footer" style="padding-left:80px; padding-right:80px">
+            <p>I will add my profile picture later. <a href="/signup">Next</a></p>
+        </div>
+    </div>
+</div>
