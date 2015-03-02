@@ -94,7 +94,7 @@ phonecatApp.config(['$routeProvider', '$locationProvider', function ($routeProvi
         templateUrl: 'partials/signup_wizard_honors_awards.html'
     }).
 	otherwise({
-			
+			redirectTo: '/'
 	});
 
     // use the HTML5 History API

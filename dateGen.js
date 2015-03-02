@@ -9,6 +9,7 @@ var Country = require('./app/models/country');
 var JobFunction = require('./app/models/job_function');
 var Industry = require('./app/models/settings/industry');
 var JobTitle = require('./app/models/settings/title');
+var QualificationType = require('./app/models/settings/qualification_type');
 
 /* Establish mongoose connection */
 mongoose.connect(config.db['development']);
@@ -2233,6 +2234,149 @@ db.once('open', function callback () {
 						
 					}
 				});
+			}
+		});
+	}
+}
+
+{
+	{
+		var ql = new QualificationType();
+		ql.name = 'Associate of Arts (A.A.)';
+		ql.slug = 'associate_arts';
+		ql.save(function (err) {
+			if (err) {
+						
+			}
+		});
+	}
+	{
+		var ql = new QualificationType();
+		ql.name = 'Associate of Science (A.S.)';
+		ql.slug = 'associate_science';
+		ql.save(function (err) {
+			if (err) {
+						
+			}
+		});
+	}
+	{
+		var ql = new QualificationType();
+		ql.name = 'Associate of Applied Science (AAS)';
+		ql.slug = 'associate_applied_science';
+		ql.save(function (err) {
+			if (err) {
+						
+			}
+		});
+	}
+	{
+		var ql = new QualificationType();
+		ql.name = 'Bachelor of Arts (B.A.)';
+		ql.slug = 'bachelor_arts';
+		ql.save(function (err) {
+			if (err) {
+						
+			}
+		});
+	}
+	{
+		var ql = new QualificationType();
+		ql.name = 'Bachelor of Science (B.S.)';
+		ql.slug = 'bachelor_science';
+		ql.save(function (err) {
+			if (err) {
+						
+			}
+		});
+	}
+	{
+		var ql = new QualificationType();
+		ql.name = 'Bachelor of Fine Arts (BFA)';
+		ql.slug = 'bachelor_fine_arts';
+		ql.save(function (err) {
+			if (err) {
+						
+			}
+		});
+	}
+	{
+		var ql = new QualificationType();
+		ql.name = 'Master of Arts (M.A.)';
+		ql.slug = 'master_arts';
+		ql.save(function (err) {
+			if (err) {
+						
+			}
+		});
+	}
+	{
+		var ql = new QualificationType();
+		ql.name = 'Master of Science (M.S.)';
+		ql.slug = 'master_science';
+		ql.save(function (err) {
+			if (err) {
+						
+			}
+		});
+	}
+	{
+		var ql = new QualificationType();
+		ql.name = 'Master of Business Administration (MBA)';
+		ql.slug = 'master_business_administration';
+		ql.save(function (err) {
+			if (err) {
+						
+			}
+		});
+	}
+	{
+		var ql = new QualificationType();
+		ql.name = 'Master of Fine Arts (MFA)';
+		ql.slug = 'master_fine_arts';
+		ql.save(function (err) {
+			if (err) {
+						
+			}
+		});
+	}
+	{
+		var ql = new QualificationType();
+		ql.name = 'Doctor of Philosophy (Ph.D.)';
+		ql.slug = 'doctor_philosophy';
+		ql.save(function (err) {
+			if (err) {
+						
+			}
+		});
+	}
+	{
+		var ql = new QualificationType();
+		ql.name = 'Juris Doctor (J.D.)';
+		ql.slug = 'juris_doctor';
+		ql.save(function (err) {
+			if (err) {
+						
+			}
+		});
+	}
+	{
+		var ql = new QualificationType();
+		ql.name = 'Doctor of Medicine (M.D.)';
+		ql.slug = 'doctor_medicine';
+		ql.save(function (err) {
+			if (err) {
+						
+			}
+		});
+	}
+	{
+		var ql = new QualificationType();
+		ql.name = 'Doctor of Dental Surgery (DDS)';
+		ql.slug = 'doctor_dental_surgery';
+		ql.save(function (err) {
+			if (err) {
+						
 			}
 		});
 	}

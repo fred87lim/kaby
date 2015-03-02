@@ -67,81 +67,67 @@
     {% include "../partials/header.html" %}
     <div class="container bs-docs-container">
         <div class="col-sm-9 col-sm-offset-2">
-
             <div ng-view></div>
-
-            <div id="account-signup" ng-if="!signup.status">
-                <h1><span class="fa fa-sign-in"></span>Join Project X</h1>
-            <br />
             
+<div id="account-signup" ng-if="!signup.status">
+<div>
+    <h1><span class="fa fa-sign-in"></span>Getting to know</h1>
+    <br />
+    <div class="panel panel-default">
+        <div class="panel-body" style="padding-top: 40px; padding-bottom: 40px; padding-right:80px">
+            <p>In order to tailor the best content for you. We would like to know a bit about you</p>
             
-
-            <div class="panel panel-default">
-              <div class="panel-body" style="padding-top: 40px; padding-bottom: 40px; padding-right:80px">
-
-            
-            
-                <!-- LOGIN FORM -->
-            <form class="form-horizontal" role="form" ng-submit="createNewAccount()" >
-                <div class="form-group">
-                    <label for="inputEmail" class="col-sm-2 control-label">Email:</label>
-                    <div class="col-sm-5">
-                        <input pattern=".{3,}" ng-model="signup.email.value" required title="3 characters minimum" class="form-control" name="email" autocomplete="off" id="email" ng-blur="checkEmailAvailable()">
-                    </div>
-                    <div class="col-sm-5" ng-if="signup.email.status && !signup.email.status.available">
-                        <div class="alert alert-danger" style="padding:6px 15px;margin-bottom:0px"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> &nbsp; [[signup.email.status.reason]]</div>
-                    </div>
-                    <div class="col-sm-5" ng-if="signup.email.status && signup.email.status.available">
-                        <div class="alert alert-success" style="padding:6px 15px;margin-bottom:0px"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span></div>
+            <a href="" ng-click="selectPurpose(1)">
+                <div class="col-sm-6 col-md-3">
+                    <div class="thumbnail">
+                        <img src="#" style="height: 100px; width: 100%; display: block;">
+                        <div class="caption">
+                            <p><a href="">I am a student</a></p>
+                        </div>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label for="inputUsername" class="col-sm-2 control-label">Username:</label>
-                    <div class="col-sm-5">
-                        <input type="text" pattern=".{3,}" ng-model="signup.username.value" required title="3 characters minimum" class="form-control" name="username" autocomplete="off" id="username" ng-blur="checkUsernameAvailable()">
-                    </div>
-                    <div class="col-sm-5" ng-if="signup.username.status && !signup.username.status.available">
-                        <div class="alert alert-danger" style="padding:6px 15px;margin-bottom:0px"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> &nbsp; [[signup.username.status.reason]]</div>
-                    </div>
-                    <div class="col-sm-5" ng-if="signup.username.status && signup.username.status.available">
-                        <div class="alert alert-success" style="padding:6px 15px;margin-bottom:0px"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span></div>
+            </a>
+
+            <a href="" ng-click="selectPurpose(2)">
+                <div class="col-sm-6 col-md-3">
+                    <div class="thumbnail">
+                        <img src="#" style="height: 100px; width: 100%; display: block;">
+                        <div class="caption">
+                            <p><a href="">I am currently looking for a job</a></p>
+                        </div>
                     </div>
                 </div>
+            </a>
                 
-                <div class="form-group">
-                    <label for="firstName" class="col-sm-2 control-label">First Name:</label>
-                    <div class="col-sm-5">
-                        <input type="text" pattern=".{3,}" required title="3 characters minimum" class="form-control" id="firstName" name="firstName" autocomplete="off" ng-model="signup.firstName.value">
+            <a href="" ng-click="selectPurpose(3)">
+                <div class="col-sm-6 col-md-3">
+                    <div class="thumbnail">
+                        <img src="#" style="height: 100px; width: 100%; display: block;">
+                        <div class="caption">
+                            <p><a href="">I am employed but open to better position</a></p>
+                        </div>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label for="lastName" class="col-sm-2 control-label">Last Name:</label>
-                    <div class="col-sm-5">
-                        <input type="text" class="form-control" id="lastName" name="lastName" autocomplete="off" ng-model="signup.lastName.value">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="password" class="col-sm-2 control-label">Password</label>
-                    <div class="col-sm-5">
-                        <input type="password" class="form-control" id="password" name="password" autocomplete="off" ng-model="signup.password.value">
-                    </div>
-                </div>
+            </a>
                 
-              <div class="form-group">
-                <div class="col-sm-offset-2 col-sm-5">
-                  <button type="submit" class="btn btn-primary btn-block">Sign up</button>
+            <a href="" ng-click="selectPurpose(4)">
+                <div class="col-sm-6 col-md-3">
+                    <div class="thumbnail">
+                        <img src="#" style="height: 100px; width: 100%; display: block;">
+                        <div class="caption">
+                            <p><a href="">I am employed and happy with current position.</a></p>
+                        </div>
+                    </div>
                 </div>
-              </div>
-            </form>
-
-              </div>
-              <div class="panel-footer" style="padding-left:80px; padding-right:80px">
-                <p>New to Project X? <a href="/signup">Sign up now</a></p>
-              </div>
-            </div>
-            </div>
-
-            
+            </a>
+        </div>
+        <div class="panel-footer" style="padding-left:80px; padding-right:80px">
+            <p>We are comitted to keep your data confidentially</p>
+            <p>To understand why we use this information and how we use it <a href="/signup">Click here</a></p>
+        </div>
+    </div>
+</div>
+  </div>          
 
             
 

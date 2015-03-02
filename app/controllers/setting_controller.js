@@ -3,6 +3,7 @@ var City			= require('../../app/models/city');
 var Country			= require('../../app/models/country');
 var PrivacySetting	= require('../../app/models/privacy_setting');
 var JobTitle	= require('../../app/models/settings/title');
+var QualificationType	= require('../../app/models/settings/qualification_type');
 var constants 		= require('../../app/utils/constants');
 
 
@@ -287,5 +288,28 @@ SettingController.findJobTitlesByKeyword = function (data, callback) {
 		}
 
 		return callback(titles);
+	});
+};
+
+/**
+ * Find qualification type by keyword.
+ *
+ * @param  {JSON} 	data - user data.
+ *					data = {
+ *						keyword: keyword
+ *					}
+ *
+ *
+ * @return [JobTitle]
+ */
+SettingController.findQualificationTypeByKeyword = function (data, callback) {
+	var re = new RegExp(data.keyword, 'i');
+
+	QualificationType.find({ name: { $regex: re }	}, function (err, qualifications) {
+		if (err) {
+			winston.log('error', err);
+		}
+
+		return callback(qualifications);
 	});
 };

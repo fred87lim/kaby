@@ -201,6 +201,23 @@ module.exports = function (app, passport) {
 		});
 	});
 
+	// Find qualification by keyword
+	app.get('/ajax/settings/qualification_type', function (req, res) {
+		var result = {
+			status: false,
+			message: '',
+			data: null
+		};
+
+		var keyword = req.query.k;
+
+		SettingController.findQualificationTypeByKeyword({keyword: keyword}, function (callbackResult) {
+			result.status = true;
+			result.data = callbackResult;
+			return res.send(result);
+		});
+	});
+
 	// Signup Page
 	app.get('/signup', function (req, res) {
 		// Check if user is authenticated
@@ -216,11 +233,18 @@ module.exports = function (app, passport) {
 		res.render('pages/signup.html', { data: data });
 	});
 
+	// process the signup form
+	app.post('/signup', passport.authenticate('local-signup', {
+		successRedirect: '/getting_started',
+		failureRedirect: '/signup',
+		failureFlash: true
+	}));
+
 	// Getting started
 	app.get('/getting_started', function (req, res) {
 		// Redirect to sign up page if user is not authenticated
 		if (!req.user) {
-			return res.redirect('/signup');
+			//return res.redirect('/signup');
 		}
 
 		var data = {
@@ -1802,13 +1826,6 @@ module.exports = function (app, passport) {
 			}
 		});
 	});
-
-	// process the signup form
-	app.post('/signup', passport.authenticate('local-signup', {
-		successRedirect: '/profile',
-		failureRedirect: '/signup',
-		failureFlash: true
-	}));
 
 	app.post('/api/v1/signup', function (req, res, next) {
 		passport.authenticate('local-signup', function(err, user, info) {

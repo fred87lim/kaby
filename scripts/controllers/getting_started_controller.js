@@ -91,10 +91,10 @@ phonecatApp.config(['$routeProvider', '$locationProvider', function ($routeProvi
         templateUrl: '/partials/signup_wizard_education.html'
     }).
     when('/honors_awards', {
-        templateUrl: 'partials/signup_wizard_honors_awards.html'
+        templateUrl: '/partials/signup_wizard_honors_awards.html'
     }).
 	otherwise({
-			
+		//redirectTo: '/get_to_know'
 	});
 
     // use the HTML5 History API
@@ -169,6 +169,32 @@ PopInTownControllers.controller('MainCtrl', ['$scope', '$location', '$window', '
         isStillHere: false,
         company: null,
         title: null
+    };
+
+    $scope.education = {
+        start: {
+            year: null
+        },
+        end: {
+            year: null
+        },
+        school: null,
+        qualification: null,
+        studyField: null,
+        educationLevel: null,
+        description: null,
+        isHonours: null
+    };
+
+    $scope.awards = {
+        title: null,
+        occupation: null,
+        issuer: null,
+        date: {
+            month: null,
+            year: null,
+        },
+        description: null
     }
 
     $scope.privacySettings = null;
@@ -212,7 +238,7 @@ PopInTownControllers.controller('MainCtrl', ['$scope', '$location', '$window', '
 
         $scope.findPrivacySettings();
 
-        $scope.signup.status = true;
+        //$scope.signup.status = true;
 	};
 
     $scope.createNewAccount = function () {
@@ -244,7 +270,7 @@ PopInTownControllers.controller('MainCtrl', ['$scope', '$location', '$window', '
             $scope.user.purpose = 'EMPLOYED_HAPPY';
         }
 
-        console.log($scope.user.purpose);
+        $scope.signup.status = true;
         $location.path('/profile_picture');
     };
 
@@ -346,6 +372,25 @@ PopInTownControllers.controller('MainCtrl', ['$scope', '$location', '$window', '
 
     $scope.onTypeaheadSelectJobTitle = function ($item, $model, $label) {
         $scope.experience.title = $model;
+    };
+
+    $scope.findQualificationTypeByKeyWord = function (val) {
+        return $http.get('/ajax/settings/qualification_type', {
+            params: { k: val }
+        }).then(function(response){
+            var qualifications= [];
+
+        for (var i = 0; i < response.data.data.length; i++) {
+          // loop through current selected response.data.data
+          qualifications.push(response.data.data[i]);         
+        }
+
+        return qualifications;
+        });
+    };
+
+    $scope.onTypeaheadSelectQualification = function ($item, $model, $label) {
+        $scope.education.qualification = $model;
     };
 
     $scope.onTypeaheadSelect = function ($item, $model, $label) {
