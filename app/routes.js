@@ -209,11 +209,26 @@ module.exports = function (app, passport) {
 		}
 
 		var data = {
-			
+			title: 'Sign up'
 		}
 
 		// Render page
 		res.render('pages/signup.html', { data: data });
+	});
+
+	// Getting started
+	app.get('/getting_started', function (req, res) {
+		// Redirect to sign up page if user is not authenticated
+		if (!req.user) {
+			return res.redirect('/signup');
+		}
+
+		var data = {
+			
+		}
+
+		// Render page
+		res.render('pages/getting_started.html', { data: data });
 	});
 
 	// /api/v2/countries?k=nod

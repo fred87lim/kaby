@@ -212,7 +212,7 @@ PopInTownControllers.controller('MainCtrl', ['$scope', '$location', '$window', '
 
         $scope.findPrivacySettings();
 
-        //$scope.signup.status = true;
+        $scope.signup.status = true;
 	};
 
     $scope.createNewAccount = function () {
