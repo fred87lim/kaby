@@ -14,6 +14,7 @@ var constants = require('../app/utils/constants');
 var passport = require('passport');
 
 var SettingController = require('../app/controllers/setting_controller');
+var UserController = require('../app/controllers/user_controller');
 
 /* add node js app reference */
 var app = require('../web');
@@ -32,7 +33,7 @@ before (function (done) {
     done();
 });
 
-describe('Test', function () {
+describe.skip('Test', function () {
     describe('Industry', function () {
         it('Find Industry By Keyword', function (done) {
             SettingController.findIndustryByKeyword('tech', function (industries) {
@@ -48,7 +49,28 @@ describe('Test', function () {
             });
         });
     })
-})
+});
+
+describe('User Controller', function () {
+    describe('User Profile', function () {
+        it('Save Basic Information', function (done) {
+            UserController.saveBasicInfo({
+                userId: '547afde26c42c55805536095',
+                location: '54d22ef42dd03b5103c1f68e',
+                birthday: {
+                    day: 23,
+                    month: 4,
+                    year: 1900,
+                    privacy: '548d273a5b8e03c003c2eab1'
+                },
+                description: 'Test Description'
+            }, function (result) {
+                console.log(result);
+                done();
+            });
+        });
+    })
+});
 
 describe.skip('Recruitment', function () {
     describe('#Signup()', function () {

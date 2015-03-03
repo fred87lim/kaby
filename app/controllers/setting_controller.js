@@ -258,6 +258,14 @@ SettingController.findCountryById = function (data, callback) {
 	});
 };
 
+/**
+ * Find all privacy setting
+ *
+ * @param  {Callback} 	
+ *
+ *			
+ * @return [Country]
+ */
 SettingController.findPrivacySettings = function (callback) {
 	PrivacySetting.find({}, function (err, privacies) {
 		if (err) {
@@ -267,6 +275,27 @@ SettingController.findPrivacySettings = function (callback) {
 		return callback(privacies);
 	});
 }
+
+/**
+ * Find privacy setting by id.
+ *
+ * @param  {JSON} 	data - user data.
+ *					data = {
+ *						privacyId: privacy id
+ *					}
+ *
+ *
+ * @return [Privacy]
+ */
+SettingController.findPrivacyById = function (data, callback) {
+	PrivacySetting.findById( data.privacyId, function (err, privacy) {
+		if (err) {
+			winston.log('error', err);
+		}
+
+		return callback(privacy);
+	});
+};
 
 /**
  * Find job title by keyword.

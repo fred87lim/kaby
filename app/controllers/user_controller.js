@@ -39,6 +39,7 @@ UserController.checkEmailAvailable = function (data, callback) {
 		var result = {
 			available: false,
 			reason: null,
+			data: null
 		}
 		if (err) {
 			winston.log('error', err);
@@ -73,6 +74,7 @@ UserController.checkUsernameAvailable = function (data, callback) {
 		var result = {
 			available: false,
 			reason: null,
+			data: null
 		}
 
 		if (err) {
@@ -141,5 +143,193 @@ UserController.changePurpose = function (data, callback) {
 
 			return callback(false);
 		})
+	});
+};
+
+/**
+ * Save user basic information.
+ *
+ * @param  {JSON} 	data - user data.
+ *					data = {
+ *						userId: user id,
+ *						location: city id,
+ *						birthday: {
+ *							day: [1 - 31]
+ *							month: [0 - 11]
+ *							year: [Number]
+ *							privacy: [Privacy]
+ *						},
+ *						desciption: [Text]
+ *					}
+ *
+ *
+ * @return [Boolean] - true if change successful.
+ */
+UserController.saveBasicInfo = function (data, callback) {
+	User.findById(data.userId, function (err, user) {
+		if (err) {
+			winston.log('error', err);
+			return callback(false);
+		}
+
+		if (!user) {
+			return callback(false);
+		}
+
+		
+
+		var findPrivacyById = function (privacyId, parallelCallback) {
+			if (privacyId) {
+				SettingController.findPrivacyById({ privacyId: privacyId}, function (result) {
+					parallelCallback(null, result);
+				});
+			} else {
+				parallelCallback(null, null);
+			}			
+		}
+
+		var findCityById = function (cityId, parallelCallback) {
+			if (cityId) {
+				SettingController.findCityById({ cityId: cityId}, function (result) {
+					parallelCallback(null, result);
+				});
+			} else {
+				parallelCallback(null, null);
+			}
+		}
+
+		var parallelJson = {
+			privacy: function (next) {
+				findPrivacyById(data.birthday.privacy, next);
+			},
+			city: function (next) {
+				findCityById(data.location, next);
+			}
+		};
+
+		async.parallel({
+			privacy: function (next) {
+				findPrivacyById(data.birthday.privacy, next);
+			},
+			city: function (next) {
+				findCityById(data.location, next);
+			}
+		}, function (err, results) {
+			var privacy = results.privacy;
+			var city = results.city;
+			
+			if (data.birthday.day != null && data.birthday.month != null && 
+				data.birthday.year != null && data.birthday.privacy != null) {
+				var birthday = new Date(data.birthday.year, data.birthday.month, data.birthday.day);
+				user.birthday.date = birthday;
+				user.birthday.privacy = privacy;
+			}
+
+			user.livesin = city;
+			console.log(data.location);
+			console.log(city);
+			//console.log(user);
+			user.save(function (err) {
+				if (err) {
+					winston.log('error', err);
+				}
+
+				return callback(true);
+			});	
+		});
+	});
+};
+
+/**
+ * Add user experience.
+ *
+ * @param  {JSON} 	data - user data.
+ *					data = {
+ *						userId: user id,
+ *						location: city id,
+ *						birthday: {
+ *							day: [1 - 31]
+ *							month: [0 - 11]
+ *							year: [Number]
+ *							privacy: [Privacy]
+ *						},
+ *						desciption: [Text]
+ *					}
+ *
+ *
+ * @return [Boolean] - true if change successful.
+ */
+UserController.saveBasicInfo = function (data, callback) {
+	User.findById(data.userId, function (err, user) {
+		if (err) {
+			winston.log('error', err);
+			return callback(false);
+		}
+
+		if (!user) {
+			return callback(false);
+		}
+
+		
+
+		var findPrivacyById = function (privacyId, parallelCallback) {
+			if (privacyId) {
+				SettingController.findPrivacyById({ privacyId: privacyId}, function (result) {
+					parallelCallback(null, result);
+				});
+			} else {
+				parallelCallback(null, null);
+			}			
+		}
+
+		var findCityById = function (cityId, parallelCallback) {
+			if (cityId) {
+				SettingController.findCityById({ cityId: cityId}, function (result) {
+					parallelCallback(null, result);
+				});
+			} else {
+				parallelCallback(null, null);
+			}
+		}
+
+		var parallelJson = {
+			privacy: function (next) {
+				findPrivacyById(data.birthday.privacy, next);
+			},
+			city: function (next) {
+				findCityById(data.location, next);
+			}
+		};
+
+		async.parallel({
+			privacy: function (next) {
+				findPrivacyById(data.birthday.privacy, next);
+			},
+			city: function (next) {
+				findCityById(data.location, next);
+			}
+		}, function (err, results) {
+			var privacy = results.privacy;
+			var city = results.city;
+			
+			if (data.birthday.day != null && data.birthday.month != null && 
+				data.birthday.year != null && data.birthday.privacy != null) {
+				var birthday = new Date(data.birthday.year, data.birthday.month, data.birthday.day);
+				user.birthday.date = birthday;
+				user.birthday.privacy = privacy;
+			}
+
+			user.livesin = city;
+			console.log(data.location);
+			console.log(city);
+			//console.log(user);
+			user.save(function (err) {
+				if (err) {
+					winston.log('error', err);
+				}
+
+				return callback(true);
+			});	
+		});
 	});
 };

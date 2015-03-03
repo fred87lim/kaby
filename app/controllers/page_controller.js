@@ -117,7 +117,6 @@ PageController.findPageByUsername = function (data, callback) {
 /**
  * Find page by keyword.
  * 
- * a page's follower. For different role, we need to tailor different data.
  *
  * @param  {JSON} 	data - user data.
  *					data = {
