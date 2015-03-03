@@ -3,6 +3,7 @@ var City			= require('../../app/models/city');
 var Country			= require('../../app/models/country');
 var Page			= require('../../app/models/page');
 var User			= require('../../app/models/user');
+var Experience			= require('../../app/models/experience');
 var constants 		= require('../../app/utils/constants');
 
 // Third party libs
@@ -12,6 +13,7 @@ var winston = require('winston');
 // Controller
 var PhotoController = require('../../app/controllers/photo_controller');
 var SettingController = require('../../app/controllers/setting_controller');
+var PageController = require('../../app/controllers/page_controller');
 
 /**
  * All things user
@@ -176,8 +178,6 @@ UserController.saveBasicInfo = function (data, callback) {
 			return callback(false);
 		}
 
-		
-
 		var findPrivacyById = function (privacyId, parallelCallback) {
 			if (privacyId) {
 				SettingController.findPrivacyById({ privacyId: privacyId}, function (result) {
@@ -198,15 +198,6 @@ UserController.saveBasicInfo = function (data, callback) {
 			}
 		}
 
-		var parallelJson = {
-			privacy: function (next) {
-				findPrivacyById(data.birthday.privacy, next);
-			},
-			city: function (next) {
-				findCityById(data.location, next);
-			}
-		};
-
 		async.parallel({
 			privacy: function (next) {
 				findPrivacyById(data.birthday.privacy, next);
@@ -226,9 +217,6 @@ UserController.saveBasicInfo = function (data, callback) {
 			}
 
 			user.livesin = city;
-			console.log(data.location);
-			console.log(city);
-			//console.log(user);
 			user.save(function (err) {
 				if (err) {
 					winston.log('error', err);
@@ -246,45 +234,61 @@ UserController.saveBasicInfo = function (data, callback) {
  * @param  {JSON} 	data - user data.
  *					data = {
  *						userId: user id,
- *						location: city id,
- *						birthday: {
- *							day: [1 - 31]
- *							month: [0 - 11]
- *							year: [Number]
- *							privacy: [Privacy]
+ *						companyName: company name,
+ *						companyId: company Id,
+ *						title: title
+ *						location: city id
+ *						isWorking: if user is still holding this job
+ *						date: {
+ *							start: {
+ *								month: 	
+ *								year: 
+ *							},
+ *							end: {
+ *								month: 	
+ *								year: 
+ *							},
  *						},
  *						desciption: [Text]
  *					}
  *
  *
- * @return [Boolean] - true if change successful.
+ * @return [ResultJSON] - true if change successful.
  */
-UserController.saveBasicInfo = function (data, callback) {
+UserController.addExperience = function (data, callback) {
+
+	var result = {
+		status: false,
+		message: null,
+		data: null
+	};
+
 	User.findById(data.userId, function (err, user) {
 		if (err) {
 			winston.log('error', err);
-			return callback(false);
+			result.message = 'Database error';
+			return callback(result);
 		}
 
 		if (!user) {
-			return callback(false);
+			result.message = 'User not found';
+			return callback(result);
 		}
 
-		
-
-		var findPrivacyById = function (privacyId, parallelCallback) {
-			if (privacyId) {
-				SettingController.findPrivacyById({ privacyId: privacyId}, function (result) {
+		// Find page to get page object to assign to experience object, so dont need full object
+		var findPageById = function (pageId, parallelCallback) {
+			if (pageId) {
+				PageController.findOriginalPageById({ pageId: pageId }, function (result) {
 					parallelCallback(null, result);
 				});
 			} else {
 				parallelCallback(null, null);
-			}			
+			}
 		}
 
 		var findCityById = function (cityId, parallelCallback) {
 			if (cityId) {
-				SettingController.findCityById({ cityId: cityId}, function (result) {
+				SettingController.findOriginalCityById({ cityId: cityId}, function (result) {
 					parallelCallback(null, result);
 				});
 			} else {
@@ -292,44 +296,51 @@ UserController.saveBasicInfo = function (data, callback) {
 			}
 		}
 
-		var parallelJson = {
-			privacy: function (next) {
-				findPrivacyById(data.birthday.privacy, next);
-			},
-			city: function (next) {
-				findCityById(data.location, next);
-			}
-		};
-
 		async.parallel({
-			privacy: function (next) {
-				findPrivacyById(data.birthday.privacy, next);
+			page: function (next) {
+				findPageById(data.companyId, next);
 			},
 			city: function (next) {
 				findCityById(data.location, next);
 			}
 		}, function (err, results) {
-			var privacy = results.privacy;
+			var page = results.page;
 			var city = results.city;
+
+			console.log(city);
+			console.log(page);
 			
-			if (data.birthday.day != null && data.birthday.month != null && 
-				data.birthday.year != null && data.birthday.privacy != null) {
-				var birthday = new Date(data.birthday.year, data.birthday.month, data.birthday.day);
-				user.birthday.date = birthday;
-				user.birthday.privacy = privacy;
+			var experience 			= new Experience();
+			experience.isWorking 	= data.isWorking;
+			experience.location		= city;
+			experience.title 		= data.title;
+			experience.description 	= data.description;
+			experience.dateStarted 	= new Date(data.date.start.year, data.date.start.month);
+
+			if (experience.isWorking == false) {
+				experience.dateEnded 	= new Date(data.date.end.year, data.date.end.month);
+			}
+			
+			experience.user 		= user;
+
+			if (page) {
+				experience.company = page;
+				experience.companyName = page.companyName;
+			} else {
+				experience.company = null;
+				experience.companyName = data.companyName;
 			}
 
-			user.livesin = city;
-			console.log(data.location);
-			console.log(city);
-			//console.log(user);
-			user.save(function (err) {
+			experience.save(function (err) {
 				if (err) {
-					winston.log('error', err);
+					result.message = constants.ERROR2000;
+					return callback(result);
 				}
 
-				return callback(true);
-			});	
-		});
+				result.status = true;
+				result.data = experience;
+				return callback(result);
+			});
+		});		
 	});
 };

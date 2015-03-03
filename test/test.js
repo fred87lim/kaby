@@ -53,7 +53,7 @@ describe.skip('Test', function () {
 
 describe('User Controller', function () {
     describe('User Profile', function () {
-        it('Save Basic Information', function (done) {
+        it.skip('Save Basic Information', function (done) {
             UserController.saveBasicInfo({
                 userId: '547afde26c42c55805536095',
                 location: '54d22ef42dd03b5103c1f68e',
@@ -62,6 +62,52 @@ describe('User Controller', function () {
                     month: 4,
                     year: 1900,
                     privacy: '548d273a5b8e03c003c2eab1'
+                },
+                description: 'Test Description'
+            }, function (result) {
+                console.log(result);
+                done();
+            });
+        });
+
+        it('Add Experience with company name', function (done) {
+            UserController.addExperience({
+                userId: '54eddf70ef940c2a050bc3b5',
+                location: '54eddf81caaf5f2d05aa6e23',
+                title: 'Software Engineer',
+                companyName: 'Google',
+                companyId: null,
+                isWorking: false,
+                date: {
+                    start: {
+                        month: 3,
+                        year: 2008
+                    },
+                    end: {
+                        month: 5,
+                        year: 2012
+                    }
+                },
+                description: 'Test Description'
+            }, function (result) {
+                console.log(result);
+                done();
+            });
+        });
+
+        it('Add Experience with company id', function (done) {
+            UserController.addExperience({
+                userId: '54eddf70ef940c2a050bc3b5',
+                location: '54eddf81caaf5f2d05aa6e24',
+                title: '',
+                companyName: 'Google',
+                companyId: '54eddf71ef940c2a050bc3cc',
+                isWorking: true,
+                date: {
+                    start: {
+                        month: 6,
+                        year: 2012
+                    }
                 },
                 description: 'Test Description'
             }, function (result) {

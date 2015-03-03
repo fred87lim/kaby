@@ -2899,7 +2899,7 @@ UserRoute.prototype.addExperience = function (req, res) {
 }
 
 /*
- *	ADD NEW EDUCATION
+ *	ADD NEW EDUCATION @ Depreciated. Refer to UserController.addExperience []
  *
  */
 UserRoute.prototype.addExperienceV2 = function (exp, callback) {

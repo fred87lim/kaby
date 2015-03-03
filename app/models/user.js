@@ -107,7 +107,7 @@ var userSchema = mongoose.Schema({
         date : { type: Date },
         privacy: { type: Schema.ObjectId, ref: 'PrivacySettingSchema' }
     },
-    livesin: { type: String },
+    livesin: { type: Schema.ObjectId, ref: 'CitySchema' },
     description: { type: String },
     maritalStatus: { type: String, enum: maritalType},
     projects: [ProjectSchema],

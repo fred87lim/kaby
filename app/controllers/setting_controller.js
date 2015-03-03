@@ -215,6 +215,32 @@ SettingController.findCityById = function (data, callback) {
 };
 
 /**
+ * Find original city by id. This will return simple page object to assign to other object
+ *
+ * @param  {JSON} 	data - user data.
+ *					data = {
+ *						cityId: city id
+ *					}
+ *
+ *
+ * @return [City]
+ */
+SettingController.findOriginalCityById = function (data, callback) {
+	City.findById( data.cityId, function (err, city) {
+		if (err) {
+			winston.log('error', err);
+			return callback(null);
+		}
+
+		if (!city) {
+			return callback(null);
+		}
+
+		return callback(city);
+	});
+};
+
+/**
  * Find countries by keyword.
  *
  * @param  {JSON} 	data - user data.

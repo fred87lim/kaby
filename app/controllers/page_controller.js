@@ -115,6 +115,31 @@ PageController.findPageByUsername = function (data, callback) {
 };
 
 /**
+ * Find original page by id. This will return simple page object to assign to other object
+ *
+ * @param  {JSON} 	data - user data.
+ *					data = {
+ *						pageId: page Id
+ *					}
+ *
+ *
+ * @return [Page]
+ */
+PageController.findOriginalPageById = function (data, callback) {
+	Page.findById( data.pageId, function (err, page) {
+		if (err) {
+			winston.log('error', err);
+		}
+
+		if (!page) {
+			return callback(null);
+		}		
+
+		return callback(page);
+	});
+};
+
+/**
  * Find page by keyword.
  * 
  *

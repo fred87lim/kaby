@@ -8,7 +8,7 @@ var ExperienceSchema = mongoose.Schema({
 	companyName:        String,
     company: { type: Schema.ObjectId, ref: 'PageSchema'},
     title:          String,
-    location:       String,
+    location:       {type: Schema.ObjectId, ref: 'CitySchema'},
     description:    String,
     isWorking:      Boolean,
     dateStarted : {type: Date},
