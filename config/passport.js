@@ -173,9 +173,10 @@ module.exports = function(passport, smtpTransport) {
     },
     function(req, email, password, done) {
         // asynchronous
+        console.log('signing up... ');
         // User.findOne wont fire unless data is sent back
         process.nextTick(function() {
-
+            console.log('signing up in progress... ');
 		// find a user whose email is the same as the forms email
 		// we are checking to see if the user trying to login already exists
         User.findOne({ 'local.email' :  email }, function(err, user) {
@@ -252,65 +253,36 @@ module.exports = function(passport, smtpTransport) {
 
                                 // if you don't want to use this transport object anymore, uncomment following line
                                 //smtpTransport.close(); // shut down the connection pool, no more messages
+                                // passport.authenticate('local-login', function (req, res) {
+                                //     return done(null, newUser);
+                                // });
                             });
+
+                            // Log user in after registration completed.
+                            // passport.authenticate('local-login', function (err, user, info) {
+                            //     console.log('Authenticating....')
+                            //     if (err) {
+                            //         console.log(err);
+                            //         return done(null, false, { message: constants.ERROR9009 });
+                            //     }
+
+                            //     if (!user) {
+                            //         return done(null, false, { message: constants.ERROR9009 });
+                            //     }
+                            //     req.logIn(user, function (err) {
+                            //         if (err) {
+                            //             return done(null, false, { message: constants.ERROR9009 });
+                            //         }
+                            //         return done(null, newUser);
+                            //     })
+                            //     // return
+                            //     return done(null, newUser);
+                            // });
+
                             return done(null, newUser);
+                            
                         });
-                        //----------------------
-                });
-
-				// if there is no user with that email
-                // create the user
-                // crypto.randomBytes(48, function (ex, buf) {
-                //     var code = buf.toString('hex');
-
-                //     var newUser            = new User();
-
-                //     // set the user's local credentials
-                //     newUser.local.email    = email;
-                //     newUser.local.username = req.body.username;
-                //     newUser.local.password = newUser.generateHash(password);
-                //     newUser.local.firstName = req.body.firstName;
-                //     newUser.local.lastName = req.body.lastName;
-
-                //     newUser.local.activationCode = code;
-
-                //     // save the user
-                //     newUser.save(function(err) {
-                //         if (err) {
-                //             if (err.errors['local.email']) {
-                //                 return done(null, false, { message: err.errors['local.email'].message});
-                //             } else if (err.errors.local.username) {
-                //                 return done(null, false, { message: err.errors['local.username'].message});
-                //             }
-                //         }
-
-                //         // send email with activation code to user for confirmation.
-                //         // setup e-mail data with unicode symbols
-                //         var mailOptions = {
-                //             from: "Fred Foo ✔ <tranhungnguyen@gmail.com>", // sender address
-                //             to: newUser.local.email, // list of receivers
-                //             subject: "Hello ✔", // Subject line
-                //             text: "Hello world ✔", // plaintext body
-
-                //             // Yahoo mail sucks. It does not show the link.
-                //             html: "<a href='http://localhost:5000/activate/" + code 
-                //                 + "'>Click on this link to activate your account</b>" // html body
-                //         }
-
-                //         // send mail with defined transport object
-                //         smtpTransport.sendMail(mailOptions, function(error, response){
-                //             if(error){
-                //                 console.log(error);
-                //             }else{
-                //                 console.log("Message sent: " + response.message);
-                //             }
-
-                //             // if you don't want to use this transport object anymore, uncomment following line
-                //             //smtpTransport.close(); // shut down the connection pool, no more messages
-                //         });
-                //         return done(null, newUser);
-                //     });
-                // });                
+                });        
             }
 
         });    
@@ -328,7 +300,7 @@ module.exports = function(passport, smtpTransport) {
 	function (req, email, password, done) {
 		// find a user whose email is the same as the forms email
 		// we are checking to see if the user trying to
-        console.log(email + "/" + password);
+        console.log('Logging in...: ' + email + "/" + password);
         var newUserAgent = req.headers['user-agent'];
         var newIpAddress = req.headers['x-forwarded-for'] || 
                     req.connection.remoteAddress || 

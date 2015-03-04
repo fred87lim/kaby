@@ -234,11 +234,55 @@ module.exports = function (app, passport) {
 	});
 
 	// process the signup form
-	app.post('/signup', passport.authenticate('local-signup', {
-		successRedirect: '/getting_started',
-		failureRedirect: '/signup',
-		failureFlash: true
-	}));
+	// app.post('/signup', passport.authenticate('local-signup', {
+	// 	successRedirect: '/getting_started',
+	// 	failureRedirect: '/signup',
+	// 	failureFlash: true
+	// }));
+
+	app.post('/signup', function (req, res, next) {
+		passport.authenticate('local-signup')(req, res, function (err, user, info) {
+			if (err) {
+				console.log(err);
+				return res.redirect('/signup'); 
+			}
+			console.log('Post sign up');
+			console.log(user);
+			console.log(info);
+
+			if (!user) {
+				return res.redirect('/getting_started'); 
+			}
+
+			res.redirect('/getting_started'); 
+		});
+	});
+
+	app.post('/login', function(req, res, next) {
+		var url = req.body.redirect_url;
+	  	passport.authenticate('local-login', function(err, user, info) {
+	    	if (err) { return next(err); }
+	    	// Redirect if it fails
+	    	if (!user) { 
+	    		// store login message in session
+	    		req.session.login_error = info.message;
+	    		return res.redirect('/login'); 
+	    	}
+
+	    	req.logIn(user, function(err) {
+	      		if (err) { 
+	      			return next(err); 
+	      		}
+
+	      		req.session.login_error = null;
+	      		if (!url) {
+	      			url = '/';
+	      		}
+	      		// Redirect if it succeeds
+	      		return res.redirect(url);
+	    	});
+	  	})(req, res, next);
+	});
 
 	// Getting started
 	app.get('/getting_started', function (req, res) {
@@ -704,31 +748,7 @@ module.exports = function (app, passport) {
 
 	
 
-	app.post('/login', function(req, res, next) {
-		var url = req.body.redirect_url;
-	  	passport.authenticate('local-login', function(err, user, info) {
-	    	if (err) { return next(err); }
-	    	// Redirect if it fails
-	    	if (!user) { 
-	    		// store login message in session
-	    		req.session.login_error = info.message;
-	    		return res.redirect('/login'); 
-	    	}
-
-	    	req.logIn(user, function(err) {
-	      		if (err) { 
-	      			return next(err); 
-	      		}
-
-	      		req.session.login_error = null;
-	      		if (!url) {
-	      			url = '/';
-	      		}
-	      		// Redirect if it succeeds
-	      		return res.redirect(url);
-	    	});
-	  	})(req, res, next);
-	});
+	
 
 	app.get('/password_reset', function(req, res) {
 		var title = 'Password Reset';
@@ -1415,6 +1435,9 @@ module.exports = function (app, passport) {
                 var resizeNewPath = uuid1 + '_resized_'  + originalFilename;
 
                 var imgLocalUrl = appDir + relativePath + resizeNewPath;
+                
+                console.log('Writing file from: ' + tempPath);
+                console.log('Writing file to: ' + imgLocalUrl);
 
                 gm(tempPath).resize(480).write(imgLocalUrl, function (err) {
                    	if (!err) {

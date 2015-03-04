@@ -115,6 +115,58 @@ UserController.signup = function (data, callback) {
 };
 
 /**
+ * Find original user by id. This will return simple page object to assign to other object
+ *
+ * @param  {JSON} 	data - user data.
+ *					data = {
+ *						userId: user id
+ *					}
+ *
+ *
+ * @return [City]
+ */
+UserController.findOriginalUserById = function (data, callback) {
+	User.findById( data.userId, function (err, user) {
+		if (err) {
+			winston.log('error', err);
+			return callback(null);
+		}
+
+		if (!user) {
+			return callback(null);
+		}
+
+		return callback(user);
+	});
+};
+
+/**
+ * Find original user by login token id. This will return simple page object to assign to other object
+ *
+ * @param  {JSON} 	data - user data.
+ *					data = {
+ *						loginToken: login token id
+ *					}
+ *
+ *
+ * @return [City]
+ */
+UserController.findOriginalUserByLoginToken = function (data, callback) {
+	User.findOne({'platforms.token' : data.loginToken}, function (err, user) {
+		if (err) {
+			winston.log('error', err);
+			return callback(null);
+		}
+
+		if (!user) {
+			return callback(null);
+		}
+
+		return callback(user);
+	});
+};
+
+/**
  * Change purpose.
  *
  * @param  {JSON} 	data - user data.
@@ -225,6 +277,32 @@ UserController.saveBasicInfo = function (data, callback) {
 				return callback(true);
 			});	
 		});
+	});
+};
+
+/**
+ * Find original experience by id. This will return simple page object to assign to other object
+ *
+ * @param  {JSON} 	data - user data.
+ *					data = {
+ *						experienceId: experience id
+ *					}
+ *
+ *
+ * @return [Experience]
+ */
+UserController.findOriginalExperienceById = function (data, callback) {
+	Experience.findById( data.experienceId, function (err, experience) {
+		if (err) {
+			winston.log('error', err);
+			return callback(null);
+		}
+
+		if (!user) {
+			return callback(null);
+		}
+
+		return callback(experience);
 	});
 };
 
@@ -342,5 +420,130 @@ UserController.addExperience = function (data, callback) {
 				return callback(result);
 			});
 		});		
+	});
+};
+
+/**
+ * Edit user experience.
+ *
+ * @param  {JSON} 	data - user data.
+ *					data = {
+ *						userId: user id,
+ *						loginToken: login token id. Currently we use user id to identify. Later probably we have to use login token id to validate user authentication
+ *						experienceId: experience id,
+ *						companyName: company name,
+ *						companyId: company Id,
+ *						title: title
+ *						location: city id
+ *						isWorking: if user is still holding this job
+ *						date: {
+ *							start: {
+ *								month: 	
+ *								year: 
+ *							},
+ *							end: {
+ *								month: 	
+ *								year: 
+ *							},
+ *						},
+ *						desciption: [Text]
+ *					}
+ *
+ *
+ * @return [ResultJSON] - true if change successful.
+ */
+UserController.editExperience = function (data, callback) {
+
+	var result = {
+		status: false,
+		message: null,
+		data: null
+	};
+
+	User.findById(data.userId, function (err, user) {
+		if (err) {
+			winston.log('error', err);
+			result.message = 'Database error';
+			return callback(result);
+		}
+
+		if (!user) {
+			result.message = 'User not found';
+			return callback(result);
+		}
+
+		// Find experience
+		UserController.findOriginalExperienceById(data.experienceId, function (experience) {
+			if (!experience) {
+				result.message = 'Experience not found';
+				return callback(result);
+			} else {
+				// Find page to get page object to assign to experience object, so dont need full object
+				var findPageById = function (pageId, parallelCallback) {
+					if (pageId) {
+						PageController.findOriginalPageById({ pageId: pageId }, function (result) {
+							parallelCallback(null, result);
+						});
+					} else {
+						parallelCallback(null, null);
+					}
+				}
+
+				var findCityById = function (cityId, parallelCallback) {
+					if (cityId) {
+						SettingController.findOriginalCityById({ cityId: cityId}, function (result) {
+							parallelCallback(null, result);
+						});
+					} else {
+						parallelCallback(null, null);
+					}
+				}
+
+				async.parallel({
+					page: function (next) {
+						findPageById(data.companyId, next);
+					},
+					city: function (next) {
+						findCityById(data.location, next);
+					}
+				}, function (err, results) {
+					var page = results.page;
+					var city = results.city;
+					
+					experience.isWorking 	= data.isWorking;
+					experience.location		= city;
+					experience.title 		= data.title;
+					experience.description 	= data.description;
+					experience.dateStarted 	= new Date(data.date.start.year, data.date.start.month);
+
+					if (experience.isWorking == false) {
+						experience.dateEnded 	= new Date(data.date.end.year, data.date.end.month);
+					}
+					
+					experience.user 		= user;
+
+					if (page) {
+						experience.company = page;
+						experience.companyName = page.companyName;
+					} else {
+						experience.company = null;
+						experience.companyName = data.companyName;
+					}
+
+					experience.save(function (err) {
+						if (err) {
+							result.message = constants.ERROR2000;
+							return callback(result);
+						}
+
+						result.status = true;
+						result.data = experience;
+						return callback(result);
+					});
+				});	
+			}
+		});
+
+			
 	});
 };
