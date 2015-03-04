@@ -82,3 +82,12 @@
 {"level":"info","message":"Mode: development","timestamp":"2015-03-04T08:45:52.914Z"}
 {"level":"info","message":"Mode: development","timestamp":"2015-03-04T08:57:52.822Z"}
 {"level":"info","message":"Mode: development","timestamp":"2015-03-04T08:58:48.472Z"}
+{"level":"info","message":"Mode: development","timestamp":"2015-03-04T12:19:39.200Z"}
+{"level":"info","message":"Mode: development","timestamp":"2015-03-04T12:28:29.722Z"}
+{"level":"info","message":"Mode: development","timestamp":"2015-03-04T14:55:57.383Z"}
+{"level":"info","message":"Mode: development","timestamp":"2015-03-04T16:21:51.517Z"}
+{"message":"","name":"CastError","type":"ObjectId","value":{"_id":"54eddf81caaf5f2d05aa6e12","description":"Everyone can see","value":1,"name":"PUBLIC","__v":0},"path":"_id","level":"error","timestamp":"2015-03-04T16:25:07.474Z"}
+{"message":"","name":"CastError","type":"ObjectId","value":{"_id":"54eddf81caaf5f2d05aa6e27","name":"Singapore","country":{"_id":"54eddf81caaf5f2d05aa6e21","name":"Singapore"}},"path":"_id","level":"error","timestamp":"2015-03-04T16:25:07.475Z"}
+{"level":"info","message":"Mode: development","timestamp":"2015-03-04T16:33:45.920Z"}
+{"level":"info","message":"Mode: development","timestamp":"2015-03-04T17:33:56.572Z"}
+{"level":"info","message":"Mode: development","timestamp":"2015-03-04T17:35:49.540Z"}

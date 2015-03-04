@@ -347,6 +347,32 @@ SettingController.findJobTitlesByKeyword = function (data, callback) {
 };
 
 /**
+ * Find original title by id. This will return simple page object to assign to other object
+ *
+ * @param  {JSON} 	data - user data.
+ *					data = {
+ *						titleId: title id
+ *					}
+ *
+ *
+ * @return [City]
+ */
+SettingController.findOriginalJobTitleById = function (data, callback) {
+	JobTitle.findById( data.titleId, function (err, title) {
+		if (err) {
+			winston.log('error', err);
+			return callback(null);
+		}
+
+		if (!title) {
+			return callback(null);
+		}
+
+		return callback(title);
+	});
+};
+
+/**
  * Find qualification type by keyword.
  *
  * @param  {JSON} 	data - user data.

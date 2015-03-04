@@ -7,7 +7,8 @@ var Schema = mongoose.Schema;
 var ExperienceSchema = mongoose.Schema({
 	companyName:        String,
     company: { type: Schema.ObjectId, ref: 'PageSchema'},
-    title:          String,
+    title:       {type: Schema.ObjectId, ref: 'JobTitleSchema'},
+    titleName:          String,
     location:       {type: Schema.ObjectId, ref: 'CitySchema'},
     description:    String,
     isWorking:      Boolean,

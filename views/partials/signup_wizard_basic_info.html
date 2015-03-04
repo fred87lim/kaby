@@ -25,10 +25,10 @@
 							&#8212;
 							<div class="btn-group" dropdown >
 								<button type="button" class="btn btn-default  dropdown-toggle" dropdown-toggle ng-disabled="disabled">
-									&nbsp; <span ng-if="birthday.month">[[birthday.month]]</span><span ng-if="!birthday.month">Month</span> &nbsp; <span class="caret"></span>
+									&nbsp; <span ng-if="birthday.month">[[birthday.month.name]]</span><span ng-if="!birthday.month">Month</span> &nbsp; <span class="caret"></span>
 								</button>
 								<ul class="dropdown-menu" role="menu" style="max-height: 300px;overflow-y:scroll; ">
-									<li ng-repeat="month in datetime.months" ><a href="" ng-click="selectMonth(month)">[[month]]</a></li>
+									<li ng-repeat="month in datetime.months" ><a href="" ng-click="selectMonth(month)">[[month.name]]</a></li>
 								</ul>
 							</div>
 							&#8212;

@@ -230,3 +230,26 @@ PageController.findPageCompactByKeyword = function (data, callback) {
 		});
 	});
 };
+
+/**
+ * Find companies by keyword.
+ *
+ * @param  {JSON} 	data - user data.
+ *					data = {
+ *						keyword: keyword
+ *					}
+ *
+ *
+ * @return [City]
+ */
+PageController.findCompaniesByKeyword = function (data, callback) {
+	var re = new RegExp(data.keyword, 'i');
+
+	Page.find({ $and: [{name: { $regex: re }}, {pageType: 'COMPANY'}]}, function (err, companies) {
+		if (err) {
+			winston.log('error', err);
+		}
+
+		return callback(companies);
+	});
+};

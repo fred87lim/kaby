@@ -28,6 +28,7 @@ var paypal = require('paypal-rest-sdk');
 
 var UserController		= require('../app/controllers/user_controller');
 var SettingController 	= require('../app/controllers/setting_controller');
+var PageController 	= require('../app/controllers/page_controller');
 
 module.exports = function (app, passport) {
 
@@ -201,6 +202,22 @@ module.exports = function (app, passport) {
 		});
 	});
 
+	app.get('/ajax/company/search', function (req, res) {
+		var result = {
+			status: false,
+			message: '',
+			data: null
+		};
+
+		var keyword = req.query.k;
+
+		PageController.findCompaniesByKeyword({keyword: keyword}, function (callbackResult) {
+			result.status = true;
+			result.data = callbackResult;
+			return res.send(result);
+		});
+	});
+
 	// Find qualification by keyword
 	app.get('/ajax/settings/qualification_type', function (req, res) {
 		var result = {
@@ -292,7 +309,7 @@ module.exports = function (app, passport) {
 		}
 
 		var data = {
-			
+			user: req.user,
 		}
 
 		// Render page
@@ -922,6 +939,35 @@ module.exports = function (app, passport) {
 		});
 	});
 
+	app.post('/ajax/user/info', function (req, res) {
+		var result = {
+			status: false,
+			message: null,
+			data: null
+		};
+
+		if (!req.user) {
+			result.message = 'User not authenticated';
+			return res.send(result);
+		}
+
+		var data = {
+			userId: req.user._id,
+			location: req.body.location,
+			birthday: {
+				day: req.body.birthdayDay,
+				month: req.body.birthdayMonth,
+				year: req.body.birthdayYear,
+				privacy: req.body.privacy
+			},
+			description: _.escape(req.body.description)
+		}
+
+		UserController.saveBasicInfo(data, function (resultJson) {
+			return res.send(resultJson);
+		});
+	});
+
 	app.put('/experiences', function (req, res) {
 		var result = {
 			status: false,
@@ -934,20 +980,28 @@ module.exports = function (app, passport) {
 			return res.send(result);
 		}
 
-		var exp = {
-			userId: req.user._id,
-			experienceId: req.body.experienceId,
-			companyName: 	_.escape(req.body.companyName),
-			companyId: 		req.body.companyId,
-			isStillHere: 	req.body.isStillHere,
-			title: 			_.escape(req.body.title),
-			location: 		_.escape(req.body.location),
-			dateStarted: 	req.body.dateStarted,
-			dateEnded: 		req.body.dateEnded,
-			description: 	_.escape(req.body.description)
-		};
+		var data = {
+		    userId: req.user._id,
+			location: req.body.location,
+			titleId: _.escape(req.body.titleId),
+			titleName: _.escape(req.body.titleName),
+			companyName: _.escape(req.body.companyName),
+			companyId: req.body.companyId,
+			isWorking: req.body.isWorking,
+			date: {
+				start: {
+					month: req.body.dateStartedMonth,
+					year: req.body.dateStartedYear
+					},
+				end: {
+					month: req.body.dateEndedMonth,
+					year: req.body.dateEndedYear
+				}
+			},
+			description: _.escape(req.body.description)
+		}
 
-		userController.editExperienceV2(exp, function (callbackResult) {
+		UserController.addExperience(data, function (callbackResult) {
 			return res.send(callbackResult);
 		});
 	});

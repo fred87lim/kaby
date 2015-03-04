@@ -111,6 +111,18 @@ phonecatServices.factory('ProfileService', function ($http) {
         },
         findPrivacySettings: function () {
             return $http.get('/ajax/settings/privacies');
+        },
+        cropProfilePicture: function (data) {
+            return $http.post('/profile_picture/crop', data);
+        },
+        editBasicInfo: function (inputs) {
+            return $http.post('/ajax/user/info', inputs);
+        },
+        addExperience: function (inputs) {
+            return $http.put('/experiences', inputs);
+        },
+        addEducation: function (inputs) {
+            return $http.post('/educations', inputs);
         }
 	}
 });
@@ -167,8 +179,13 @@ PopInTownControllers.controller('MainCtrl', ['$scope', '$location', '$window', '
             year: null
         },
         isStillHere: false,
-        company: null,
-        title: null
+        companyName: null,
+        companyId: null,
+        title: null,
+        titleName: null,
+        description: null,
+        location: null,
+        locationName: null
     };
 
     $scope.education = {
@@ -179,12 +196,22 @@ PopInTownControllers.controller('MainCtrl', ['$scope', '$location', '$window', '
             year: null
         },
         school: null,
+        schoolId: null,
         qualification: null,
         studyField: null,
         educationLevel: null,
         description: null,
         isHonours: null
     };
+
+    $scope.cropValue = {
+        x: 0,
+        y: 0,
+        w: 0,
+        h: 0,
+        loginToken: '',
+        type: 'USER'
+    }
 
     $scope.awards = {
         title: null,
@@ -216,18 +243,19 @@ PopInTownControllers.controller('MainCtrl', ['$scope', '$location', '$window', '
             $scope.datetime.days.push(i);
         }
 
-        $scope.datetime.months.push('Jan');
-        $scope.datetime.months.push('Feb');
-        $scope.datetime.months.push('Mar');
-        $scope.datetime.months.push('Apr');
-        $scope.datetime.months.push('May');
-        $scope.datetime.months.push('Jun');
-        $scope.datetime.months.push('Jul');
-        $scope.datetime.months.push('Aug');
-        $scope.datetime.months.push('Sep');
-        $scope.datetime.months.push('Oct');
-        $scope.datetime.months.push('Nov');
-        $scope.datetime.months.push('Dec');
+
+        $scope.datetime.months.push({name: 'Jan', value: 0});
+        $scope.datetime.months.push({name: 'Feb', value: 1});
+        $scope.datetime.months.push({name: 'Mar', value: 2});
+        $scope.datetime.months.push({name: 'Apr', value: 3});
+        $scope.datetime.months.push({name: 'May', value: 4});
+        $scope.datetime.months.push({name: 'Jun', value: 5});
+        $scope.datetime.months.push({name: 'Jul', value: 6});
+        $scope.datetime.months.push({name: 'Aug', value: 7});
+        $scope.datetime.months.push({name: 'Sep', value: 8});
+        $scope.datetime.months.push({name: 'Oct', value: 9});
+        $scope.datetime.months.push({name: 'Nov', value: 10});
+        $scope.datetime.months.push({name: 'Dec', value: 11});
 
         console.log($scope.datetime.months);
 
@@ -274,20 +302,63 @@ PopInTownControllers.controller('MainCtrl', ['$scope', '$location', '$window', '
         $location.path('/profile_picture');
     };
 
+    // Save profile picture and proceed to basic info view
     $scope.saveProfilePicture = function() {
-
-        $location.path('/basic_info');
+        ProfileService.cropProfilePicture($scope.cropValue).success(function (result) {
+            if (result.status) {
+                $location.path('/basic_info');
+            }            
+        }); 
+        
     }
 
+    // Save basic info and proceed to experience tab
     $scope.saveBasicInfo = function () {
         $scope.user.birthday = $scope.birthday;
         console.log($scope.user);
-        $location.path('/experience');
+
+        var data = {
+            location: $scope.user.city._id,
+            birthdayDay: $scope.user.birthday.day,
+            birthdayMonth: $scope.user.birthday.month.value,
+            birthdayYear: $scope.user.birthday.year,
+            privacy: $scope.user.birthday.privacy._id,
+            description: $scope.user.description
+        }
+
+        ProfileService.editBasicInfo(data).success(function (result) {
+            if (result.status) {
+                $location.path('/experience');
+            }
+        });
+
+        
     }
 
+    // Save experience and proceed to education tab
     $scope.saveExperience = function () {
-        console.log($scope.experience);
-        $location.path('/education');
+        var data = {
+            location: $scope.experience.location._id,
+            titleId: $scope.experience.title._id,
+            titleName: $scope.experience.titleName,
+            companyName: $scope.experience.companyName,
+            companyId: $scope.experience.companyId,
+            isWorking: $scope.experience.isStillHere,
+            dateStartedMonth: $scope.experience.start.month.value,
+            dateStartedYear: $scope.experience.start.year,
+            dateEndedMonth: $scope.experience.end.month.value,
+            dateEndedYear: $scope.experience.end.year,
+            description: $scope.experience.description
+        }
+
+        console.log(data);
+
+        ProfileService.addExperience(data).success(function (result) {
+            if (result.status) {
+                $location.path('/education');
+            }
+        });
+        
     }
 
     $scope.saveEducation = function () {
@@ -324,7 +395,7 @@ PopInTownControllers.controller('MainCtrl', ['$scope', '$location', '$window', '
 
     $scope.selectExpEndYear = function (year) {
         $scope.experience.end.year = year;
-    }
+    };
 
     $scope.findPrivacySettings = function () {
         ProfileService.findPrivacySettings().success(function (result) {
@@ -334,7 +405,7 @@ PopInTownControllers.controller('MainCtrl', ['$scope', '$location', '$window', '
                 $scope.birthday.privacy = $scope.privacySettings[0];
             }
         });
-    }
+    };
 
     $scope.selectPrivacy = function (privacy) {
         $scope.birthday.privacy = privacy;
@@ -372,6 +443,12 @@ PopInTownControllers.controller('MainCtrl', ['$scope', '$location', '$window', '
 
     $scope.onTypeaheadSelectJobTitle = function ($item, $model, $label) {
         $scope.experience.title = $model;
+        $scope.experience.titleName = $model.name;
+    };
+
+    $scope.onTypeaheadSelectExpLocation = function ($item, $model, $label) {
+        $scope.experience.location = $model;
+        $scope.experience.locationName = $model.name;
     };
 
     $scope.findQualificationTypeByKeyWord = function (val) {
@@ -389,8 +466,27 @@ PopInTownControllers.controller('MainCtrl', ['$scope', '$location', '$window', '
         });
     };
 
+    $scope.findCompanyByKeyWord = function (val) {
+        return $http.get('/ajax/company/search', {
+            params: { k: val }
+        }).then(function(response){
+            var companies= [];
+
+        for (var i = 0; i < response.data.data.length; i++) {
+          // loop through current selected response.data.data
+          companies.push(response.data.data[i]);         
+        }
+        return companies;
+        });
+    };
+
     $scope.onTypeaheadSelectQualification = function ($item, $model, $label) {
         $scope.education.qualification = $model;
+    };
+
+    $scope.onTypeaheadSelectCompany = function ($item, $model, $label) {
+        $scope.experience.companyId = $model._id;
+        $scope.experience.companyName = $model.name;
     };
 
     $scope.onTypeaheadSelect = function ($item, $model, $label) {
@@ -435,18 +531,11 @@ PopInTownControllers.controller('MainCtrl', ['$scope', '$location', '$window', '
     };
 
     // Crop image
-    $scope.cropProfilePicture = function() {
-        console.log($scope.cropValue.x + '/' + $scope.cropValue.y + '/' + $scope.cropValue.w + '/' + $scope.cropValue.h);
+    $scope.saveCroppedProfilePicture = function() {
         ProfileService.cropProfilePicture($scope.cropValue).success(function (result) {
 
             if (result.status) {
-                console.log(result);
 
-                $scope.data.target_user.profilePicture = result.data.url;
-                console.log($scope.data.target_user.profilePicture);
-                $scope.data.user.profilePicture = result.data.url;
-                /* exit photo dialog modal and set profile picture */
-                $('#profilePicModal').modal('hide');
             }
             
         }); 

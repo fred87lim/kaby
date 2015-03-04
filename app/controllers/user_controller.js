@@ -220,14 +220,22 @@ UserController.changePurpose = function (data, callback) {
  * @return [Boolean] - true if change successful.
  */
 UserController.saveBasicInfo = function (data, callback) {
+	var result = {
+		status: false,
+		message: null,
+		data: null
+	};
+
 	User.findById(data.userId, function (err, user) {
 		if (err) {
 			winston.log('error', err);
-			return callback(false);
+			result.message = 'Database error';
+			return callback(result);
 		}
 
 		if (!user) {
-			return callback(false);
+			result.message = 'User not authenticated';
+			return callback(result);
 		}
 
 		var findPrivacyById = function (privacyId, parallelCallback) {
@@ -269,12 +277,15 @@ UserController.saveBasicInfo = function (data, callback) {
 			}
 
 			user.livesin = city;
+			user.desciption = data.desciption;
 			user.save(function (err) {
 				if (err) {
 					winston.log('error', err);
 				}
 
-				return callback(true);
+				result.status = true;
+				result.data = data;
+				return callback(result);
 			});	
 		});
 	});
@@ -314,7 +325,8 @@ UserController.findOriginalExperienceById = function (data, callback) {
  *						userId: user id,
  *						companyName: company name,
  *						companyId: company Id,
- *						title: title
+ *						titleId: title id,
+ *						titleName: title name
  *						location: city id
  *						isWorking: if user is still holding this job
  *						date: {
@@ -331,7 +343,7 @@ UserController.findOriginalExperienceById = function (data, callback) {
  *					}
  *
  *
- * @return [ResultJSON] - true if change successful.
+ * @return [ResultJSON] - .
  */
 UserController.addExperience = function (data, callback) {
 
@@ -374,24 +386,34 @@ UserController.addExperience = function (data, callback) {
 			}
 		}
 
+		var findJobTitleById = function (jobTitleId, parallelCallback) {
+			if (jobTitleId) {
+				SettingController.findOriginalJobTitleById({ titleId: jobTitleId}, function (result) {
+					parallelCallback(null, result);
+				});
+			} else {
+				parallelCallback(null, null);
+			}
+		}
+
 		async.parallel({
 			page: function (next) {
 				findPageById(data.companyId, next);
 			},
 			city: function (next) {
 				findCityById(data.location, next);
+			},
+			title: function (next) {
+				findJobTitleById(data.titleId, next);
 			}
 		}, function (err, results) {
 			var page = results.page;
 			var city = results.city;
-
-			console.log(city);
-			console.log(page);
+			var title = results.title;
 			
 			var experience 			= new Experience();
 			experience.isWorking 	= data.isWorking;
 			experience.location		= city;
-			experience.title 		= data.title;
 			experience.description 	= data.description;
 			experience.dateStarted 	= new Date(data.date.start.year, data.date.start.month);
 
@@ -406,7 +428,15 @@ UserController.addExperience = function (data, callback) {
 				experience.companyName = page.companyName;
 			} else {
 				experience.company = null;
-				experience.companyName = data.companyName;
+				experience.companyName = data.titleName;
+			}
+
+			if (title) {
+				experience.title = title;
+				experience.titleName = title.name;
+			} else {
+				experience.title = null;
+				experience.titleName = data.companyName;
 			}
 
 			experience.save(function (err) {

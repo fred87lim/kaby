@@ -12,19 +12,19 @@
         <div class="form-group">
           <label for="edit-exp-company-name" class="col-sm-3 control-label">Company:</label>
           <div class="col-sm-9">
-            <input type="text" ng-model="expEdit.companyName" class="form-control" id="edit-exp-company-name">
+            <input type="text" ng-model="experience.companyName" placeholder="" typeahead="company as company.name for company in findCompanyByKeyWord($viewValue) | filter:{name:$viewValue}" typeahead-on-select='onTypeaheadSelectCompany($item, $model, $label)' typeahead-template-url="customTemplate.html" autocomplete="off" class="form-control">
           </div>
         </div>
         <div class="form-group">
           <label for="edit-exp-title" class="col-sm-3 control-label">Title:</label>
           <div class="col-sm-9">
-            <input type="text" ng-model="biz.city.name" placeholder="" typeahead="city as city.name for city in findJobTitlesByKeyWord($viewValue) | filter:{name:$viewValue}" typeahead-on-select='onTypeaheadSelectJobTitle($item, $model, $label)' typeahead-template-url="customTemplate.html" autocomplete="off" class="form-control">
+            <input type="text" ng-model="experience.titleName" placeholder="" typeahead="city as city.name for city in findJobTitlesByKeyWord($viewValue) | filter:{name:$viewValue}" typeahead-on-select='onTypeaheadSelectJobTitle($item, $model, $label)' typeahead-template-url="customTemplate.html" autocomplete="off" class="form-control">
           </div>
         </div>
         <div class="form-group">
             <label for="edit-exp-location" class="col-sm-3 control-label">Location:</label>
             <div class="col-sm-9">
-                <input type="lastName" ng-model="expEdit.location" class="form-control" id="edit-exp-location">
+                <input type="text" ng-model="experience.locationName" placeholder="" typeahead="city as city.name for city in getCities($viewValue) | filter:{name:$viewValue}" typeahead-on-select='onTypeaheadSelectExpLocation($item, $model, $label)' typeahead-template-url="customTemplate.html" autocomplete="off" class="form-control">
             </div>
         </div>
         <div class="form-group" style="margin-bottom:0px">
@@ -32,10 +32,10 @@
             <div class="col-sm-9">
                 <div class="btn-group" dropdown >
                     <button type="button" class="btn btn-default  dropdown-toggle" dropdown-toggle ng-disabled="disabled">
-                        &nbsp; <span ng-if="experience.start.month">[[experience.start.month]]</span><span ng-if="!experience.start.month">Month</span> &nbsp; <span class="caret"></span>
+                        &nbsp; <span ng-if="experience.start.month">[[experience.start.month.name]]</span><span ng-if="!experience.start.month">Month</span> &nbsp; <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu" role="menu" style="max-height: 300px;overflow-y:scroll; ">
-                        <li ng-repeat="month in datetime.months" ><a href="" ng-click="selectExpStartMonth(month)">[[month]]</a></li>
+                        <li ng-repeat="month in datetime.months" ><a href="" ng-click="selectExpStartMonth(month)">[[month.name]]</a></li>
                     </ul>
                 </div>
                 &#8212;
@@ -52,10 +52,10 @@
                 <span ng-if="!experience.isStillHere">
                     <div class="btn-group" dropdown >
                     <button type="button" class="btn btn-default  dropdown-toggle" dropdown-toggle ng-disabled="disabled">
-                        &nbsp; <span ng-if="experience.end.month">[[experience.end.month]]</span><span ng-if="!experience.end.month">Month</span> &nbsp; <span class="caret"></span>
+                        &nbsp; <span ng-if="experience.end.month">[[experience.end.month.name]]</span><span ng-if="!experience.end.month">Month</span> &nbsp; <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu" role="menu" style="max-height: 300px;overflow-y:scroll; ">
-                        <li ng-repeat="month in datetime.months" ><a href="" ng-click="selectExpEndMonth(month)">[[month]]</a></li>
+                        <li ng-repeat="month in datetime.months" ><a href="" ng-click="selectExpEndMonth(month)">[[month.name]]</a></li>
                     </ul>
                 </div>
                 &#8212;
@@ -82,7 +82,7 @@
         <div class="form-group">
             <label for="edit-exp-description" class="col-sm-3 control-label">Description:</label>
             <div class="col-sm-9">
-                <textarea id='exp-editor' class="form-control" ng-model="expEdit.description" style='height: 200px'></textarea>
+                <textarea id='exp-editor' class="form-control" ng-model="experience.description" style='height: 200px'></textarea>
             </div>
         </div>
 </form>
