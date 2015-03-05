@@ -4,11 +4,16 @@ var express = require("express"),
 
 // EJS is not cool, so we use swig.
 var swig = require('swig');
+
+// required for file upload multi-part form
+var multer = require('multer');
 //swig.setDefaults({ varControls: ['<%=', '%>'] });
 var passport = require('passport');
 var flash = require('connect-flash');
 var logfmt = require("logfmt");
 var mongoose = require('mongoose');
+
+var bodyParser = require('body-parser');
 
 /* Configuration file */
 var config = require('./config/config');
@@ -95,7 +100,22 @@ mongoose.connect(app.get('dbUrl'));
 require('./config/passport')(passport, smtpTransport);
 
 app.use(logfmt.requestLogger());
-app.use(require('connect').bodyParser());
+//app.use(require('connect').bodyParser());
+
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
+
+// parse application/json
+app.use(bodyParser.json());
+
+// parse multipart/form-data
+app.use(multer());
+
+//app.use(express.urlencoded());
+//app.use(express.json());
+
 app.set('views', __dirname + '/views');
 
 app.set('view cache', false);
@@ -113,7 +133,10 @@ app.engine('html', swig.renderFile);
 app.set('view engine', 'html');
 
 // required for passport
-app.use(session({ secret: 'keyboard cat'}));
+//app.use(session({ secret: 'keyboard cat'}));
+app.use(session({ resave: true, saveUninitialized: true, 
+                      secret: 'kabuky' }));
+
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
