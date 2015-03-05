@@ -36,13 +36,20 @@ module.exports = PageController;
  * @return [Page]
  */
 PageController.findPageByUsername = function (data, callback) {
+	var result = {
+			status: false,
+			message: null,
+			data: null
+		}
 	Page.findOne({ username: data.username}, function (err, page) {
 		if (err) {
+			result.message = 'Database error';
 			winston.log('error', err);
 		}
 
 		if (!page) {
-			return callback(null);
+			result.message = 'Object not found';
+			return callback(result);
 		}		
 
 		// Find profile picture
@@ -108,8 +115,10 @@ PageController.findPageByUsername = function (data, callback) {
 				cover: cover,
 				yearFounded: page.yearFounded
 			}
+			result.status = true;
+			result.data = pageJson;
 
-			return callback(pageJson);
+			return callback(result);
 		});
 	});
 };

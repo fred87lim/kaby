@@ -47,7 +47,7 @@
 }
 </style>
 </head>
-<body data-twttr-rendered="true" style="background-color: #C0DEED;">
+<body data-twttr-rendered="true">
     <a class="sr-only sr-only-focusable" href="#content">Skip to main content</a>
     {% include "../partials/header.html" %}
     <div class="container bs-docs-container" >
@@ -56,15 +56,39 @@
             <div class="row">
 
 <!-- MAIN -->
-<div class="col-md-12">
+<div class="col-md-12" ng-if="!pageType">
     <div class="panel panel-default">
-        <div class="panel-body">
-            <ul class="list-inline">
-                <li><a href="#company">Company</a></li>
-                <li><a href="#school">School</a></li>
-            </ul>
+        <div class="panel-body" style="padding-top: 40px; padding-bottom: 40px; padding-right:80px">
+            <p>In order to tailor the best content for you. We would like to know a bit about you</p>
+            
+            <a href="#company">
+                <div class="col-sm-6 col-md-3">
+                    <div class="thumbnail">
+                        <img src="#" style="height: 100px; width: 100%; display: block;">
+                        <div class="caption">
+                            <a href="#company">Company</a>
+                        </div>
+                    </div>
+                </div>
+            </a>
+
+            <a href="#school">
+                <div class="col-sm-6 col-md-3">
+                    <div class="thumbnail">
+                        <img src="#" style="height: 100px; width: 100%; display: block;">
+                        <div class="caption">
+                            <p><a href="#school">School</a></p>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="panel-footer" style="padding-left:80px; padding-right:80px">
+            <p>We are comitted to keep your data confidentially</p>
+            <p>To understand why we use this information and how we use it <a href="/signup">Click here</a></p>
         </div>
     </div>
+</div>
     <div ng-view></div>
 </div>
 <!-- END OF MAIN -->

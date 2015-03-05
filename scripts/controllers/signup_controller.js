@@ -229,7 +229,7 @@ PopInTownControllers.controller('MainCtrl', ['$scope', '$location', '$window', '
 
     $scope.checkUsernameAvailable = function () {
         ProfileService.checkUsernameAvailable($scope.signup.username.value).success(function (result) {
-            $scope.signup.username.status = result;
+            $scope.signup.username.status = result.data.isAvailable;
         });
     };
 

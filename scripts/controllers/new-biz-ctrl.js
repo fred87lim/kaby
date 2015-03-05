@@ -20,10 +20,6 @@ PopInTownControllers.controller('NewCompanyCtrl', ['$scope', '$window',
 			}
 		];
 
-	
-
-	
-
 	$scope.googleMapsInput = {
 		address: '',
 		sensor: 'true',
@@ -65,6 +61,7 @@ PopInTownControllers.controller('NewCompanyCtrl', ['$scope', '$window',
 	$scope.init = function (){
 		// If user is not logged in, redirect to homepage 
 		$scope.$parent.biz.type = 'COMPANY';
+		$scope.$parent.pageType = 'COMPANY';
 		console.log($scope.$parent.biz.type);
 		
 	};

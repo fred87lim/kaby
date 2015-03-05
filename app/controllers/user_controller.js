@@ -74,19 +74,22 @@ UserController.checkUsernameAvailable = function (data, callback) {
 	User.findOne({ "local.username": data.username }, function (err, user) {
 
 		var result = {
-			available: false,
+			status: true,
 			reason: null,
-			data: null
+			data: {
+				isAvailable: false
+			}
 		}
 
 		if (err) {
 			winston.log('error', err);
-			result.reason = 'Error';
+			result.status = false;
+			result.reason = 'Database error';
 			return callback(result);
 		}
 
 		if (!user) {
-			result.available = true;
+			result.data.isAvailable = true;
 		} else {
 			result.reason = 'This username has been taken.';
 		}

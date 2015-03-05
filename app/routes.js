@@ -78,12 +78,6 @@ module.exports = function (app, passport) {
 		var username = req.params.username;
 
 		UserController.checkUsernameAvailable({ username: username }, function (callbackResult) {
-			var result = {
-				status: true,
-				message: null,
-				data: callbackResult
-			}
-
 			return res.send(callbackResult);
 		});
 	});
@@ -720,7 +714,8 @@ module.exports = function (app, passport) {
 
 		var data = {
 			title: 'New Page',
-			username: username
+			username: username,
+			user: req.user
 		}
 
 		// Render page
@@ -1727,6 +1722,39 @@ module.exports = function (app, passport) {
 			}
 		});		
 	});
+
+	app.get('/:username/edit', function (req, res) {
+		var username = req.params.username;
+
+		// check if user is authenticated.
+		if (!req.user) {
+			return res.redirect('/');
+		}
+
+		var data = {
+			username: username,
+			user: req.user
+		};
+
+		// Redirect to appropriate html page
+		UserController.checkUsernameAvailable({username: username}, function (result) {
+			if (result.status) {
+				if (!result.data.isAvailable) {
+					res.render('pages/profile_edit.html', { data: data });
+				} else {
+					// Look up for page
+					PageController.findPageByUsername( {username: username}, function (pageResult) {
+						if (pageResult.status) {
+							if (!req.session.managingToken) {
+								return res.redirect('/');
+							}
+							res.render('pages/company_edit.html', { data: data });
+						}
+					});
+				}
+			}
+		});
+	})
 
 	// Page edit
 	app.get('/company/:username/edit', function (req, res) {

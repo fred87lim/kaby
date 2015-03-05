@@ -36,13 +36,10 @@ phonecatApp.config(['$routeProvider', '$locationProvider', function ($routeProvi
         templateUrl: '/partials/new-biz.html',
         controller: 'NewCompanyCtrl'
     }).
-    when('/logo', {
-        templateUrl: '/partials/page_logo.html',
-        controller: 'PageLogoCtrl'
-    }).
-		otherwise({
-			redirectTo: '/'
-		});
+    when('/school', {
+        templateUrl: '/partials/new_school.html',
+        controller: 'NewSchoolCtrl'
+    })
 
     // use the HTML5 History API
     //$locationProvider.html5Mode(true);
@@ -80,6 +77,8 @@ PopInTownControllers.controller('MainCtrl', ['$scope', '$location', '$window', '
         country: null,
         type: null,
     };
+
+    $scope.pageType = null;
 
 	/*
 	 * Init when the page is load
@@ -316,5 +315,70 @@ PopInTownControllers.controller('PageLogoCtrl', ['$scope', '$location', '$window
     $scope.init = function () {
         console.log('Logo');
     };
+}]);
+
+PopInTownControllers.controller('NewSchoolCtrl', ['$scope', '$location', '$window', 'ProfileService', '$sce', '$upload', 
+    '$filter', '$http', '$interval',  '$compile',
+    function ($scope, $location, $window, ProfileService, $sce, $upload, $filter, $http, $interval, $compile) {
+
+      $scope.countries = [
+      {
+        'countryCode' : 'sg',
+        'countryName' : 'Singapore',
+        'url'     : 'img/singapore.png',
+
+      },
+      {
+        'countryCode' : 'vn',
+        'countryName' : 'Viet Nam',
+        'url'     : 'img/vietnam.png',
+
+      }
+    ];
+    
+  $scope.googleMapsInput = {
+    address: '',
+    sensor: 'true',
+    key: 'AIzaSyDFmK2IXbwelBhKxWSTuGfh18r6XSGk7uc'
+  };
+
+  //?address=1600+Amphitheatre+Parkway,+Mountain+View,+CA&sensor=true&key=AIzaSyDFmK2IXbwelBhKxWSTuGfh18r6XSGk7uc
+
+  $scope.map = {
+    control: {},
+        version: "uknown",
+      center: {
+          latitude: 45,
+          longitude: -73
+      },
+      zoom: 3,
+      options: {
+        streetViewControl: false,
+            panControl: false,
+            maxZoom: 20,
+            minZoom: 3    
+      },
+      dragging: false,
+      bounds: {},
+      dynamicMarkers: [],
+      markers: [
+        {
+          latitude: 33,
+                    longitude: -77,
+                    showWindow: false,
+                    title: ''
+        }
+      ]
+  };
+    /*
+     * Init when the page is load
+     */
+    $scope.init = function () {
+        $scope.$parent.biz.type = 'SCHOOL';
+        $scope.$parent.pageType = 'SCHOOL'
+        console.log($scope.$parent.biz.type);
+    };
+
+
 }]);
 
