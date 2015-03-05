@@ -1482,8 +1482,17 @@ module.exports = function (app, passport) {
                 var tempPath = file.path;
 
                 var relativePath = '/public/img/profile_temp/';
+
+                // BECAREFUL OF '/' BECAUSE IT IS NOT THE SAME ON WINDOWS AND LINUX
                 var lastIndex = __dirname.lastIndexOf('/');
+
+                if (lastIndex == -1) {
+                	lastIndex = __dirname.lastIndexOf('\\');
+                }
                 var appDir = __dirname.substring(0, lastIndex );
+
+                console.log('__dirname: ' + lastIndex);
+                console.log('app dir: ' + appDir);
 
                 /* Path for resized image */
                 var resizeNewPath = uuid1 + '_resized_'  + originalFilename;
@@ -1556,6 +1565,10 @@ module.exports = function (app, passport) {
 
 		var relativePath = '/public/img/profile_temp/';
         var lastIndex = __dirname.lastIndexOf('/');
+
+        if (lastIndex == -1) {
+        	lastIndex = __dirname.lastIndexOf('\\');
+        }
         var appDir = __dirname.substring(0, lastIndex );
 
         var imgLocalUrl = appDir + relativePath + imagePath;

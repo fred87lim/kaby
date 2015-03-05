@@ -55,6 +55,7 @@
     "winston": "^0.8.3",
     "node-oauth2-server": "^2.2.2",
     "swig": "^1.4.2",
-    "underscore": "^1.7.0"
+    "underscore": "^1.7.0",
+    "bunyan": "^1.3.4"
   }
 }

@@ -305,6 +305,7 @@ PopInTownControllers.controller('MainCtrl', ['$scope', '$location', '$window', '
     // Save profile picture and proceed to basic info view
     $scope.saveProfilePicture = function() {
         ProfileService.cropProfilePicture($scope.cropValue).success(function (result) {
+            console.log(result);
             if (result.status) {
                 $location.path('/basic_info');
             }            
